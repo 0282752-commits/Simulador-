@@ -102,7 +102,7 @@ export default function FootballGame({ save, tick, mutate }: { save: FootballSav
           <div className="mt-3 space-y-4">
             {save.dataSource.demo && (
               <div className="card border-yellow-600/50 text-xs text-yellow-200">
-                Estás usando datos de demostración ficticios. Para plantillas reales 2026/27 importa el CSV (ver README: <code>npm run datos:futbol</code>).
+                Estás usando datos de demostración ficticios. Para las plantillas reales con medias de EA SPORTS FC 27 ejecuta <code>npm run datos:fc27</code> en tu computadora y crea una partida nueva (ver README).
               </div>
             )}
             {finished && <div className="card text-sm">🏁 Temporada terminada. Revisa el historial y pulsa <b>Nueva temporada</b>.</div>}

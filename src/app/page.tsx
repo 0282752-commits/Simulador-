@@ -95,7 +95,7 @@ export default function Home() {
       </div>
 
       <p className="mt-10 text-xs text-gray-500">
-        Sin escudos, logos ni imágenes oficiales: colores e iniciales propios. Los datos de /data indican su fuente y fecha; los datos incluidos de fútbol y los jugadores NFL son de DEMOSTRACIÓN hasta que importes los CSV reales. Los stats del modo DC son una escala propia de la app.
+        Sin escudos, logos ni imágenes oficiales: colores e iniciales propios. Los datos de /data indican su fuente y fecha; los datos incluidos de fútbol y los jugadores NFL son de DEMOSTRACIÓN hasta que importes los reales (fútbol: npm run datos:fc27). Los stats del modo DC son una escala propia de la app.
       </p>
 
       {creating && (

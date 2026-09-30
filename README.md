@@ -104,7 +104,7 @@ Cada archivo guarda `meta.source` y `meta.updated`; la app muestra "DATOS DEMO" 
 
 ### Por qué no vienen incluidas las plantillas reales
 
-Las medias de **EA SPORTS FC 26** y **Madden NFL 27** son contenido con copyright de Electronic Arts. EA las
+Las medias de **EA SPORTS FC 27** (salió el 25 de septiembre de 2026) y **Madden NFL 27** son contenido con copyright de Electronic Arts. EA las
 publica en su web de ratings (ea.com/games/ea-sports-fc/ratings y ea.com/games/madden-nfl/player-ratings) pero
 no ofrece una descarga con licencia de redistribución, y los datasets públicos (Kaggle, SoFIFA) son extracciones
 de esa web con licencias dudosas. Por eso el repositorio incluye **importadores** en vez de los datos, y no se
@@ -112,22 +112,29 @@ inventan datos reales: los clubes/jugadores de demo son ficticios.
 
 ### Qué archivo conseguir y cómo importarlo
 
-**Fútbol** — un CSV con una fila por jugador de la base de EA SPORTS FC 26 (o la versión más reciente) con columnas
-estilo SoFIFA/Kaggle (en la búsqueda solo pude confirmar un dataset de FC 25 en Kaggle; comprueba si ya hay uno de FC 26) (`short_name, long_name, player_positions,
-overall, potential, age, nationality_name, preferred_foot, pace, shooting, passing, dribbling, defending, physic,
-goalkeeping_*, mentality_penalties, skill_fk_accuracy, attacking_heading_accuracy, attacking_crossing, club_name,
-league_name, club_loaned_from, value_eur`). También acepta las columnas de la web de EA (`Name, Team, League,
-Position, Alternate positions, OVR, PAC … PHY, Age, Nation, Preferred foot, GK Diving …`). Revisa la licencia del
-archivo antes de publicarlo en un repositorio público.
+**Fútbol (EA SPORTS FC 27)** — dónde verlos: en la base oficial de EA, https://www.ea.com/games/ea-sports-fc/ratings
+(filtros por liga, club y posición; ficha de cada jugador con todos los atributos). EA no ofrece un botón de descarga,
+así que hay dos caminos:
 
-```bash
-npm run datos:futbol -- ruta/fc26.csv --fuente "EA SPORTS FC 26 · dataset X (licencia Y) · descargado 2026-09-30"
-# añade --otras-ligas "Liga Portugal,Eredivisie" o --todas para más clubes europeos
-```
+1. **Automático (recomendado):** en tu computadora, con internet:
+   ```bash
+   npm run datos:fc27
+   ```
+   Descarga la base completa desde el mismo servicio que usa la web de EA a `data/football/raw/fc27.csv`
+   (carpeta ignorada por git), la importa y reemplaza los datos demo. Equivale a `npm run datos:ea` seguido de
+   `npm run datos:futbol -- data/football/raw/fc27.csv`. Tarda unos minutos (21.000+ jugadores).
+   El servicio no es una API pública documentada: si EA lo cambia y el script falla, usa la opción 2.
+2. **Manual:** un CSV de FC 27 hecho por la comunidad (Kaggle, SoFIFA) con columnas estilo SoFIFA
+   (`short_name, long_name, player_positions, overall, age, nationality_name, preferred_foot, pace … physic,
+   goalkeeping_*, mentality_penalties, skill_fk_accuracy, attacking_heading_accuracy, attacking_crossing, club_name,
+   league_name`) o las de la web de EA (`Name, Team, League, Position, OVR, PAC … PHY …`):
+   ```bash
+   npm run datos:futbol -- ruta/fc27.csv --fuente "EA SPORTS FC 27 · origen · fecha"
+   ```
 
-Verifica después: número de clubes por liga (el script avisa si no son 20/24/22/18), fichajes del último mercado
-(el dataset debe ser posterior al cierre del 1 de septiembre de 2026) y rellena `europe-participants.json` con los
-36 clasificados reales de cada torneo.
+Los ratings son de Electronic Arts: úsalos para tu partida y no subas el CSV/JSON a un repositorio público
+(si despliegas en Vercel, el sitio servirá esos datos). Después de importar, revisa el aviso de clubes por liga y
+rellena `europe-participants.json` con los clasificados reales.
 
 **NFL** — CSV de la base de ratings de **Madden NFL 27** con `firstName, lastName, team, position, overall_rating,
 age, jerseyNum, speed_rating, strength_rating, throwPower_rating, throwAccuracyShort/Mid/Deep_rating,

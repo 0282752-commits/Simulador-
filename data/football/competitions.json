@@ -61,7 +61,8 @@
    "csvNames": [
     "EFL Championship",
     "Championship",
-    "ENG Championship (2)"
+    "ENG Championship (2)",
+    "Sky Bet Championship"
    ],
    "tiebreakers": [
     "pts",
@@ -94,7 +95,8 @@
     "LALIGA EA SPORTS",
     "LaLiga EA Sports",
     "La Liga",
-    "Spain Primera Division (1)"
+    "Spain Primera Division (1)",
+    "LaLiga"
    ],
    "tiebreakers": [
     "pts",
@@ -249,7 +251,8 @@
    "teams": 18,
    "csvNames": [
     "2. Bundesliga",
-    "German 2. Bundesliga (2)"
+    "German 2. Bundesliga (2)",
+    "Bundesliga 2"
    ],
    "tiebreakers": [
     "pts",
@@ -274,7 +277,8 @@
    "csvNames": [
     "Ligue 1",
     "Ligue 1 McDonald's",
-    "French Ligue 1 (1)"
+    "French Ligue 1 (1)",
+    "Ligue 1+"
    ],
    "tiebreakers": [
     "pts",

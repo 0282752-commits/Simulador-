@@ -8,7 +8,7 @@ import type { Club, Player, Pos } from "../src/engine/football/types";
 
 const file = process.argv[2];
 if (!file || file.startsWith("--")) {
-  console.error("Uso: npm run datos:futbol -- archivo.csv [--fuente \"EA SPORTS FC 26, descargado el AAAA-MM-DD\"] [--todas]");
+  console.error("Uso: npm run datos:futbol -- archivo.csv [--fuente \"EA SPORTS FC 27, descargado el AAAA-MM-DD\"] [--todas]");
   process.exit(1);
 }
 const cfg = JSON.parse(readFileSync("data/football/competitions.json", "utf8"));
@@ -33,6 +33,8 @@ const POS: Record<string, Pos> = { GK: "POR", CB: "DFC", RB: "LD", LB: "LI", RWB
 const leagueOf = (name: string): { id: string | null; country: string } | null => {
   const n = norm(name);
   for (const lg of cfg.leagues) if (lg.csvNames.some((x: string) => norm(x) === n) || norm(lg.name) === n) return { id: lg.id, country: lg.country };
+  // coincidencia flexible (p. ej. "Ligue 1 McDonald's" vs "Ligue 1"), evitando confundir 1ª y 2ª división
+  for (const lg of cfg.leagues) if (lg.csvNames.some((x: string) => { const m = norm(x); return m.length >= 6 && (n.startsWith(m) || m.startsWith(n)) && !/2|b$|hypermotion|championship/.test(n.replace(m, "")); })) return { id: lg.id, country: lg.country };
   const o = Object.entries(OTHER).find(([k]) => norm(k) === n);
   if (o) return { id: null, country: o[1] };
   if (extra.includes(name.toLowerCase()) || all) return { id: null, country: name.slice(0, 3).toUpperCase() };

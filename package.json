@@ -11,6 +11,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "datos:demo": "tsx scripts/generate-demo-data.ts",
+    "datos:ea": "tsx scripts/download-ea-ratings.ts",
+    "datos:fc27": "tsx scripts/download-ea-ratings.ts && tsx scripts/import-fc-csv.ts data/football/raw/fc27.csv --fuente \"EA SPORTS FC 27 (web oficial de ratings de EA)\"",
     "datos:futbol": "tsx scripts/import-fc-csv.ts",
     "datos:nfl": "tsx scripts/import-madden-csv.ts",
     "calibrar:futbol": "tsx scripts/calibrate-football.ts",
