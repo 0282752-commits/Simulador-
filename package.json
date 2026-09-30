@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "node scripts/copy-data.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/copy-data.mjs",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
@@ -14,7 +16,8 @@
     "calibrar:futbol": "tsx scripts/calibrate-football.ts",
     "calibrar:nfl": "tsx scripts/calibrate-nfl.ts",
     "calibrar:dc": "tsx scripts/calibrate-dc.ts",
-    "calibrar": "npm run calibrar:futbol && npm run calibrar:nfl && npm run calibrar:dc"
+    "calibrar": "npm run calibrar:futbol && npm run calibrar:nfl && npm run calibrar:dc",
+    "test": "tsx scripts/test-season.ts && tsx scripts/test-nfl.ts && tsx scripts/test-dc.ts"
   },
   "dependencies": {
     "next": "^15.5.0",

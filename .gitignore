@@ -5,3 +5,5 @@ next-env.d.ts
 *.tsbuildinfo
 .vercel
 data/**/raw/*.csv
+public/data
+.smoke
