@@ -1,0 +1,16 @@
+import { readFileSync } from "node:fs";
+import { newDcSave, createTournament, nextDcDay, playDcDay, rankings } from "../src/engine/dc/tournaments";
+const data = JSON.parse(readFileSync("data/dc/characters.json", "utf8"));
+const save = newDcSave(data, 3);
+const teams = Object.keys(save.teams);
+createTournament(save, { name: "Liga", format: "liga", teamSize: 3, participants: teams, startDay: 1, gap: 1, randomness: 0.5 });
+createTournament(save, { name: "Copa", format: "eliminacion", teamSize: 5, participants: teams, startDay: 2, gap: 2, randomness: 0.5 });
+createTournament(save, { name: "Grupos", format: "grupos", teamSize: 3, participants: teams.slice(0, 8), startDay: 1, gap: 1, randomness: 0.5 });
+createTournament(save, { name: "Royale", format: "royale", teamSize: 1, participants: teams, startDay: 3, gap: 1, randomness: 0.5 });
+createTournament(save, { name: "Equipos", format: "equipos", teamSize: 3, participants: teams.slice(0, 6), startDay: 1, gap: 1, randomness: 0.5 });
+let d: number | null; let n = 0;
+while ((d = nextDcDay(save)) !== null && n++ < 200) playDcDay(save, d);
+for (const t of save.tournaments) console.log(t.name, "→", t.done, save.teams[t.winner!]?.name, JSON.stringify(t.placements));
+const r = rankings(save);
+console.log("Top personajes:", r.characters.slice(0, 5).map((e) => `${save.characters[e.id].name} ${e.pts}`).join(", "));
+console.log("Top equipos:", r.teams.slice(0, 3).map((e) => `${save.teams[e.id].name} ${e.pts}`).join(", "));

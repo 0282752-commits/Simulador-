@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+html, body { background: #0b1220; color: #e5e7eb; }
+body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: contain; }
+.tabular { font-variant-numeric: tabular-nums; }
+.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.pitch { background: repeating-linear-gradient(0deg, #166534 0 10%, #15803d 10% 20%); }
+.field-nfl { background: repeating-linear-gradient(90deg, #166534 0 5%, #15803d 5% 10%); }
+@layer components {
+  .card { @apply rounded-xl border border-borde bg-panel p-3; }
+  .btn { @apply inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition active:scale-95 disabled:opacity-40; }
+  .btn-primary { @apply btn bg-acento text-black hover:bg-green-400; }
+  .btn-ghost { @apply btn border border-borde bg-transparent hover:bg-white/5; }
+  .btn-sm { @apply px-2 py-1 text-xs; }
+  .input { @apply w-full rounded-lg border border-borde bg-fondo px-3 py-2 text-sm outline-none focus:border-acento; }
+  .th { @apply px-1.5 py-1 text-left text-[11px] font-semibold uppercase text-gray-400; }
+  .td { @apply px-1.5 py-1 text-sm; }
+}
