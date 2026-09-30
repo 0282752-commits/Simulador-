@@ -2,19 +2,19 @@
 import { useEffect, useMemo, useState } from "react";
 import type { DepthSlot, NflGame as Game, NflPlayer, NflResult, NflSave } from "@/engine/nfl/types";
 import { DEPTH_SLOTS, DEPTH_STARTERS } from "@/engine/nfl/types";
-import { applyNflResult, conferenceSeeds, currentWeek, divisionStandings, gameInput, nflChampion, nflLeaders, nflOffseason, nflRows, playNflWeek, roster, simulateGame, teamStrength, type NflConfig } from "@/engine/nfl/season";
+import { nflTeamSummary, nextTeamGame, recordNflCampaign, simulateNflSeason, applyNflResult, conferenceSeeds, currentWeek, divisionStandings, gameInput, nflChampion, nflLeaders, nflOffseason, nflRows, playNflWeek, roster, simulateGame, teamStrength, type NflConfig } from "@/engine/nfl/season";
 import { teamDepth, teamOverall, slotValue, SLOT_POS } from "@/engine/nfl/depth";
 import { NflGameSim } from "@/engine/nfl/game";
 import { loadNflData } from "@/lib/data";
 import { Badge, Empty, Field, Modal, Progress, SpeedControls, Stat, Tabs, cx } from "@/components/ui";
 import { fmtDate } from "@/lib/rng";
 
-type Tab = "semana" | "standings" | "playoffs" | "lideres" | "equipos" | "mercado" | "historial";
+type Tab = "mi" | "semana" | "standings" | "playoffs" | "lideres" | "equipos" | "mercado" | "historial";
 type Mut = (fn: (s: NflSave) => void) => void;
 const WEEK_LABEL = (w: number) => (w <= 18 ? `Semana ${w}` : ({ 19: "Wild Card", 20: "Divisional", 21: "Campeonatos de conferencia", 22: "Super Bowl" } as Record<number, string>)[w]);
 
 export default function NflGame({ save, tick, mutate }: { save: NflSave; tick: number; mutate: Mut }) {
-  const [tab, setTab] = useState<Tab>("semana");
+  const [tab, setTab] = useState<Tab>(save.focusMode || save.userTeam ? "mi" : "semana");
   const cw = currentWeek(save);
   const [week, setWeek] = useState<number>(cw ?? 1);
   const [live, setLive] = useState<Game | null>(null);
@@ -43,6 +43,12 @@ export default function NflGame({ save, tick, mutate }: { save: NflSave; tick: n
     mutate(() => {});
   }
 
+  async function run(label: string, task: (p: (t: string, x: number) => void) => Promise<void>) {
+    setBusy({ t: label, p: 0 });
+    try { await task((t, x) => setBusy({ t, p: x })); } finally { setBusy(null); const nw = currentWeek(save); if (nw) setWeek(nw); mutate(() => {}); }
+  }
+  const getCfg = async () => { const c = cfg ?? (await loadNflData()).cfg; setCfg(c); return c; };
+
   async function newSeason() {
     const c = cfg ?? (await loadNflData()).cfg;
     setCfg(c);
@@ -60,10 +66,12 @@ export default function NflGame({ save, tick, mutate }: { save: NflSave; tick: n
           </div>
           {cw ? <button className="btn-primary" onClick={() => simUntil("semana")}>Simular semana ▸</button> : <button className="btn-primary" onClick={() => { if (confirm("¿Pasar a la siguiente temporada? Habrá draft, progresión y retiros.")) newSeason(); }}>Nueva temporada ▸</button>}
         </div>
-        {cw && <div className="mt-2 flex gap-1"><button className="btn-ghost btn-sm" disabled={cw > 18} onClick={() => simUntil("regular")}>Hasta fin de temporada regular</button><button className="btn-ghost btn-sm" onClick={() => { if (confirm("¿Simular todo hasta el Super Bowl?")) simUntil("fin"); }}>Hasta el Super Bowl</button></div>}
-        <Tabs<Tab> value={tab} onChange={setTab} tabs={[{ id: "semana", label: "Partidos" }, { id: "standings", label: "Standings" }, { id: "playoffs", label: "Playoffs" }, { id: "lideres", label: "Líderes" }, { id: "equipos", label: "Equipos" }, { id: "mercado", label: "Mercado" }, { id: "historial", label: "Historial" }]} />
+        {cw && <div className="mt-2 flex gap-1"><button className="btn-ghost btn-sm" disabled={cw > 18} onClick={() => simUntil("regular")}>Hasta fin de temporada regular</button><button className="btn-ghost btn-sm" onClick={() => simUntil("fin")}>⏭ Simular temporada completa</button></div>}
+        <Tabs<Tab> value={tab} onChange={setTab} tabs={[...(save.focusMode || save.userTeam ? [{ id: "mi" as Tab, label: "★ Mi equipo" }] : []), { id: "semana", label: "Partidos" }, { id: "standings", label: "Standings" }, { id: "playoffs", label: "Playoffs" }, { id: "lideres", label: "Líderes" }, { id: "equipos", label: "Equipos" }, { id: "mercado", label: "Mercado" }, { id: "historial", label: "Historial" }]} />
       </div>
 
+      {tab === "mi" && <MyNfl save={save} mutate={mutate} run={run} getCfg={getCfg} onLive={setLive} onManual={setManual} onDetail={setDetail} />}
+      {save.focusMode && !save.userTeam && <NflTeamPicker save={save} mutate={mutate} />}
       {tab === "semana" && (
         <div className="mt-3">
           <select className="input" value={week} onChange={(e) => setWeek(Number(e.target.value))}>{weeks.map((w) => <option key={w} value={w}>{WEEK_LABEL(w)}</option>)}</select>
@@ -497,6 +505,89 @@ function NflMarket({ save, mutate }: { save: NflSave; mutate: Mut }) {
         });
         setSelA([]); setSelB([]);
       }}>Confirmar intercambio</button>
+    </div>
+  );
+}
+
+// ===== Modo "mi equipo" =====
+function NflTeamPicker({ save, mutate, onClose }: { save: NflSave; mutate: Mut; onClose?: () => void }) {
+  return (
+    <Modal title="Elige tu equipo" onClose={onClose ?? (() => {})} wide>
+      {(["AFC", "NFC"] as const).map((conf) => (
+        <div key={conf} className="mb-3">
+          <div className="mb-1 text-xs font-semibold uppercase text-gray-400">{conf}</div>
+          <div className="grid grid-cols-2 gap-1 sm:grid-cols-4">
+            {Object.values(save.teams).filter((t) => t.conf === conf).sort((a, b) => a.div.localeCompare(b.div) || a.city.localeCompare(b.city)).map((t) => (
+              <button key={t.id} className="flex items-center gap-2 rounded-lg border border-borde p-2 text-left text-sm hover:border-acento" onClick={() => { mutate((s) => { s.userTeam = t.id; s.focusMode = true; }); onClose?.(); }}>
+                <Badge colors={t.colors} label={t.abbr} size={24} /><span className="truncate">{t.city} {t.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </Modal>
+  );
+}
+
+function MyNfl({ save, mutate, run, getCfg, onLive, onManual, onDetail }: { save: NflSave; mutate: Mut; run: (l: string, t: (p: (t: string, x: number) => void) => Promise<void>) => Promise<void>; getCfg: () => Promise<NflConfig>; onLive: (g: Game) => void; onManual: (g: Game) => void; onDetail: (g: Game) => void }) {
+  const [picker, setPicker] = useState(false);
+  const [summary, setSummary] = useState<string | null>(null);
+  const team = save.userTeam ? save.teams[save.userTeam] : null;
+  if (!team) return <div className="mt-6 text-center"><button className="btn-primary" onClick={() => setPicker(true)}>Elegir equipo</button>{picker && <NflTeamPicker save={save} mutate={mutate} onClose={() => setPicker(false)} />}</div>;
+  const next = nextTeamGame(save, team.id);
+  const done = currentWeek(save) === null;
+  const sum = nflTeamSummary(save, team.id);
+  const mine = save.games.filter((g) => g.result && (g.home === team.id || g.away === team.id)).sort((a, b) => b.week - a.week).slice(0, 6);
+  const wait = () => new Promise((r) => setTimeout(r, 0));
+  const toMyGame = (play: boolean) => run("Simulando hasta mi partido…", async (p) => {
+    const g = nextTeamGame(save, team.id);
+    if (!g) return;
+    let w: number | null;
+    while ((w = currentWeek(save)) !== null && w < g.week) { playNflWeek(save, w); p(WEEK_LABEL(w), w / 22); await wait(); }
+    for (const x of save.games.filter((x) => x.week === g.week && !x.result && x.id !== g.id)) applyNflResult(save, x.id, simulateGame(save, x));
+    if (play) { applyNflResult(save, g.id, simulateGame(save, g)); const wk = currentWeek(save); if (wk === g.week) playNflWeek(save, g.week); }
+  });
+  const seasons = (n: number) => run(`Simulando ${n} temporada${n > 1 ? "s" : ""}…`, async (p) => {
+    const c = await getCfg();
+    const years: number[] = [];
+    if (currentWeek(save) === null) nflOffseason(save, c);
+    for (let k = 0; k < n; k++) {
+      simulateNflSeason(save, (w) => p(`Temporada ${save.seasonYear} · ${WEEK_LABEL(w)}`, (k + w / 22) / n));
+      years.push(save.seasonYear);
+      await wait();
+      if (k < n - 1) nflOffseason(save, c); else recordNflCampaign(save);
+    }
+    setSummary((save.myHistory ?? []).filter((h) => years.includes(h.season)).map((h) => `${h.season}${h.champion ? " 🏆 CAMPEÓN" : ""}\n  ${h.lines.join("\n  ")}`).join("\n\n"));
+  });
+  return (
+    <div className="mt-3 space-y-3">
+      <div className="card flex flex-wrap items-center gap-3">
+        <Badge colors={team.colors} label={team.abbr} size={48} />
+        <div className="min-w-0 flex-1"><div className="text-lg font-bold">{team.city} {team.name}</div><div className="text-xs text-gray-400">{sum.lines.join(" · ")}</div></div>
+        <button className="btn-ghost btn-sm" onClick={() => setPicker(true)}>Cambiar equipo</button>
+      </div>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {!done ? (
+          <>
+            <button className="btn-primary !py-3" disabled={!next} onClick={() => toMyGame(true)}>⚡ Jugar mi próximo partido</button>
+            <button className="btn-ghost !py-3" disabled={!next} onClick={() => toMyGame(false)}>⏩ Avanzar hasta mi partido (para verlo en vivo)</button>
+            <button className="btn-primary !py-3 sm:col-span-2" onClick={() => seasons(1)}>⏭ Simular toda la temporada (regular + playoffs)</button>
+          </>
+        ) : (
+          <button className="btn-primary !py-3 sm:col-span-2" onClick={async () => { const c = await getCfg(); mutate((s) => { nflOffseason(s, c); }); }}>Draft y temporada {save.seasonYear + 1} ▸</button>
+        )}
+        <div className="flex flex-wrap items-center gap-1 sm:col-span-2"><span className="text-xs text-gray-400">Simular varias temporadas seguidas (con draft):</span>{[3, 5, 10].map((n) => <button key={n} className="btn-ghost btn-sm" onClick={() => seasons(n)}>{n} temporadas</button>)}</div>
+      </div>
+      {next && <div><h4 className="mb-1 text-sm font-semibold text-gray-300">Próximo partido</h4><GameRow g={next} save={save} mutate={mutate} onLive={() => onLive(next)} onManual={() => onManual(next)} onDetail={() => onDetail(next)} /></div>}
+      {mine.length > 0 && <div><h4 className="mb-1 text-sm font-semibold text-gray-300">Últimos resultados</h4><div className="grid gap-2 md:grid-cols-2">{mine.map((g) => <GameRow key={g.id} g={g} save={save} mutate={mutate} onLive={() => onLive(g)} onManual={() => onManual(g)} onDetail={() => onDetail(g)} />)}</div></div>}
+      {(save.myHistory?.length ?? 0) > 0 && (
+        <div className="card text-xs">
+          <h4 className="mb-2 text-sm font-semibold">Historial de mis temporadas</h4>
+          {[...save.myHistory!].reverse().map((h) => <div key={h.season} className="border-b border-borde/50 py-1"><b>{h.season}</b> · {save.teams[h.team]?.name}{h.champion && <span className="text-acento"> · 🏆 Campeón</span>}<div className="text-gray-400">{h.lines.join(" · ")}</div></div>)}
+        </div>
+      )}
+      {picker && <NflTeamPicker save={save} mutate={mutate} onClose={() => setPicker(false)} />}
+      {summary && <Modal title="Resumen de las temporadas" onClose={() => setSummary(null)}><pre className="whitespace-pre-wrap text-sm">{summary}</pre></Modal>}
     </div>
   );
 }

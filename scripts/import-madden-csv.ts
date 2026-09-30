@@ -10,7 +10,7 @@ if (!file || file.startsWith("--")) { console.error("Uso: npm run datos:nfl -- a
 const teams = JSON.parse(readFileSync("data/nfl/teams.json", "utf8")).teams as { id: string; city: string; name: string; abbr: string }[];
 const rows = readCsv(file);
 const POS: Record<string, NflPos> = { QB: "QB", HB: "RB", RB: "RB", FB: "RB", WR: "WR", TE: "TE", LT: "OT", RT: "OT", OT: "OT", T: "OT", LG: "OG", RG: "OG", OG: "OG", G: "OG", C: "C",
-  LE: "DE", RE: "DE", DE: "DE", LEDGE: "DE", REDGE: "DE", EDGE: "DE", DT: "DT", NT: "DT", DL: "DT", LOLB: "LB", ROLB: "LB", MLB: "LB", OLB: "LB", ILB: "LB", LB: "LB", SAM: "LB", WILL: "LB", MIKE: "LB",
+  LE: "DE", RE: "DE", DE: "DE", LEDGE: "DE", REDGE: "DE", LEDG: "DE", REDG: "DE", EDGE: "DE", DT: "DT", NT: "DT", DL: "DT", LOLB: "LB", ROLB: "LB", MLB: "LB", OLB: "LB", ILB: "LB", LB: "LB", SAM: "LB", WILL: "LB", MIKE: "LB",
   CB: "CB", FS: "S", SS: "S", S: "S", K: "K", P: "P", LS: "LS" };
 const teamOf = (s: string) => {
   const n = norm(s);
@@ -20,7 +20,7 @@ const players: NflPlayer[] = [];
 const unknown = new Set<string>();
 let i = 0;
 for (const r of rows) {
-  const teamRaw = pick(r, ["team", "teamName", "Team", "equipo", "Team Name"]) ?? "";
+  const teamRaw = pick(r, ["team_name", "team", "teamName", "Team", "equipo", "Team Name"]) ?? "";
   const teamId = teamOf(teamRaw);
   if (!teamId) { if (teamRaw) unknown.add(teamRaw); continue; }
   const posRaw = (pick(r, ["position", "pos", "Position", "posicion"]) ?? "").toUpperCase();
@@ -32,16 +32,16 @@ for (const r of rows) {
   const ovr = num(r, ["overall_rating", "overallRating", "overall", "ovr", "OVR", "Overall Rating"], 60);
   const avg = (...xs: number[]) => Math.round(xs.reduce((a, b) => a + b, 0) / xs.length);
   players.push({
-    id: `n${++i}`, name, teamId, pos, ovr, age: num(r, ["age", "Age"], 25), number: num(r, ["jerseyNum", "jersey_number", "number", "Jersey Number"], 0), practiceSquad: false,
+    id: `n${++i}`, name, teamId, pos, ovr, age: num(r, ["age", "Age"], 25), number: num(r, ["jerseyNum", "jersey_num", "jersey_number", "number", "Jersey Number"], 0), practiceSquad: false,
     spd: num(r, ["speed_rating", "speed", "spd", "Speed"], 60), str: num(r, ["strength_rating", "strength", "str", "Strength"], 60),
     thp: num(r, ["throwPower_rating", "throw_power", "thp", "Throw Power"], 40),
-    tha: pick(r, ["throwAccuracy_rating", "throw_accuracy", "Throw Accuracy"]) ? num(r, ["throwAccuracy_rating", "throw_accuracy", "Throw Accuracy"], 40) : avg(num(r, ["throwAccuracyShort_rating", "Short Throw Accuracy", "throw_accuracy_short"], 40), num(r, ["throwAccuracyMid_rating", "Medium Throw Accuracy", "throw_accuracy_mid"], 40), num(r, ["throwAccuracyDeep_rating", "Deep Throw Accuracy", "throw_accuracy_deep"], 40)),
-    cth: num(r, ["catching_rating", "catching", "cth", "Catching"], 40), car: num(r, ["carrying_rating", "carrying", "Carrying", "bCVision_rating", "Ball Carrier Vision"], 40),
+    tha: pick(r, ["throwAccuracy_rating", "throw_accuracy", "Throw Accuracy"]) ? num(r, ["throwAccuracy_rating", "throw_accuracy", "Throw Accuracy"], 40) : avg(num(r, ["throwAccuracyShort_rating", "throw_acc_short_rating", "Short Throw Accuracy", "throw_accuracy_short"], 40), num(r, ["throwAccuracyMid_rating", "throw_acc_mid_rating", "Medium Throw Accuracy", "throw_accuracy_mid"], 40), num(r, ["throwAccuracyDeep_rating", "throw_acc_deep_rating", "Deep Throw Accuracy", "throw_accuracy_deep"], 40)),
+    cth: num(r, ["catching_rating", "catch_rating", "catching", "cth", "Catching"], 40), car: num(r, ["carrying_rating", "carry_rating", "carrying", "Carrying", "bCVision_rating", "bcv_rating", "Ball Carrier Vision"], 40),
     rbk: num(r, ["runBlock_rating", "run_block", "Run Block"], 40), pbk: num(r, ["passBlock_rating", "pass_block", "Pass Block"], 40),
     tak: num(r, ["tackle_rating", "tackle", "Tackle"], 40),
     prs: Math.max(num(r, ["powerMoves_rating", "power_moves", "Power Moves"], 30), num(r, ["finesseMoves_rating", "finesse_moves", "Finesse Moves"], 30), num(r, ["pass_rush", "Pass Rush"], 30)),
-    cov: avg(num(r, ["manCoverage_rating", "man_coverage", "Man Coverage"], 35), num(r, ["zoneCoverage_rating", "zone_coverage", "Zone Coverage"], 35)),
-    kpw: num(r, ["kickPower_rating", "kick_power", "Kick Power"], 30), kac: num(r, ["kickAccuracy_rating", "kick_accuracy", "Kick Accuracy"], 30),
+    cov: avg(num(r, ["manCoverage_rating", "man_cover_rating", "man_coverage", "Man Coverage"], 35), num(r, ["zoneCoverage_rating", "zone_cover_rating", "zone_coverage", "Zone Coverage"], 35)),
+    kpw: num(r, ["kickPower_rating", "kick_power", "Kick Power"], 30), kac: num(r, ["kickAccuracy_rating", "kick_acc_rating", "kick_accuracy", "Kick Accuracy"], 30),
     college: pick(r, ["college", "College"]),
   });
 }

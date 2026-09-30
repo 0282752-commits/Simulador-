@@ -27,14 +27,14 @@ export interface MatchOptions {
 
 // ====== Constantes de calibración (ver scripts/calibrate-football.ts) ======
 export const CAL = {
-  shotRate: 0.1, // tiros por minuto por equipo con fuerzas iguales
-  strengthK: 0.066, // sensibilidad de tiros a la diferencia ataque-defensa
+  shotRate: 0.105, // tiros por minuto por equipo con fuerzas iguales
+  strengthK: 0.078, // sensibilidad de tiros a la diferencia ataque-defensa
   homeShot: 1.21,
   awayShot: 0.845,
   bigChance: 0.06,
   xgBase: 0.079,
   qualityK: 0.022,
-  gkK: 0.014,
+  gkK: 0.009,
   foulRate: 0.118,
   yellowPerFoul: 0.18,
   redPerFoul: 0.0022,
@@ -45,6 +45,7 @@ export const CAL = {
   injuryRate: 0.0015,
   directFkRate: 0.0055,
   varOverturn: 0.045,
+  satur: 7,
 };
 
 interface OnPitch {
@@ -361,7 +362,8 @@ export class FootballMatch {
       const ment = me.tactics.mentality === "ofensiva" ? 1.12 : me.tactics.mentality === "defensiva" ? 0.86 : 1;
       const opMent = op.tactics.mentality === "defensiva" ? 0.93 : op.tactics.mentality === "ofensiva" ? 1.06 : 1;
       const adv = s === 0 ? (this.opts.neutral ? 1 : CAL.homeShot * hAdv) : this.opts.neutral ? 1 : CAL.awayShot;
-      const strDiff = me.str.att - op.str.def;
+      // saturación suave: las diferencias grandes no se disparan (evita ligas de 100 puntos)
+      const strDiff = CAL.satur * Math.tanh((me.str.att - op.str.def) / CAL.satur);
       const rate = CAL.shotRate * Math.exp(CAL.strengthK * strDiff) * (0.55 + 0.9 * poss) * scoreAdj * ment * opMent * adv;
 
       if (this.rng.chance(rate)) this.shot(s, "jugada");
@@ -407,7 +409,7 @@ export class FootballMatch {
     const shooter = this.pickPlayer(s, (o) => (header ? SHOT_W[o.slot] * 0.6 + (o.p.hea - 40) / 18 + (o.slot === "DFC" ? 0.9 : 0) : SHOT_W[o.slot] * Math.pow(o.p.sho / 60, 1.4)));
     if (!shooter) return;
     const gk = this.gkOf(1 - s as 0 | 1);
-    const quality = (me.str.att - op.str.def) * CAL.qualityK;
+    const quality = CAL.satur * Math.tanh((me.str.att - op.str.def) / CAL.satur) * CAL.qualityK;
     let xg: number;
     if (kind === "tiro libre") xg = 0.04 + (me.on.find((o) => o.id === me.lineup.fkTaker)?.p.fk ?? 60) / 3000;
     else if (this.rng.chance(CAL.bigChance * Math.exp(quality))) xg = 0.3 + this.rng.next() * 0.35;
@@ -416,7 +418,7 @@ export class FootballMatch {
     xg = clamp(xg, 0.01, 0.8);
     const skill = header ? shooter.p.hea : shooter.p.sho;
     const gkSkill = gk ? this.eff(gk) : 40;
-    let pGoal = 1.03 * xg * Math.exp((skill - 70) * 0.014) * Math.exp(-(gkSkill - 75) * CAL.gkK) * (0.85 + 0.15 * shooter.fit / 100);
+    let pGoal = 1.03 * xg * Math.exp((skill - 70) * 0.009) * Math.exp(-(gkSkill - 75) * CAL.gkK) * (0.85 + 0.15 * shooter.fit / 100);
     pGoal = clamp(pGoal, 0.005, 0.85);
     this.stats[s].shots++;
     this.stats[s].xg += xg;

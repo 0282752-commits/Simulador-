@@ -387,6 +387,7 @@ export function nflLeaders(save: NflSave) {
 
 // ===== Fin de temporada: draft, progresión, retiros =====
 export function nflOffseason(save: NflSave, cfg: NflConfig): { draft: { pick: number; team: string; player: string }[]; retired: number } {
+  recordNflCampaign(save);
   const rng = new Rng(save.seed + save.seasonYear * 13);
   const rows = nflRows(save);
   const champ = nflChampion(save);
@@ -460,3 +461,42 @@ export function nflOffseason(save: NflSave, cfg: NflConfig): { draft: { pick: nu
 }
 
 export type { DraftPick };
+
+// ===== Modo "mi equipo" =====
+export function nflTeamSummary(save: NflSave, team: string): { lines: string[]; champion: boolean } {
+  const rows = nflRows(save);
+  const r = rows.get(team)!;
+  const t = save.teams[team];
+  const div = divisionStandings(save, rows)[`${t.conf} ${t.div}`];
+  const lines = [`Récord ${r.w}-${r.l}${r.t ? `-${r.t}` : ""} · ${div.indexOf(team) + 1}º en la ${t.conf} ${t.div} · PF ${r.pf} / PC ${r.pa}`];
+  const regDone = save.games.filter((g) => !g.playoff).every((g) => g.result);
+  let champion = false;
+  if (regDone) {
+    const seeds = conferenceSeeds(save, t.conf, rows);
+    const seed = seeds.indexOf(team) + 1;
+    if (seed >= 1 && seed <= 7) {
+      const po = save.games.filter((g) => g.playoff && (g.home === team || g.away === team) && g.result).sort((a, b) => a.week - b.week);
+      const lost = po.find((g) => (g.home === team ? g.result!.hs < g.result!.as : g.result!.as < g.result!.hs));
+      champion = nflChampion(save) === team;
+      lines.push(`Playoffs como semilla #${seed}: ${champion ? "🏆 ¡CAMPEÓN DEL SUPER BOWL!" : lost ? `eliminado en ${lost.label}` : po.length ? `sigue vivo (${po[po.length - 1].label})` : seed === 1 ? "descansa en Wild Card" : "por jugar"}`);
+    } else lines.push("No se clasificó a playoffs");
+  }
+  return { lines, champion };
+}
+
+export function recordNflCampaign(save: NflSave) {
+  if (!save.userTeam) return;
+  const s = nflTeamSummary(save, save.userTeam);
+  save.myHistory = (save.myHistory ?? []).filter((h) => h.season !== save.seasonYear);
+  save.myHistory.push({ season: save.seasonYear, team: save.userTeam, lines: s.lines, champion: s.champion });
+}
+
+export function simulateNflSeason(save: NflSave, onWeek?: (w: number) => void) {
+  let w: number | null;
+  let g = 0;
+  while ((w = currentWeek(save)) !== null && g++ < 40) { playNflWeek(save, w); onWeek?.(w); }
+}
+
+export function nextTeamGame(save: NflSave, team: string) {
+  return save.games.filter((g) => !g.result && (g.home === team || g.away === team)).sort((a, b) => a.week - b.week)[0];
+}

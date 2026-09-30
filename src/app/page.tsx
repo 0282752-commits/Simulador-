@@ -20,6 +20,7 @@ export default function Home() {
   const [creating, setCreating] = useState<Mode | null>(null);
   const [name, setName] = useState("");
   const [money, setMoney] = useState(false);
+  const [focus, setFocus] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -38,10 +39,13 @@ export default function Home() {
       if (creating === "futbol") {
         const s = newFootballSave(await loadFootballData());
         s.moneyMode = money;
+        s.focusMode = focus;
         if (money) for (const c of Object.values(s.clubs)) c.budget = Math.round(((c.reputation ?? 70) - 55) ** 2.4 * 40000);
         await writeSave({ id, name: title, mode: "futbol", created }, s);
       } else if (creating === "nfl") {
-        await writeSave({ id, name: title, mode: "nfl", created }, newNflSave(await loadNflData()));
+        const s = newNflSave(await loadNflData());
+        s.focusMode = focus;
+        await writeSave({ id, name: title, mode: "nfl", created }, s);
       } else {
         await writeSave({ id, name: title, mode: "dc", created }, newDcSave(await loadDcData()));
       }
@@ -103,6 +107,16 @@ export default function Home() {
           <label className="block text-sm">Nombre
             <input className="input mt-1" value={name} onChange={(e) => setName(e.target.value)} placeholder="Mi partida" />
           </label>
+          {creating !== "dc" && (
+            <div className="mt-3 grid gap-2">
+              <button className={cx("rounded-lg border p-3 text-left text-sm", focus ? "border-acento bg-acento/10" : "border-borde")} onClick={() => setFocus(true)}>
+                <b>★ Mi equipo</b><div className="text-xs text-gray-400">Eliges un equipo y simulas todas sus campañas (liga, copas, Europa o playoffs) con un clic, temporada tras temporada.</div>
+              </button>
+              <button className={cx("rounded-lg border p-3 text-left text-sm", !focus ? "border-acento bg-acento/10" : "border-borde")} onClick={() => setFocus(false)}>
+                <b>Todas las competiciones</b><div className="text-xs text-gray-400">Controlas el calendario completo de todos los equipos, partido por partido o por bloques.</div>
+              </button>
+            </div>
+          )}
           {creating === "futbol" && (
             <label className="mt-3 flex items-center gap-2 text-sm">
               <input type="checkbox" checked={money} onChange={(e) => setMoney(e.target.checked)} />

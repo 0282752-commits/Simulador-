@@ -8,14 +8,16 @@ export interface NflGameOpts { neutral?: boolean; playoff?: boolean; seed?: numb
 
 export const NCAL = {
   runMean: 4.3, runSd: 4.2, runK: 0.07, breakaway: 0.02,
-  sackBase: 0.078, sackK: 0.045,
-  cmpShort: 0.725, cmpMid: 0.53, cmpDeep: 0.35, cmpK: 0.006,
-  intShort: 0.015, intMid: 0.032, intDeep: 0.06,
+  sackBase: 0.064, sackK: 0.045,
+  cmpShort: 0.77, cmpMid: 0.575, cmpDeep: 0.395, cmpK: 0.006,
+  intShort: 0.012, intMid: 0.026, intDeep: 0.049,
   fumbleRun: 0.009, fumbleCatch: 0.006,
   penalty: 0.088,
   passRate: 0.58,
   homeEdge: 1.9, // puntos de "rating" a favor del local
   runClock: 38.5, hurryClock: 14,
+  // medias de referencia (titulares de Madden NFL 27): el motor mide cada equipo contra ellas
+  ref: { qb: 85.8, qbSpd: 85, rb: 87.8, recvCover: 11.5, runGap: -6.5, rushGap: -4.2, k: 86, kpw: 95.5, p: 93.6 },
 };
 
 interface Units { qb: number; qbSpd: number; qbPow: number; rb: number; recv: number; olPass: number; olRun: number; rush: number; runStop: number; cover: number; k: number; kpw: number; p: number }
@@ -295,8 +297,8 @@ export class NflGameSim {
   private fgProb(dist: number): number {
     const s = this.sides[this.poss].u;
     const base = dist < 30 ? 0.985 : dist < 40 ? 0.93 : dist < 50 ? 0.83 : dist < 55 ? 0.72 : dist < 60 ? 0.58 : 0.35;
-    const maxD = 50 + (s.kpw - 60) * 0.35;
-    const acc = (s.k - 80) * 0.004;
+    const maxD = 55 + (s.kpw - NCAL.ref.kpw) * 0.35;
+    const acc = (s.k - NCAL.ref.k) * 0.004;
     return clamp(base + acc - (dist > maxD ? (dist - maxD) * 0.06 : 0), 0.02, 0.995);
   }
 
@@ -332,7 +334,7 @@ export class NflGameSim {
       this.changePossession(100 - this.ball + 8);
       return;
     }
-    const gross = clamp(Math.round(this.rng.normal(47 + (this.sides[s].u.p - 75) * 0.15, 6)), 25, 70);
+    const gross = clamp(Math.round(this.rng.normal(47 + (this.sides[s].u.p - NCAL.ref.p) * 0.15, 6)), 25, 70);
     let land = this.ball + gross;
     let text: string;
     if (l) { l.punts = (l.punts ?? 0) + 1; l.puntYds = (l.puntYds ?? 0) + gross; }
@@ -376,7 +378,7 @@ export class NflGameSim {
       const k = this.starters(this.sides[s], "K")[0];
       const l = k ? this.line(k.id, s) : undefined;
       if (l) l.xpa = (l.xpa ?? 0) + 1;
-      const ok = this.rng.chance(clamp(0.957 + (this.sides[s].u.k - 80) * 0.002, 0.8, 0.995));
+      const ok = this.rng.chance(clamp(0.957 + (this.sides[s].u.k - NCAL.ref.k) * 0.002, 0.8, 0.995));
       if (ok) { this.addScore(s, 1, "Punto extra"); if (l) l.xpm = (l.xpm ?? 0) + 1; }
       this.push("extra", 0, ok ? `Punto extra bueno. ${this.abbr(0)} ${this.score[0]}-${this.score[1]} ${this.abbr(1)}.` : `¡${this.name(k)} falla el punto extra!`, ok);
     }
@@ -391,7 +393,7 @@ export class NflGameSim {
     const s = this.poss;
     const diff = this.score[s] - this.score[1 - s];
     const dist = 100 - this.ball + 17;
-    const fgRange = dist <= 50 + (this.sides[s].u.kpw - 60) * 0.3;
+    const fgRange = dist <= 53 + (this.sides[s].u.kpw - NCAL.ref.kpw) * 0.3;
     const lateTrail = this.q >= 4 && diff < 0 && this.clock < 300;
     if (lateTrail && (diff < -3 || !fgRange)) return "go";
     if (this.q >= 4 && this.clock < 5 && diff >= -3 && diff <= 0 && fgRange) return "fg";
@@ -451,7 +453,7 @@ export class NflGameSim {
     if (this.hurry(s)) pr = 0.82;
     if (this.q >= 4 && diff > 7 && this.clock < 420) pr = 0.28;
     if (this.down === 4) pr = this.togo <= 2 ? 0.45 : 0.85;
-    pr += (off.u.qb - 75) * 0.004 - (off.u.rb - 75) * 0.002;
+    pr += (off.u.qb - NCAL.ref.qb) * 0.004 - (off.u.rb - NCAL.ref.rb) * 0.002;
     const home = this.opts.neutral ? 0 : s === 0 ? NCAL.homeEdge : -NCAL.homeEdge;
     this.stats[s].plays++;
     const startDown = this.down;
@@ -503,7 +505,7 @@ export class NflGameSim {
     const off = this.sides[s], def = this.sides[o];
     const rbs = this.starters(off, "RB", 2);
     const carrier = rbs.length ? (this.rng.chance(0.78) || rbs.length < 2 ? rbs[0] : rbs[1]) : this.starters(off, "QB")[0];
-    const edge = off.u.olRun - def.u.runStop + (off.u.rb - 75) * 0.4 + home;
+    const edge = off.u.olRun - def.u.runStop - NCAL.ref.runGap + (off.u.rb - NCAL.ref.rb) * 0.4 + home;
     let y = Math.round(this.rng.normal(NCAL.runMean + edge * NCAL.runK - 0.4, NCAL.runSd));
     if (this.rng.chance(NCAL.breakaway * Math.exp(edge * 0.03))) y = this.rng.int(12, 50) + (this.rng.chance(0.2) ? this.rng.int(0, 35) : 0);
     y = Math.max(y, -6);
@@ -544,7 +546,7 @@ export class NflGameSim {
     const pre = this.downStr() + " en " + this.spot();
     const ql = this.line(qb.id, s);
     // captura
-    const press = def.u.rush - off.u.olPass - home * 0.5 - (off.u.qbSpd - 60) * 0.1;
+    const press = def.u.rush - off.u.olPass - NCAL.ref.rushGap - home * 0.5 - (off.u.qbSpd - NCAL.ref.qbSpd) * 0.1;
     if (this.rng.chance(NCAL.sackBase * Math.exp(NCAL.sackK * press))) {
       const y = -this.rng.int(3, 11);
       const rusher = this.rng.weighted([...this.starters(def, "DL"), ...this.starters(def, "LB")], (p) => p.prs);
@@ -569,7 +571,7 @@ export class NflGameSim {
       return r;
     }
     // scramble
-    if (this.rng.chance(0.03 + (qb.spd - 60) * 0.001)) {
+    if (this.rng.chance(0.03 + (qb.spd - NCAL.ref.qbSpd) * 0.001)) {
       const y = Math.round(this.rng.normal(5 + (qb.spd - 70) * 0.1, 4));
       const cap = Math.min(y, 100 - this.ball);
       ql.rushAtt = (ql.rushAtt ?? 0) + 1; ql.rushYds = (ql.rushYds ?? 0) + cap;
@@ -593,9 +595,9 @@ export class NflGameSim {
     const tl = this.line(tgt.id, s);
     tl.tgt = (tl.tgt ?? 0) + 1;
     ql.passAtt = (ql.passAtt ?? 0) + 1;
-    const edge = off.u.qb - 75 + (off.u.recv - def.u.cover) * 0.8 + home;
+    const edge = off.u.qb - NCAL.ref.qb + (off.u.recv - def.u.cover - NCAL.ref.recvCover) * 0.8 + home;
     const base = depth === "corto" ? NCAL.cmpShort : depth === "medio" ? NCAL.cmpMid : NCAL.cmpDeep;
-    const pInt = (depth === "corto" ? NCAL.intShort : depth === "medio" ? NCAL.intMid : NCAL.intDeep) * Math.exp(-(off.u.qb - def.u.cover) * 0.03);
+    const pInt = (depth === "corto" ? NCAL.intShort : depth === "medio" ? NCAL.intMid : NCAL.intDeep) * Math.exp(-(off.u.qb - NCAL.ref.qb - (def.u.cover - (NCAL.ref.qb - NCAL.ref.recvCover))) * 0.03);
     let air = depth === "corto" ? this.rng.int(-2, 6) : depth === "medio" ? this.rng.int(9, 17) : this.rng.int(20, 42);
     if (this.down >= 3 && this.rng.chance(0.6)) air = Math.max(air, Math.min(need, depth === "corto" ? 7 : 20)); // rutas hasta la línea de primero
     const rr = this.rng.next();

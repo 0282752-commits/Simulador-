@@ -20,6 +20,13 @@ npm run calibrar     # 10.000 partidos por modo con promedios frente a referenci
 
 Deploy en Vercel: importar el repositorio, framework "Next.js", sin variables de entorno.
 
+## Dos formas de jugar (Fútbol y NFL)
+
+- **★ Mi equipo:** eliges un club o franquicia y con un clic juegas su próximo partido, avanzas hasta él para verlo
+  en vivo, simulas la temporada entera (todas sus competiciones a la vez) o 3, 5 o 10 temporadas seguidas con
+  resumen de cada campaña (posición, copas, Europa o playoffs, títulos).
+- **Todas las competiciones:** controlas el calendario completo, partido a partido o por bloques.
+
 ## Reglas comunes
 
 Cada partido/batalla: **⚡ Simular**, **▶ En vivo** (pausa, x1, x2, x5, x10, saltar al final) o **✍ Manual**
@@ -125,6 +132,19 @@ Escocia, etc.; los clubes con plantilla incompleta en la base de EA se completan
 El potencial y el valor de mercado no vienen en ese archivo: la app los estima. Los colores de club salen de
 `data/football/club-colors.json`. Este repositorio es público, así que los datos de EA no se suben: solo los demo.
 
+### NFL real: Madden 27
+
+[zachxwalton/madden-ratings-breakdown](https://github.com/zachxwalton/madden-ratings-breakdown) tiene
+`scraper/output/madden27_ratings.csv` (2.365 jugadores, ratings de lanzamiento de la web de EA):
+
+```bash
+git clone --depth 1 https://github.com/zachxwalton/madden-ratings-breakdown /tmp/m27
+npm run datos:nfl -- /tmp/m27/scraper/output/madden27_ratings.csv --fuente "Madden NFL 27 (ratings de lanzamiento)"
+```
+
+Los motores están centrados en las medias reales de Madden 27 y FC 27 (`NCAL.ref` y `CAL`): con los datos demo
+los promedios de `npm run calibrar` se desvían; con los reales cuadran con la tabla de abajo.
+
 ### Qué archivo conseguir y cómo importarlo
 
 **Fútbol (EA SPORTS FC 27)** — dónde verlos: en la base oficial de EA, https://www.ea.com/games/ea-sports-fc/ratings
@@ -166,26 +186,26 @@ Para regenerar los datos ficticios: `npm run datos:demo`.
 
 ## Calibración (10.000 partidos por modo)
 
-`npm run calibrar` — resultados con los datos de demo (las referencias son promedios aproximados de las grandes
+`npm run calibrar` — resultados con los datos reales de EA SPORTS FC 27 y Madden NFL 27 importados (las referencias son promedios aproximados de las grandes
 ligas europeas y de la NFL de temporadas recientes):
 
 | Fútbol | Motor | Referencia |
 |---|---|---|
-| Goles por partido | 2.69 | ~2.7 |
-| Victorias local / empates / visitante | 44.6% / 25.9% / 29.5% | ~45% / ~25% / ~30% |
+| Goles por partido | 2.72 | ~2.7 |
+| Victorias local / empates / visitante | 45.4% / 25.5% / 29.1% | ~45% / ~25% / ~30% |
 | Córners | 10.7 | ~10 |
 | Penales señalados | 0.28 | ~0.25-0.30 |
-| Tiros (a puerta) | 26.3 (9.0) | ~25 (~8.5) |
+| Tiros (a puerta) | 27.1 (9.2) | ~25 (~8.5) |
 | Amarillas / rojas | 3.9 / 0.12 | ~4 / ~0.15 |
 
 | NFL | Motor | Referencia |
 |---|---|---|
-| Puntos totales | 45.5 | ~45 |
-| Victorias local | 56.6% | ~55-57% |
-| Yardas por equipo (pase/tierra) | 331 (219/112) | ~330 (~210/~118) |
-| Capturas / pérdidas por equipo | 2.54 / 1.24 | ~2.4 / ~1.2 |
-| % pases completos / 3ª conversión | 65.4% / 36.8% | ~65% / ~39% |
-| % goles de campo / puntos extra | 83.7% / 94.9% | ~85% / ~95% |
+| Puntos totales | 44.6 | ~45 |
+| Victorias local | 56.9% | ~55-57% |
+| Yardas por equipo (pase/tierra) | 329 (216/113) | ~330 (~210/~118) |
+| Capturas / pérdidas por equipo | 2.47 / 1.25 | ~2.4 / ~1.2 |
+| % pases completos / 3ª conversión | 64.9% / 36.7% | ~65% / ~39% |
+| % goles de campo / puntos extra | 88.0% / 95.7% | ~85% / ~95% |
 
 DC no tiene referencia real: el script comprueba la coherencia interna (el favorito gana ~81%, curva por
 diferencia de overall y duelos de referencia). Las constantes están en `CAL` (`src/engine/football/match.ts`)

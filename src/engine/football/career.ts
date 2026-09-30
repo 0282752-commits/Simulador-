@@ -1,7 +1,8 @@
 // Partida nueva, archivo de temporada, fin de temporada (ascensos, envejecimiento, retiros, juveniles) y estadísticas.
 import { Rng, clamp, addDays } from "../../lib/rng";
 import type { Club, Fixture, FootballSave, Player, Pos, SeasonArchive } from "./types";
-import { createSeason, leagueTable, seasonLabel, type FootballConfig } from "./season";
+import { createSeason, leagueTable, nextMatchDate, playDay, seasonFinished, seasonLabel, type FootballConfig } from "./season";
+import { tieOutcome } from "./competitions";
 
 export interface FootballData {
   cfg: FootballConfig;
@@ -114,6 +115,7 @@ function develop(p: Player, rng: Rng) {
 export interface OffseasonReport { promoted: string[]; relegated: string[]; retired: string[]; youth: number; champions: Record<string, string> }
 
 export function startNewSeason(save: FootballSave, cfg: FootballConfig): OffseasonReport {
+  recordMyCampaign(save);
   const arch = save.history[save.history.length - 1]?.season === seasonLabel(save.seasonYear) ? save.history[save.history.length - 1] : archiveSeason(save);
   const rng = new Rng(save.seed + save.seasonYear * 31);
   const report: OffseasonReport = { promoted: [], relegated: [], retired: [], youth: 0, champions: {} };
@@ -187,4 +189,73 @@ export function fixturesOfClub(save: FootballSave, clubId: string): Fixture[] {
 export function estimateValue(ovr: number, age: number): number {
   const f = age < 21 ? 1.6 : age < 24 ? 1.35 : age <= 28 ? 1 : age <= 30 ? 0.7 : age <= 32 ? 0.45 : 0.25;
   return Math.round((0.45e6 * Math.exp((ovr - 65) * 0.21) * f) / 1e5) * 1e5;
+}
+
+// ===== Modo "mi equipo" =====
+export interface CampaignLine { comp: string; name: string; status: string; won: boolean; done: boolean; pos?: number; record?: string }
+
+export function teamCampaign(save: FootballSave, clubId: string): CampaignLine[] {
+  const out: CampaignLine[] = [];
+  for (const c of Object.values(save.comps)) {
+    const fx = save.fixtures.filter((f) => f.comp === c.id && (f.home === clubId || f.away === clubId));
+    if (!c.clubs.includes(clubId) && !fx.length) continue;
+    const played = fx.filter((f) => f.result);
+    let w = 0, d = 0, l = 0;
+    for (const f of played) { const r = f.result!; const my = f.home === clubId ? r.hg : r.ag, ot = f.home === clubId ? r.ag : r.hg; if (my > ot) w++; else if (my < ot) l++; else d++; }
+    const record = `${w}G ${d}E ${l}P`;
+    const won = c.winner === clubId && !!c.done;
+    if (c.type === "liga") {
+      const t = leagueTable(save, c.id);
+      const pos = t.findIndex((r) => r.club === clubId) + 1;
+      const row = t[pos - 1];
+      const zone = c.zones?.find((z) => pos >= z.from && pos <= z.to)?.label;
+      out.push({ comp: c.id, name: c.name, pos, record, won: !!c.done && pos === 1, done: !!c.done, status: `${pos}º · ${row?.pts ?? 0} pts (${row?.pj ?? 0} PJ)${zone ? ` · ${zone}` : ""}${c.done && pos === 1 ? " · 🏆 CAMPEÓN" : ""}` });
+      continue;
+    }
+    if (won) { out.push({ comp: c.id, name: c.name, status: "🏆 CAMPEÓN", won: true, done: true, record }); continue; }
+    // eliminatorias: última ronda del club
+    const ko = fx.filter((f) => f.tieId).sort((a, b) => a.stageIdx - b.stageIdx);
+    const lastStage = ko.length ? ko[ko.length - 1].stageIdx : -1;
+    let status = "";
+    if (c.type === "europa") {
+      const lp = leagueTable(save, c.id);
+      const pos = lp.findIndex((r) => r.club === clubId) + 1;
+      status = `Fase liga: ${pos}º`;
+      const lpDone = save.fixtures.filter((f) => f.comp === c.id && f.stageIdx < 100).every((f) => f.result);
+      if (lpDone && pos > 24) status += " · eliminado";
+    }
+    if (lastStage >= 0) {
+      const legs = ko.filter((f) => f.stageIdx === lastStage);
+      const stageName = legs[0].stage.replace(/ \((ida|vuelta)\)/, "");
+      const o = tieOutcome(legs);
+      if (!o) status += `${status ? " · " : ""}En ${stageName}`;
+      else if (o.loser === clubId) status += `${status ? " · " : ""}Eliminado en ${stageName} por ${save.clubs[o.winner]?.name ?? "?"}`;
+      else status += `${status ? " · " : ""}Pasa ${stageName}`;
+    } else if (!status) status = c.clubs.includes(clubId) ? "Por empezar" : "—";
+    out.push({ comp: c.id, name: c.name, status, won: false, done: !!c.done, record: played.length ? record : undefined });
+  }
+  return out;
+}
+
+export function recordMyCampaign(save: FootballSave) {
+  const club = save.userClub;
+  if (!club) return;
+  const lines = teamCampaign(save, club);
+  save.myHistory ??= [];
+  const season = seasonLabel(save.seasonYear);
+  save.myHistory = save.myHistory.filter((h) => h.season !== season);
+  save.myHistory.push({ season, club, lines: lines.map((l) => `${l.name}: ${l.status}`), titles: lines.filter((l) => l.won).map((l) => l.name) });
+}
+
+// Simula todo lo pendiente de la temporada (todas las competiciones a la vez)
+export function simulateRestOfSeason(save: FootballSave, cfg: FootballConfig, onDay?: (date: string) => void) {
+  let d: string | null;
+  let guard = 0;
+  while ((d = nextMatchDate(save)) && guard++ < 500) { playDay(save, d, cfg); onDay?.(d); }
+  return seasonFinished(save);
+}
+
+// Próxima fecha con partido del club
+export function nextClubMatch(save: FootballSave, clubId: string) {
+  return save.fixtures.filter((f) => !f.result && (f.home === clubId || f.away === clubId)).sort((a, b) => a.date.localeCompare(b.date))[0];
 }

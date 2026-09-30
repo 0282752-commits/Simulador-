@@ -110,6 +110,9 @@ export interface NflSave {
   picks: DraftPick[];
   history: { season: number; champion: string; runnerUp: string; mvp?: string; standings: { team: string; w: number; l: number; t: number }[] }[];
   transactions: { date: string; text: string }[];
+  userTeam?: string | null;
+  focusMode?: boolean;
+  myHistory?: { season: number; team: string; lines: string[]; champion: boolean }[];
   dataSource: { source: string; updated: string; demo: boolean };
   seed: number;
 }

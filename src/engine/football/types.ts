@@ -197,6 +197,8 @@ export interface FootballSave {
   honours: Record<string, { comp: string; season: string }[]>; // por club
   moneyMode: boolean;
   userClub?: string | null;
+  focusMode?: boolean; // modo "mi equipo"
+  myHistory?: { season: string; club: string; lines: string[]; titles: string[] }[];
   dataSource: { source: string; updated: string; demo: boolean };
   seed: number;
 }

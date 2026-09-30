@@ -16,12 +16,13 @@ import { Competitions } from "./Competitions";
 import { Teams, PlayerModal } from "./Teams";
 import { Market } from "./Market";
 import { History } from "./History";
+import { MyTeam, TeamPicker } from "./MyTeam";
 
-type Tab = "hoy" | "calendario" | "comps" | "equipos" | "mercado" | "historial";
+type Tab = "mi" | "hoy" | "calendario" | "comps" | "equipos" | "mercado" | "historial";
 
 export default function FootballGame({ save, tick, mutate }: { save: FootballSave; tick: number; mutate: (fn: (s: FootballSave) => void) => void }) {
   const [cfg, setCfg] = useState<FootballConfig | null>(null);
-  const [tab, setTab] = useState<Tab>("hoy");
+  const [tab, setTab] = useState<Tab>(save.focusMode || save.userClub ? "mi" : "hoy");
   const [live, setLive] = useState<Fixture | null>(null);
   const [multi, setMulti] = useState<Fixture[] | null>(null);
   const [manual, setManual] = useState<Fixture | null>(null);
@@ -66,6 +67,11 @@ export default function FootballGame({ save, tick, mutate }: { save: FootballSav
     mutate(() => {});
   }
 
+  async function run(label: string, task: (progress: (t: string, p: number) => void) => Promise<void>) {
+    setProgress({ text: label, pct: 0 });
+    try { await task((t, p) => setProgress({ text: t, pct: p })); } finally { setProgress(null); mutate(() => {}); }
+  }
+
   if (!ctx) return <div className="p-4 text-gray-400">Cargando configuración…</div>;
   const today = next ? save.fixtures.filter((f) => f.date === next) : [];
   const byComp = new Map<string, Fixture[]>();
@@ -90,12 +96,12 @@ export default function FootballGame({ save, tick, mutate }: { save: FootballSav
             <div className="mt-2 flex flex-wrap items-center gap-1">
               <button className="btn-ghost btn-sm" onClick={() => advance("semana")}>+1 semana</button>
               <button className="btn-ghost btn-sm" onClick={() => advance("mes")}>+1 mes</button>
-              <button className="btn-ghost btn-sm" onClick={() => { if (confirm("¿Simular hasta el final de la temporada?")) advance("fin"); }}>Hasta el final</button>
+              <button className="btn-ghost btn-sm" onClick={() => advance("fin")}>⏭ Simular temporada completa</button>
               <input type="date" className="input !w-auto !py-1 text-xs" value={untilDate} onChange={(e) => setUntilDate(e.target.value)} />
               <button className="btn-ghost btn-sm" disabled={!untilDate} onClick={() => advance("fecha")}>Hasta fecha</button>
             </div>
           )}
-          <Tabs<Tab> value={tab} onChange={setTab} tabs={[{ id: "hoy", label: "Próximos" }, { id: "calendario", label: "Calendario" }, { id: "comps", label: "Competiciones" }, { id: "equipos", label: "Equipos" }, { id: "mercado", label: "Mercado" }, { id: "historial", label: "Historial" }]} />
+          <Tabs<Tab> value={tab} onChange={setTab} tabs={[...(save.focusMode || save.userClub ? [{ id: "mi" as Tab, label: "★ Mi equipo" }] : []), { id: "hoy", label: "Próximos" }, { id: "calendario", label: "Calendario" }, { id: "comps", label: "Competiciones" }, { id: "equipos", label: "Equipos" }, { id: "mercado", label: "Mercado" }, { id: "historial", label: "Historial" }]} />
         </div>
 
         {tab === "hoy" && (
@@ -126,6 +132,7 @@ export default function FootballGame({ save, tick, mutate }: { save: FootballSav
             )}
           </div>
         )}
+        {tab === "mi" && <MyTeam run={run} />}
         {tab === "calendario" && <Calendar />}
         {tab === "comps" && <Competitions />}
         {tab === "equipos" && <Teams focus={clubFocus} />}
@@ -133,6 +140,7 @@ export default function FootballGame({ save, tick, mutate }: { save: FootballSav
         {tab === "historial" && <History />}
       </div>
 
+      {save.focusMode && !save.userClub && <TeamPicker />}
       {live && <LiveMatch f={live} onClose={() => setLive(null)} />}
       {multi && <MultiLive fixtures={multi} onClose={() => setMulti(null)} />}
       {manual && <ManualResult f={manual} onClose={() => setManual(null)} />}
