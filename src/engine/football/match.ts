@@ -27,12 +27,12 @@ export interface MatchOptions {
 
 // ====== Constantes de calibración (ver scripts/calibrate-football.ts) ======
 export const CAL = {
-  shotRate: 0.103, // tiros por minuto por equipo con fuerzas iguales
-  strengthK: 0.045, // sensibilidad de tiros a la diferencia ataque-defensa
+  shotRate: 0.1, // tiros por minuto por equipo con fuerzas iguales
+  strengthK: 0.066, // sensibilidad de tiros a la diferencia ataque-defensa
   homeShot: 1.21,
   awayShot: 0.845,
   bigChance: 0.06,
-  xgBase: 0.072,
+  xgBase: 0.079,
   qualityK: 0.022,
   gkK: 0.014,
   foulRate: 0.118,
@@ -357,7 +357,7 @@ export class FootballMatch {
       let scoreAdj = 1;
       if (diff < 0) scoreAdj += 0.26 * late + 0.08;
       else if (diff > 0) scoreAdj -= 0.16 * late + 0.06;
-      else if (this.minute >= 70) scoreAdj -= 0.2;
+      else if (this.minute >= 70) scoreAdj -= 0.08;
       const ment = me.tactics.mentality === "ofensiva" ? 1.12 : me.tactics.mentality === "defensiva" ? 0.86 : 1;
       const opMent = op.tactics.mentality === "defensiva" ? 0.93 : op.tactics.mentality === "ofensiva" ? 1.06 : 1;
       const adv = s === 0 ? (this.opts.neutral ? 1 : CAL.homeShot * hAdv) : this.opts.neutral ? 1 : CAL.awayShot;

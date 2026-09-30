@@ -108,7 +108,7 @@ function develop(p: Player, rng: Rng) {
   p.pac = adj(p.pac, paceK); p.sho = adj(p.sho); p.pas = adj(p.pas, 0.8); p.dri = adj(p.dri); p.def = adj(p.def); p.phy = adj(p.phy, p.age >= 31 ? 1.2 : 1);
   p.pen = adj(p.pen, 0.5); p.fk = adj(p.fk, 0.5); p.hea = adj(p.hea, 0.7); p.crn = adj(p.crn, 0.5);
   if (p.gk) p.gk = { div: adj(p.gk.div), han: adj(p.gk.han), kic: adj(p.gk.kic, 0.6), ref: adj(p.gk.ref), pos: adj(p.gk.pos) };
-  if (p.value !== undefined) p.value = Math.round(Math.pow(Math.max(0, p.ovr - 55), 2.6) * (p.age < 24 ? 900 : p.age > 30 ? 350 : 650) / 1000) * 1000;
+  if (p.value !== undefined) p.value = estimateValue(p.ovr, p.age);
 }
 
 export interface OffseasonReport { promoted: string[]; relegated: string[]; retired: string[]; youth: number; champions: Record<string, string> }
@@ -181,4 +181,10 @@ export function startNewSeason(save: FootballSave, cfg: FootballConfig): Offseas
 
 export function fixturesOfClub(save: FootballSave, clubId: string): Fixture[] {
   return save.fixtures.filter((f) => f.home === clubId || f.away === clubId);
+}
+
+// Valor de mercado estimado por la app (no es un dato de EA ni de Transfermarkt)
+export function estimateValue(ovr: number, age: number): number {
+  const f = age < 21 ? 1.6 : age < 24 ? 1.35 : age <= 28 ? 1 : age <= 30 ? 0.7 : age <= 32 ? 0.45 : 0.25;
+  return Math.round((0.45e6 * Math.exp((ovr - 65) * 0.21) * f) / 1e5) * 1e5;
 }

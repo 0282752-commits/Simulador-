@@ -110,6 +110,21 @@ no ofrece una descarga con licencia de redistribución, y los datasets públicos
 de esa web con licencias dudosas. Por eso el repositorio incluye **importadores** en vez de los datos, y no se
 inventan datos reales: los clubes/jugadores de demo son ficticios.
 
+### Fuente probada: FC 27 real
+
+El repositorio público [LakshmiKanth11/EA_FC_ANALYSIS](https://github.com/LakshmiKanth11/EA_FC_ANALYSIS) contiene
+`data/players.csv` con los 19.789 jugadores de la API oficial de ratings de EA (instantánea del 12-09-2026). Se importa directo:
+
+```bash
+git clone --depth 1 https://github.com/LakshmiKanth11/EA_FC_ANALYSIS /tmp/eafc
+npm run datos:futbol -- "/tmp/eafc/EA_FC_PLAYERS_DATASET_AND_ DASHBOARD/data/players.csv" --fuente "EA SPORTS FC 27 (instantánea 2026-09-12)"
+```
+
+Resultado: las 10 ligas completas (20/24/20/22/20/20/18/18/18/18 clubes), más Portugal, Países Bajos, Bélgica, Turquía,
+Escocia, etc.; los clubes con plantilla incompleta en la base de EA se completan hasta 18 con canteranos marcados "(relleno)".
+El potencial y el valor de mercado no vienen en ese archivo: la app los estima. Los colores de club salen de
+`data/football/club-colors.json`. Este repositorio es público, así que los datos de EA no se suben: solo los demo.
+
 ### Qué archivo conseguir y cómo importarlo
 
 **Fútbol (EA SPORTS FC 27)** — dónde verlos: en la base oficial de EA, https://www.ea.com/games/ea-sports-fc/ratings

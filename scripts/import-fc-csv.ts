@@ -5,6 +5,7 @@ import { writeFileSync, readFileSync } from "node:fs";
 import { basename } from "node:path";
 import { readCsv, pick, num, arg, norm, colorFromName } from "./csv";
 import type { Club, Player, Pos } from "../src/engine/football/types";
+import { estimateValue } from "../src/engine/football/career";
 
 const file = process.argv[2];
 if (!file || file.startsWith("--")) {
@@ -22,7 +23,8 @@ const OTHER: Record<string, string> = {
   "super lig": "TUR", "trendyol super lig": "TUR", "turkish super lig": "TUR", "scottish premiership": "SCO", "cinch premiership": "SCO", "william hill premiership": "SCO",
   "austrian bundesliga": "AUT", "admiral bundesliga": "AUT", "swiss super league": "SUI", "credit suisse super league": "SUI", "chance liga": "CZE", "czech first league": "CZE",
   "super league greece": "GRE", "danish superliga": "DEN", "3f superliga": "DEN", "eliteserien": "NOR", "hnl": "CRO", "supersport hnl": "CRO", "superliga srbije": "SRB",
-  "ukrainian premier league": "UKR", "pko bp ekstraklasa": "POL", "ekstraklasa": "POL", "cyprus league": "CYP", "allsvenskan": "SWE", "ligat haal": "ISR", "nb i": "HUN", "otp bank liga": "HUN", "superliga": "ROU", "romanian superliga": "ROU",
+  "ukrainian premier league": "UKR", "ukrayina liha": "UKR", "brack super league": "SUI", "o bundesliga": "AUT", "hellas liga": "GRE", "ceska liga": "CZE", "liga hrvatska": "CRO",
+  "liga cyprus": "CYP", "magyar liga": "HUN", "liga azerbaijan": "AZE", "liga bulgaria": "BUL", "finnliiga": "FIN", "sse airtricity mens premier division": "IRL", "pko bp ekstraklasa": "POL", "ekstraklasa": "POL", "cyprus league": "CYP", "allsvenskan": "SWE", "ligat haal": "ISR", "nb i": "HUN", "otp bank liga": "HUN", "superliga": "ROU", "romanian superliga": "ROU",
 };
 const extra = (arg("otras-ligas") ?? "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean);
 const all = process.argv.includes("--todas");
@@ -41,11 +43,24 @@ const leagueOf = (name: string): { id: string | null; country: string } | null =
   return null;
 };
 
+const KNOWN_COLORS: Record<string, [string, string]> = (() => { try { return JSON.parse(readFileSync("data/football/club-colors.json", "utf8")).colors; } catch { return {}; } })();
 const clubs = new Map<string, Club>();
 const players: Player[] = [];
 const skipped = new Map<string, number>();
 let i = 0;
+const ageFrom = (b?: string): number | undefined => {
+  if (!b) return undefined;
+  const m = b.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/) ?? null;
+  const d = m ? new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1])) : new Date(b);
+  if (isNaN(+d)) return undefined;
+  const now = new Date();
+  let a = now.getFullYear() - d.getFullYear();
+  if (now < new Date(now.getFullYear(), d.getMonth(), d.getDate())) a--;
+  return a;
+};
 for (const r of rows) {
+  const gender = pick(r, ["gender", "genero"]);
+  if (gender && /women|female|femen/i.test(gender)) continue;
   const clubName = pick(r, ["club_name", "club", "team", "equipo", "Team Name"]);
   const leagueName = pick(r, ["league_name", "league", "liga", "competition"]);
   if (!clubName || !leagueName) continue;
@@ -53,7 +68,7 @@ for (const r of rows) {
   if (!lg) { skipped.set(leagueName, (skipped.get(leagueName) ?? 0) + 1); continue; }
   let club = clubs.get(clubName);
   if (!club) {
-    club = { id: `c_${norm(clubName).slice(0, 24)}`, name: clubName, short: clubName.replace(/^(FC|AC|AS|SS|US|SV|VfB|TSV|SC|1\. FC|VfL|RC|Real|Club|CF|UD|CD|RCD|SD|SL|SK|FK) /i, "").slice(0, 3).toUpperCase(), country: lg.country, leagueId: lg.id, colors: colorFromName(clubName) };
+    club = { id: `c_${norm(clubName).slice(0, 24)}`, name: clubName, short: clubName.replace(/^(FC|AC|AS|SS|US|SV|VfB|TSV|SC|1\. FC|VfL|RC|Real|Club|CF|UD|CD|RCD|SD|SL|SK|FK) /i, "").slice(0, 3).toUpperCase(), country: lg.country, leagueId: lg.id, colors: KNOWN_COLORS[clubName] ?? colorFromName(clubName) };
     clubs.set(clubName, club);
   }
   const posRaw = (pick(r, ["player_positions", "positions", "position", "posicion", "Position", "Alternate positions"]) ?? "CM").split(/[,/ ]+/).map((x) => x.trim().toUpperCase()).filter(Boolean);
@@ -61,15 +76,17 @@ for (const r of rows) {
   const positions = [...new Set([...posRaw, ...alt].map((p) => POS[p]).filter(Boolean))] as Pos[];
   if (!positions.length) positions.push("MC");
   const ovr = num(r, ["overall", "ovr", "overall_rating", "rating", "media"], 60);
-  const name = pick(r, ["long_name", "name", "full_name", "nombre", "Player Name", "short_name"]) ?? "Jugador";
-  const short = pick(r, ["short_name", "common_name", "Known As", "name"]) ?? name;
+  const first = pick(r, ["first_name", "firstName"]), last = pick(r, ["last_name", "lastName"]);
+  const common = pick(r, ["common_name", "commonName"]);
+  const name = pick(r, ["long_name", "name", "full_name", "nombre", "Player Name"]) ?? common ?? (`${first ?? ""} ${last ?? ""}`.trim() || pick(r, ["short_name"]) || "Jugador");
+  const short = pick(r, ["short_name", "Known As"]) ?? common ?? (first && last ? `${first[0]}. ${last}` : name);
   const isGk = positions[0] === "POR";
   const p: Player = {
     id: `p${++i}`, name, shortName: short, clubId: club.id, positions,
-    age: num(r, ["age", "edad"], 25), nationality: pick(r, ["nationality_name", "nationality", "nation", "nacionalidad", "country"]) ?? "—",
+    age: pick(r, ["age", "edad"]) ? num(r, ["age", "edad"], 25) : ageFrom(pick(r, ["birthdate", "dob", "fecha_nacimiento"])) ?? 25, nationality: pick(r, ["nationality_name", "nationality", "nation", "nacionalidad", "country"]) ?? "—",
     foot: /left|zurdo|izq/i.test(pick(r, ["preferred_foot", "foot", "pie", "Preferred foot"]) ?? "") ? "Zurdo" : "Diestro",
-    ovr, pot: num(r, ["potential", "pot", "potencial"], ovr),
-    pac: num(r, ["pace", "pac"], ovr), sho: num(r, ["shooting", "sho"], ovr - 10), pas: num(r, ["passing", "pas"], ovr - 5), dri: num(r, ["dribbling", "dri"], ovr - 5), def: num(r, ["defending", "def"], ovr - 20), phy: num(r, ["physic", "physical", "phy"], ovr - 5),
+    ovr, pot: pick(r, ["potential", "pot", "potencial"]) ? num(r, ["potential", "pot", "potencial"], ovr) : -1,
+    pac: num(r, ["pace", "pac"], ovr), sho: num(r, ["shooting", "sho"], ovr - 10), pas: num(r, ["passing", "pas"], ovr - 5), dri: num(r, ["dribbling", "dri"], ovr - 5), def: num(r, ["defending", "def"], ovr - 20), phy: num(r, ["physic", "physical", "physicality", "phy"], ovr - 5),
     pen: num(r, ["mentality_penalties", "penalties", "penaltis", "Penalties"], 50), fk: num(r, ["skill_fk_accuracy", "fk_accuracy", "free_kick_accuracy", "Free Kick Accuracy"], 50),
     hea: num(r, ["attacking_heading_accuracy", "heading_accuracy", "heading", "Heading Accuracy"], 50), crn: num(r, ["attacking_crossing", "crossing", "Crossing", "curve"], 50),
     value: num(r, ["value_eur", "value", "valor"], 0) || undefined, wage: num(r, ["wage_eur", "wage"], 0) || undefined,
@@ -80,12 +97,37 @@ for (const r of rows) {
     // en el formato EA, las 6 medias del portero vienen en PAC..PHY
     if (!pick(r, ["goalkeeping_diving", "gk_diving", "diving", "GK Diving"]) && pick(r, ["pac"])) p.gk = { div: p.pac, han: p.sho, kic: p.pas, ref: p.dri, pos: p.phy };
   }
+  // sin potencial en el archivo: estimación propia (no es dato de EA) según la edad
+  if (p.pot < 0) p.pot = Math.min(95, p.age < 24 ? p.ovr + Math.round((24 - p.age) * 1.8) : p.ovr);
+  if (!p.value) p.value = estimateValue(p.ovr, p.age);
   const loan = pick(r, ["club_loaned_from", "loaned_from"]);
   if (loan) p.loanFrom = loan; // se resuelve abajo
   players.push(p);
 }
 // resolver cedidos (nombre de club → id)
 for (const p of players) if (p.loanFrom) p.loanFrom = clubs.get(p.loanFrom)?.id ?? null;
+// Plantillas incompletas en el archivo: se completan hasta 18 con canteranos genéricos marcados como relleno
+const FILL: Pos[] = ["POR", "DFC", "DFC", "LD", "LI", "MCD", "MC", "MC", "MCO", "ED", "EI", "DC", "DC", "DFC", "MC", "POR", "ED", "EI"];
+let filled = 0;
+for (const c of clubs.values()) {
+  const sq = players.filter((p) => p.clubId === c.id);
+  if (sq.length >= 18) continue;
+  const avg = Math.round(sq.reduce((a, p) => a + p.ovr, 0) / Math.max(1, sq.length));
+  const need = FILL.filter((pos, k) => k >= 0).slice();
+  let k = 0;
+  while (players.filter((p) => p.clubId === c.id).length < 18) {
+    const have = players.filter((p) => p.clubId === c.id);
+    const gks = have.filter((p) => p.positions[0] === "POR").length;
+    const pos: Pos = gks < 2 ? "POR" : need[(k++ % (need.length - 1)) + 1] === "POR" ? "MC" : need[(k % (need.length - 1)) + 1];
+    const o = Math.max(45, avg - 7);
+    const pl: Player = { id: `p${++i}`, name: `Canterano ${c.short} ${k} (relleno)`, shortName: `Cant. ${c.short} ${k}`, clubId: c.id, positions: [pos], age: 19, nationality: "—", foot: "Diestro",
+      ovr: o, pot: o + 10, pac: o, sho: pos === "DC" ? o : o - 12, pas: o - 4, dri: o - 2, def: pos === "DFC" ? o + 2 : o - 20, phy: o - 3, pen: 45, fk: 40, hea: 50, crn: 45, youth: true, custom: true, value: estimateValue(o, 19) };
+    if (pos === "POR") pl.gk = { div: o, han: o - 1, kic: o - 6, ref: o + 1, pos: o - 2 };
+    players.push(pl);
+    filled++;
+  }
+}
+if (filled) console.log(`Relleno: ${filled} canteranos genéricos (marcados "relleno") en clubes con menos de 18 jugadores en el archivo.`);
 // reputación = media del top-16
 for (const c of clubs.values()) {
   const top = players.filter((p) => p.clubId === c.id).map((p) => p.ovr).sort((a, b) => b - a).slice(0, 16);
