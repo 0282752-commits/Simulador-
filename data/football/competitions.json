@@ -1,0 +1,681 @@
+{
+ "season": "2026/27",
+ "seasonYear": 2026,
+ "start": "2026-08-01",
+ "end": "2027-06-05",
+ "datesNote": "Las fechas de rondas y jornadas son aproximadas (plantilla basada en calendarios recientes). Los emparejamientos de liga se generan con el algoritmo de todos contra todos: NO son el calendario oficial.",
+ "internationalBreaks": [
+  "2026-09-05",
+  "2026-10-10",
+  "2026-11-14",
+  "2027-03-27"
+ ],
+ "leagueWindows": {
+  "1": [
+   "2026-08-15",
+   "2027-05-23"
+  ],
+  "2": [
+   "2026-08-08",
+   "2027-05-09"
+  ]
+ },
+ "leagues": [
+  {
+   "id": "ENG1",
+   "name": "Premier League",
+   "short": "PL",
+   "country": "ENG",
+   "tier": 1,
+   "teams": 20,
+   "csvNames": [
+    "Premier League",
+    "English Premier League",
+    "ENG Premier League (1)"
+   ],
+   "tiebreakers": [
+    "pts",
+    "gd",
+    "gf",
+    "h2h_pts",
+    "h2h_away_gf"
+   ],
+   "relegation": 3,
+   "promotion": 0,
+   "europe": {
+    "ucl": 4,
+    "uel": 1,
+    "uecl": 1
+   },
+   "cup": "ENG_FA",
+   "leagueCup": "ENG_LC",
+   "verified": true
+  },
+  {
+   "id": "ENG2",
+   "name": "EFL Championship",
+   "short": "CHA",
+   "country": "ENG",
+   "tier": 2,
+   "teams": 24,
+   "csvNames": [
+    "EFL Championship",
+    "Championship",
+    "ENG Championship (2)"
+   ],
+   "tiebreakers": [
+    "pts",
+    "gd",
+    "gf",
+    "h2h_pts",
+    "h2h_away_gf"
+   ],
+   "relegation": 0,
+   "promotion": 2,
+   "playoff": {
+    "type": "semis2_final1",
+    "places": [
+     3,
+     4,
+     5,
+     6
+    ]
+   },
+   "verified": true
+  },
+  {
+   "id": "ESP1",
+   "name": "LaLiga EA Sports",
+   "short": "LAL",
+   "country": "ESP",
+   "tier": 1,
+   "teams": 20,
+   "csvNames": [
+    "LALIGA EA SPORTS",
+    "LaLiga EA Sports",
+    "La Liga",
+    "Spain Primera Division (1)"
+   ],
+   "tiebreakers": [
+    "pts",
+    "h2h_pts",
+    "h2h_gd",
+    "gd",
+    "gf"
+   ],
+   "relegation": 3,
+   "promotion": 0,
+   "europe": {
+    "ucl": 4,
+    "uel": 1,
+    "uecl": 1
+   },
+   "cup": "ESP_CR",
+   "verified": true
+  },
+  {
+   "id": "ESP2",
+   "name": "LaLiga Hypermotion",
+   "short": "LL2",
+   "country": "ESP",
+   "tier": 2,
+   "teams": 22,
+   "csvNames": [
+    "LALIGA HYPERMOTION",
+    "LaLiga Hypermotion",
+    "LaLiga 2",
+    "Spain Segunda Division (2)"
+   ],
+   "tiebreakers": [
+    "pts",
+    "h2h_pts",
+    "h2h_gd",
+    "gd",
+    "gf"
+   ],
+   "relegation": 0,
+   "promotion": 2,
+   "playoff": {
+    "type": "semis2_final2",
+    "places": [
+     3,
+     4,
+     5,
+     6
+    ]
+   },
+   "verified": true
+  },
+  {
+   "id": "ITA1",
+   "name": "Serie A",
+   "short": "SA",
+   "country": "ITA",
+   "tier": 1,
+   "teams": 20,
+   "csvNames": [
+    "Serie A",
+    "Serie A Enilive",
+    "Italian Serie A (1)"
+   ],
+   "tiebreakers": [
+    "pts",
+    "h2h_pts",
+    "h2h_gd",
+    "gd",
+    "gf"
+   ],
+   "relegation": 3,
+   "promotion": 0,
+   "europe": {
+    "ucl": 4,
+    "uel": 1,
+    "uecl": 1
+   },
+   "cup": "ITA_CI",
+   "verified": true,
+   "notes": "Desde 2022/23 un empate a puntos por el título o el descenso se decide con un partido de desempate; aquí se aplica el orden de criterios."
+  },
+  {
+   "id": "ITA2",
+   "name": "Serie B",
+   "short": "SB",
+   "country": "ITA",
+   "tier": 2,
+   "teams": 20,
+   "csvNames": [
+    "Serie B",
+    "Serie BKT",
+    "Italian Serie B (2)"
+   ],
+   "tiebreakers": [
+    "pts",
+    "h2h_pts",
+    "h2h_gd",
+    "gd",
+    "gf"
+   ],
+   "relegation": 0,
+   "promotion": 2,
+   "playoff": {
+    "type": "serieb",
+    "places": [
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   },
+   "verified": true
+  },
+  {
+   "id": "GER1",
+   "name": "Bundesliga",
+   "short": "BL",
+   "country": "GER",
+   "tier": 1,
+   "teams": 18,
+   "csvNames": [
+    "Bundesliga",
+    "German 1. Bundesliga (1)"
+   ],
+   "tiebreakers": [
+    "pts",
+    "gd",
+    "gf",
+    "h2h_pts",
+    "h2h_away_gf",
+    "away_gf"
+   ],
+   "relegation": 2,
+   "relegationPlayoff": 16,
+   "promotion": 0,
+   "europe": {
+    "ucl": 4,
+    "uel": 1,
+    "uecl": 1
+   },
+   "cup": "GER_DFB",
+   "verified": true
+  },
+  {
+   "id": "GER2",
+   "name": "2. Bundesliga",
+   "short": "BL2",
+   "country": "GER",
+   "tier": 2,
+   "teams": 18,
+   "csvNames": [
+    "2. Bundesliga",
+    "German 2. Bundesliga (2)"
+   ],
+   "tiebreakers": [
+    "pts",
+    "gd",
+    "gf",
+    "h2h_pts",
+    "h2h_away_gf",
+    "away_gf"
+   ],
+   "relegation": 0,
+   "promotion": 2,
+   "promotionPlayoff": 3,
+   "verified": true
+  },
+  {
+   "id": "FRA1",
+   "name": "Ligue 1",
+   "short": "L1",
+   "country": "FRA",
+   "tier": 1,
+   "teams": 18,
+   "csvNames": [
+    "Ligue 1",
+    "Ligue 1 McDonald's",
+    "French Ligue 1 (1)"
+   ],
+   "tiebreakers": [
+    "pts",
+    "gd",
+    "h2h_pts",
+    "h2h_gd",
+    "gf"
+   ],
+   "relegation": 2,
+   "relegationPlayoff": 16,
+   "promotion": 0,
+   "europe": {
+    "ucl": 3,
+    "uel": 1,
+    "uecl": 1
+   },
+   "cup": "FRA_CF",
+   "verified": false,
+   "notes": "Orden de desempate de Ligue 1 pendiente de verificar con el reglamento LFP 2026/27."
+  },
+  {
+   "id": "FRA2",
+   "name": "Ligue 2",
+   "short": "L2",
+   "country": "FRA",
+   "tier": 2,
+   "teams": 18,
+   "csvNames": [
+    "Ligue 2",
+    "Ligue 2 BKT",
+    "French Ligue 2 (2)"
+   ],
+   "tiebreakers": [
+    "pts",
+    "gd",
+    "h2h_pts",
+    "h2h_gd",
+    "gf"
+   ],
+   "relegation": 0,
+   "promotion": 2,
+   "promotionPlayoffL2": [
+    3,
+    4,
+    5
+   ],
+   "verified": false
+  }
+ ],
+ "cups": [
+  {
+   "id": "ENG_FA",
+   "name": "FA Cup",
+   "short": "FAC",
+   "country": "ENG",
+   "leagues": [
+    "ENG1",
+    "ENG2"
+   ],
+   "rounds": [
+    "2026-11-07",
+    "2027-01-09",
+    "2027-02-13",
+    "2027-03-06",
+    "2027-04-17",
+    "2027-05-15"
+   ],
+   "twoLegRounds": [],
+   "noExtraTimeRounds": [],
+   "finalNeutral": true,
+   "semisNeutral": true,
+   "verified": true,
+   "notes": "Sin replays desde 2024/25. En la realidad entran clubes de categorías inferiores; aquí solo los de Premier y Championship, con ronda previa para cuadrar el cuadro."
+  },
+  {
+   "id": "ENG_LC",
+   "name": "Carabao Cup",
+   "short": "EFL",
+   "country": "ENG",
+   "leagues": [
+    "ENG1",
+    "ENG2"
+   ],
+   "rounds": [
+    "2026-08-26",
+    "2026-09-23",
+    "2026-10-28",
+    "2026-12-16",
+    "2027-01-13",
+    "2027-03-21"
+   ],
+   "twoLegSemis": true,
+   "semiSecondLeg": "2027-02-03",
+   "noExtraTime": true,
+   "finalNeutral": true,
+   "verified": true,
+   "notes": "Sin prórroga salvo en la final: empate = penales. Semifinales a ida y vuelta."
+  },
+  {
+   "id": "ESP_CR",
+   "name": "Copa del Rey",
+   "short": "CDR",
+   "country": "ESP",
+   "leagues": [
+    "ESP1",
+    "ESP2"
+   ],
+   "rounds": [
+    "2026-10-29",
+    "2026-12-03",
+    "2027-01-14",
+    "2027-02-04",
+    "2027-02-11",
+    "2027-04-24"
+   ],
+   "twoLegSemis": true,
+   "semiSecondLeg": "2027-03-04",
+   "hostLowerTier": true,
+   "finalNeutral": true,
+   "verified": true,
+   "notes": "Eliminatorias a partido único en casa del equipo de menor categoría; semifinales a ida y vuelta."
+  },
+  {
+   "id": "ITA_CI",
+   "name": "Coppa Italia",
+   "short": "CI",
+   "country": "ITA",
+   "leagues": [
+    "ITA1",
+    "ITA2"
+   ],
+   "rounds": [
+    "2026-08-15",
+    "2026-09-23",
+    "2026-12-02",
+    "2027-02-03",
+    "2027-03-03",
+    "2027-05-13"
+   ],
+   "twoLegSemis": true,
+   "semiSecondLeg": "2027-04-21",
+   "finalNeutral": true,
+   "verified": false,
+   "notes": "Formato real con cabezas de serie; aquí sorteo libre con ronda previa."
+  },
+  {
+   "id": "GER_DFB",
+   "name": "DFB-Pokal",
+   "short": "DFB",
+   "country": "GER",
+   "leagues": [
+    "GER1",
+    "GER2"
+   ],
+   "rounds": [
+    "2026-08-15",
+    "2026-10-27",
+    "2026-12-01",
+    "2027-02-02",
+    "2027-04-20",
+    "2027-05-22"
+   ],
+   "finalNeutral": true,
+   "hostLowerTier": true,
+   "verified": true
+  },
+  {
+   "id": "FRA_CF",
+   "name": "Coupe de France",
+   "short": "CDF",
+   "country": "FRA",
+   "leagues": [
+    "FRA1",
+    "FRA2"
+   ],
+   "rounds": [
+    "2026-12-19",
+    "2027-01-16",
+    "2027-02-06",
+    "2027-03-03",
+    "2027-04-21",
+    "2027-05-15"
+   ],
+   "noExtraTime": true,
+   "finalNeutral": true,
+   "verified": false,
+   "notes": "Sin prórroga (directo a penales) según el reglamento reciente; pendiente de verificar para 2026/27."
+  }
+ ],
+ "supercups": [
+  {
+   "id": "ENG_CS",
+   "name": "Community Shield",
+   "country": "ENG",
+   "size": 2,
+   "date": "2026-08-09",
+   "noExtraTime": true,
+   "neutral": true,
+   "from": [
+    "ENG1:champion",
+    "ENG_FA:winner"
+   ]
+  },
+  {
+   "id": "ESP_SC",
+   "name": "Supercopa de España",
+   "country": "ESP",
+   "size": 4,
+   "dates": [
+    "2027-01-07",
+    "2027-01-11"
+   ],
+   "neutral": true,
+   "noExtraTime": true,
+   "verified": false,
+   "from": [
+    "ESP1:champion",
+    "ESP1:runnerup",
+    "ESP_CR:winner",
+    "ESP_CR:runnerup"
+   ]
+  },
+  {
+   "id": "ITA_SC",
+   "name": "Supercoppa Italiana",
+   "country": "ITA",
+   "size": 4,
+   "dates": [
+    "2026-12-18",
+    "2026-12-22"
+   ],
+   "neutral": true,
+   "noExtraTime": true,
+   "verified": false,
+   "from": [
+    "ITA1:champion",
+    "ITA1:runnerup",
+    "ITA_CI:winner",
+    "ITA_CI:runnerup"
+   ]
+  },
+  {
+   "id": "GER_SC",
+   "name": "DFL-Supercup",
+   "country": "GER",
+   "size": 2,
+   "date": "2026-08-08",
+   "noExtraTime": true,
+   "neutral": false,
+   "from": [
+    "GER1:champion",
+    "GER_DFB:winner"
+   ]
+  },
+  {
+   "id": "FRA_SC",
+   "name": "Trophée des Champions",
+   "country": "FRA",
+   "size": 2,
+   "date": "2027-01-03",
+   "noExtraTime": true,
+   "neutral": true,
+   "verified": false,
+   "from": [
+    "FRA1:champion",
+    "FRA_CF:winner"
+   ]
+  }
+ ],
+ "europe": [
+  {
+   "id": "UCL",
+   "name": "UEFA Champions League",
+   "short": "UCL",
+   "teams": 36,
+   "pots": 4,
+   "matches": 8,
+   "leagueDates": [
+    "2026-09-15",
+    "2026-09-29",
+    "2026-10-20",
+    "2026-11-03",
+    "2026-11-24",
+    "2026-12-08",
+    "2027-01-19",
+    "2027-01-27"
+   ],
+   "koDates": {
+    "playoff": [
+     "2027-02-16",
+     "2027-02-23"
+    ],
+    "r16": [
+     "2027-03-09",
+     "2027-03-16"
+    ],
+    "qf": [
+     "2027-04-06",
+     "2027-04-13"
+    ],
+    "sf": [
+     "2027-04-27",
+     "2027-05-04"
+    ],
+    "final": "2027-05-29"
+   }
+  },
+  {
+   "id": "UEL",
+   "name": "UEFA Europa League",
+   "short": "UEL",
+   "teams": 36,
+   "pots": 4,
+   "matches": 8,
+   "leagueDates": [
+    "2026-09-17",
+    "2026-10-01",
+    "2026-10-22",
+    "2026-11-05",
+    "2026-11-26",
+    "2026-12-10",
+    "2027-01-21",
+    "2027-01-28"
+   ],
+   "koDates": {
+    "playoff": [
+     "2027-02-18",
+     "2027-02-25"
+    ],
+    "r16": [
+     "2027-03-11",
+     "2027-03-18"
+    ],
+    "qf": [
+     "2027-04-08",
+     "2027-04-15"
+    ],
+    "sf": [
+     "2027-04-29",
+     "2027-05-06"
+    ],
+    "final": "2027-05-19"
+   }
+  },
+  {
+   "id": "UECL",
+   "name": "UEFA Conference League",
+   "short": "UECL",
+   "teams": 36,
+   "pots": 6,
+   "matches": 6,
+   "leagueDates": [
+    "2026-10-01",
+    "2026-10-22",
+    "2026-11-05",
+    "2026-11-26",
+    "2026-12-10",
+    "2026-12-17"
+   ],
+   "koDates": {
+    "playoff": [
+     "2027-02-18",
+     "2027-02-25"
+    ],
+    "r16": [
+     "2027-03-11",
+     "2027-03-18"
+    ],
+    "qf": [
+     "2027-04-08",
+     "2027-04-15"
+    ],
+    "sf": [
+     "2027-04-29",
+     "2027-05-06"
+    ],
+    "final": "2027-05-26"
+   }
+  }
+ ],
+ "europeCountryCap": 3,
+ "otherCountries": [
+  "POR",
+  "NED",
+  "BEL",
+  "TUR",
+  "SCO",
+  "AUT",
+  "SUI",
+  "CZE",
+  "GRE",
+  "DEN",
+  "NOR",
+  "CRO",
+  "SRB",
+  "UKR",
+  "POL",
+  "CYP",
+  "SWE",
+  "ISR",
+  "HUN",
+  "ROU"
+ ]
+}

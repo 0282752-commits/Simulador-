@@ -1,0 +1,411 @@
+{
+ "season": 2026,
+ "source": "Equipos, conferencias y divisiones de la NFL (estructura vigente desde 2002). Colores aproximados, sin logos.",
+ "teams": [
+  {
+   "id": "BUF",
+   "city": "Buffalo",
+   "name": "Bills",
+   "abbr": "BUF",
+   "conf": "AFC",
+   "div": "Este",
+   "colors": [
+    "#00338D",
+    "#C60C30"
+   ]
+  },
+  {
+   "id": "MIA",
+   "city": "Miami",
+   "name": "Dolphins",
+   "abbr": "MIA",
+   "conf": "AFC",
+   "div": "Este",
+   "colors": [
+    "#008E97",
+    "#FC4C02"
+   ]
+  },
+  {
+   "id": "NE",
+   "city": "New England",
+   "name": "Patriots",
+   "abbr": "NE",
+   "conf": "AFC",
+   "div": "Este",
+   "colors": [
+    "#002244",
+    "#C60C30"
+   ]
+  },
+  {
+   "id": "NYJ",
+   "city": "New York",
+   "name": "Jets",
+   "abbr": "NYJ",
+   "conf": "AFC",
+   "div": "Este",
+   "colors": [
+    "#125740",
+    "#FFFFFF"
+   ]
+  },
+  {
+   "id": "BAL",
+   "city": "Baltimore",
+   "name": "Ravens",
+   "abbr": "BAL",
+   "conf": "AFC",
+   "div": "Norte",
+   "colors": [
+    "#241773",
+    "#9E7C0C"
+   ]
+  },
+  {
+   "id": "CIN",
+   "city": "Cincinnati",
+   "name": "Bengals",
+   "abbr": "CIN",
+   "conf": "AFC",
+   "div": "Norte",
+   "colors": [
+    "#FB4F14",
+    "#000000"
+   ]
+  },
+  {
+   "id": "CLE",
+   "city": "Cleveland",
+   "name": "Browns",
+   "abbr": "CLE",
+   "conf": "AFC",
+   "div": "Norte",
+   "colors": [
+    "#311D00",
+    "#FF3C00"
+   ]
+  },
+  {
+   "id": "PIT",
+   "city": "Pittsburgh",
+   "name": "Steelers",
+   "abbr": "PIT",
+   "conf": "AFC",
+   "div": "Norte",
+   "colors": [
+    "#FFB612",
+    "#101820"
+   ]
+  },
+  {
+   "id": "HOU",
+   "city": "Houston",
+   "name": "Texans",
+   "abbr": "HOU",
+   "conf": "AFC",
+   "div": "Sur",
+   "colors": [
+    "#03202F",
+    "#A71930"
+   ]
+  },
+  {
+   "id": "IND",
+   "city": "Indianapolis",
+   "name": "Colts",
+   "abbr": "IND",
+   "conf": "AFC",
+   "div": "Sur",
+   "colors": [
+    "#002C5F",
+    "#A2AAAD"
+   ]
+  },
+  {
+   "id": "JAX",
+   "city": "Jacksonville",
+   "name": "Jaguars",
+   "abbr": "JAX",
+   "conf": "AFC",
+   "div": "Sur",
+   "colors": [
+    "#006778",
+    "#D7A22A"
+   ]
+  },
+  {
+   "id": "TEN",
+   "city": "Tennessee",
+   "name": "Titans",
+   "abbr": "TEN",
+   "conf": "AFC",
+   "div": "Sur",
+   "colors": [
+    "#0C2340",
+    "#4B92DB"
+   ]
+  },
+  {
+   "id": "DEN",
+   "city": "Denver",
+   "name": "Broncos",
+   "abbr": "DEN",
+   "conf": "AFC",
+   "div": "Oeste",
+   "colors": [
+    "#FB4F14",
+    "#002244"
+   ]
+  },
+  {
+   "id": "KC",
+   "city": "Kansas City",
+   "name": "Chiefs",
+   "abbr": "KC",
+   "conf": "AFC",
+   "div": "Oeste",
+   "colors": [
+    "#E31837",
+    "#FFB81C"
+   ]
+  },
+  {
+   "id": "LV",
+   "city": "Las Vegas",
+   "name": "Raiders",
+   "abbr": "LV",
+   "conf": "AFC",
+   "div": "Oeste",
+   "colors": [
+    "#000000",
+    "#A5ACAF"
+   ]
+  },
+  {
+   "id": "LAC",
+   "city": "Los Angeles",
+   "name": "Chargers",
+   "abbr": "LAC",
+   "conf": "AFC",
+   "div": "Oeste",
+   "colors": [
+    "#0080C6",
+    "#FFC20E"
+   ]
+  },
+  {
+   "id": "DAL",
+   "city": "Dallas",
+   "name": "Cowboys",
+   "abbr": "DAL",
+   "conf": "NFC",
+   "div": "Este",
+   "colors": [
+    "#003594",
+    "#869397"
+   ]
+  },
+  {
+   "id": "NYG",
+   "city": "New York",
+   "name": "Giants",
+   "abbr": "NYG",
+   "conf": "NFC",
+   "div": "Este",
+   "colors": [
+    "#0B2265",
+    "#A71930"
+   ]
+  },
+  {
+   "id": "PHI",
+   "city": "Philadelphia",
+   "name": "Eagles",
+   "abbr": "PHI",
+   "conf": "NFC",
+   "div": "Este",
+   "colors": [
+    "#004C54",
+    "#A5ACAF"
+   ]
+  },
+  {
+   "id": "WAS",
+   "city": "Washington",
+   "name": "Commanders",
+   "abbr": "WAS",
+   "conf": "NFC",
+   "div": "Este",
+   "colors": [
+    "#5A1414",
+    "#FFB612"
+   ]
+  },
+  {
+   "id": "CHI",
+   "city": "Chicago",
+   "name": "Bears",
+   "abbr": "CHI",
+   "conf": "NFC",
+   "div": "Norte",
+   "colors": [
+    "#0B162A",
+    "#C83803"
+   ]
+  },
+  {
+   "id": "DET",
+   "city": "Detroit",
+   "name": "Lions",
+   "abbr": "DET",
+   "conf": "NFC",
+   "div": "Norte",
+   "colors": [
+    "#0076B6",
+    "#B0B7BC"
+   ]
+  },
+  {
+   "id": "GB",
+   "city": "Green Bay",
+   "name": "Packers",
+   "abbr": "GB",
+   "conf": "NFC",
+   "div": "Norte",
+   "colors": [
+    "#203731",
+    "#FFB612"
+   ]
+  },
+  {
+   "id": "MIN",
+   "city": "Minnesota",
+   "name": "Vikings",
+   "abbr": "MIN",
+   "conf": "NFC",
+   "div": "Norte",
+   "colors": [
+    "#4F2683",
+    "#FFC62F"
+   ]
+  },
+  {
+   "id": "ATL",
+   "city": "Atlanta",
+   "name": "Falcons",
+   "abbr": "ATL",
+   "conf": "NFC",
+   "div": "Sur",
+   "colors": [
+    "#A71930",
+    "#000000"
+   ]
+  },
+  {
+   "id": "CAR",
+   "city": "Carolina",
+   "name": "Panthers",
+   "abbr": "CAR",
+   "conf": "NFC",
+   "div": "Sur",
+   "colors": [
+    "#0085CA",
+    "#101820"
+   ]
+  },
+  {
+   "id": "NO",
+   "city": "New Orleans",
+   "name": "Saints",
+   "abbr": "NO",
+   "conf": "NFC",
+   "div": "Sur",
+   "colors": [
+    "#D3BC8D",
+    "#101820"
+   ]
+  },
+  {
+   "id": "TB",
+   "city": "Tampa Bay",
+   "name": "Buccaneers",
+   "abbr": "TB",
+   "conf": "NFC",
+   "div": "Sur",
+   "colors": [
+    "#D50A0A",
+    "#34302B"
+   ]
+  },
+  {
+   "id": "ARI",
+   "city": "Arizona",
+   "name": "Cardinals",
+   "abbr": "ARI",
+   "conf": "NFC",
+   "div": "Oeste",
+   "colors": [
+    "#97233F",
+    "#000000"
+   ]
+  },
+  {
+   "id": "LAR",
+   "city": "Los Angeles",
+   "name": "Rams",
+   "abbr": "LAR",
+   "conf": "NFC",
+   "div": "Oeste",
+   "colors": [
+    "#003594",
+    "#FFA300"
+   ]
+  },
+  {
+   "id": "SF",
+   "city": "San Francisco",
+   "name": "49ers",
+   "abbr": "SF",
+   "conf": "NFC",
+   "div": "Oeste",
+   "colors": [
+    "#AA0000",
+    "#B3995D"
+   ]
+  },
+  {
+   "id": "SEA",
+   "city": "Seattle",
+   "name": "Seahawks",
+   "abbr": "SEA",
+   "conf": "NFC",
+   "div": "Oeste",
+   "colors": [
+    "#002244",
+    "#69BE28"
+   ]
+  }
+ ],
+ "scheduleRotation": {
+  "note": "Rotación de rivales según la fórmula de la NFL. Emparejamientos 2026 deducidos del ciclo (3 años intraconferencia, 4 años interconferencia) a partir de temporadas anteriores: VERIFICAR con el calendario oficial.",
+  "intra2026": {
+   "Este": "Oeste",
+   "Norte": "Sur"
+  },
+  "inter2026": {
+   "AFC:Este": "NFC:Norte",
+   "AFC:Norte": "NFC:Sur",
+   "AFC:Sur": "NFC:Oeste",
+   "AFC:Oeste": "NFC:Este"
+  },
+  "seventeenth2026": {
+   "AFC:Este": "NFC:Oeste",
+   "AFC:Norte": "NFC:Este",
+   "AFC:Sur": "NFC:Norte",
+   "AFC:Oeste": "NFC:Sur"
+  },
+  "firstSunday": "2026-09-13",
+  "superBowl": "2027-02-14"
+ }
+}
