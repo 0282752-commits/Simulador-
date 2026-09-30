@@ -1,0 +1,3140 @@
+{
+ "scale": "ESCALA PROPIA DE ESTA APP (1-100). Estos valores son inventados para el juego y NO son estadísticas oficiales de DC Comics. Son editables desde la app.",
+ "characters": [
+  {
+   "id": "superman",
+   "name": "Superman",
+   "str": 98,
+   "spd": 95,
+   "dur": 97,
+   "cmb": 80,
+   "int": 75,
+   "pow": 90,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#0b3d91",
+    "#d62828"
+   ],
+   "attackTags": [],
+   "weaknesses": {
+    "kryptonita": 2.5,
+    "magia": 1.6
+   },
+   "special": {
+    "name": "Visión de calor",
+    "type": "dano",
+    "power": 1.9
+   },
+   "abilities": [
+    "Superfuerza",
+    "Vuelo",
+    "Visión de calor",
+    "Aliento congelante",
+    "Invulnerabilidad"
+   ]
+  },
+  {
+   "id": "batman",
+   "name": "Batman",
+   "str": 46,
+   "spd": 35,
+   "dur": 50,
+   "cmb": 98,
+   "int": 99,
+   "pow": 20,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league",
+    "bat-familia"
+   ],
+   "colors": [
+    "#1f2937",
+    "#facc15"
+   ],
+   "attackTags": [
+    "tecnologia",
+    "kryptonita"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Plan de contingencia",
+    "type": "potenciar",
+    "power": 1.3
+   },
+   "abilities": [
+    "Maestro de artes marciales",
+    "Detective",
+    "Gadgets",
+    "Preparación"
+   ]
+  },
+  {
+   "id": "wonder-woman",
+   "name": "Wonder Woman",
+   "str": 92,
+   "spd": 80,
+   "dur": 88,
+   "cmb": 98,
+   "int": 80,
+   "pow": 72,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#b91c1c",
+    "#1d4ed8"
+   ],
+   "attackTags": [
+    "magia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Lazo de la Verdad",
+    "type": "aturdir",
+    "power": 1.0
+   },
+   "abilities": [
+    "Fuerza divina",
+    "Brazaletes",
+    "Lazo de la Verdad",
+    "Vuelo"
+   ]
+  },
+  {
+   "id": "flash",
+   "name": "Flash",
+   "str": 45,
+   "spd": 100,
+   "dur": 52,
+   "cmb": 72,
+   "int": 85,
+   "pow": 78,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#dc2626",
+    "#facc15"
+   ],
+   "attackTags": [
+    "electricidad"
+   ],
+   "weaknesses": {
+    "frio": 1.4
+   },
+   "special": {
+    "name": "Puñetazo de masa infinita",
+    "type": "dano",
+    "power": 2.0
+   },
+   "abilities": [
+    "Supervelocidad",
+    "Fuerza de la Velocidad",
+    "Vibrar a través de objetos"
+   ]
+  },
+  {
+   "id": "green-lantern-hal-jordan",
+   "name": "Green Lantern (Hal Jordan)",
+   "str": 50,
+   "spd": 72,
+   "dur": 70,
+   "cmb": 72,
+   "int": 72,
+   "pow": 92,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league",
+    "green-lantern-corps"
+   ],
+   "colors": [
+    "#16a34a",
+    "#111827"
+   ],
+   "attackTags": [
+    "luz"
+   ],
+   "weaknesses": {
+    "miedo": 1.4
+   },
+   "special": {
+    "name": "Constructo gigante",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Anillo de poder",
+    "Constructos",
+    "Vuelo",
+    "Voluntad"
+   ]
+  },
+  {
+   "id": "aquaman",
+   "name": "Aquaman",
+   "str": 85,
+   "spd": 65,
+   "dur": 85,
+   "cmb": 84,
+   "int": 70,
+   "pow": 72,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#f59e0b",
+    "#15803d"
+   ],
+   "attackTags": [],
+   "weaknesses": {
+    "fuego": 1.3
+   },
+   "special": {
+    "name": "Tridente de Poseidón",
+    "type": "dano",
+    "power": 1.7
+   },
+   "abilities": [
+    "Fuerza atlante",
+    "Telepatía marina",
+    "Tridente"
+   ]
+  },
+  {
+   "id": "martian-manhunter",
+   "name": "Martian Manhunter",
+   "str": 88,
+   "spd": 78,
+   "dur": 85,
+   "cmb": 82,
+   "int": 90,
+   "pow": 90,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#15803d",
+    "#1e3a8a"
+   ],
+   "attackTags": [
+    "telepatia"
+   ],
+   "weaknesses": {
+    "fuego": 2.0
+   },
+   "special": {
+    "name": "Ataque psíquico",
+    "type": "aturdir",
+    "power": 1.2
+   },
+   "abilities": [
+    "Telepatía",
+    "Cambio de forma",
+    "Intangibilidad",
+    "Superfuerza"
+   ]
+  },
+  {
+   "id": "cyborg",
+   "name": "Cyborg",
+   "str": 72,
+   "spd": 45,
+   "dur": 80,
+   "cmb": 72,
+   "int": 90,
+   "pow": 78,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league",
+    "teen-titans"
+   ],
+   "colors": [
+    "#9ca3af",
+    "#dc2626"
+   ],
+   "attackTags": [
+    "tecnologia",
+    "sonico"
+   ],
+   "weaknesses": {
+    "electricidad": 1.4
+   },
+   "special": {
+    "name": "Cañón sónico",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Tecnología Madre Caja",
+    "Cañón sónico",
+    "Hackeo"
+   ]
+  },
+  {
+   "id": "green-arrow",
+   "name": "Green Arrow",
+   "str": 30,
+   "spd": 42,
+   "dur": 35,
+   "cmb": 88,
+   "int": 78,
+   "pow": 15,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#15803d",
+    "#facc15"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Flecha truco",
+    "type": "aturdir",
+    "power": 0.9
+   },
+   "abilities": [
+    "Arquero experto",
+    "Flechas truco"
+   ]
+  },
+  {
+   "id": "black-canary",
+   "name": "Black Canary",
+   "str": 35,
+   "spd": 48,
+   "dur": 38,
+   "cmb": 93,
+   "int": 72,
+   "pow": 72,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#111827",
+    "#fbbf24"
+   ],
+   "attackTags": [
+    "sonico"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Grito del canario",
+    "type": "aturdir",
+    "power": 1.3
+   },
+   "abilities": [
+    "Grito sónico",
+    "Artes marciales"
+   ]
+  },
+  {
+   "id": "hawkgirl",
+   "name": "Hawkgirl",
+   "str": 76,
+   "spd": 62,
+   "dur": 72,
+   "cmb": 86,
+   "int": 62,
+   "pow": 45,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#b45309",
+    "#facc15"
+   ],
+   "attackTags": [
+    "nth"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Maza de metal Nth",
+    "type": "dano",
+    "power": 1.7
+   },
+   "abilities": [
+    "Metal Nth",
+    "Vuelo",
+    "Reencarnación"
+   ]
+  },
+  {
+   "id": "zatanna",
+   "name": "Zatanna",
+   "str": 20,
+   "spd": 35,
+   "dur": 32,
+   "cmb": 52,
+   "int": 86,
+   "pow": 92,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#1f2937",
+    "#e5e7eb"
+   ],
+   "attackTags": [
+    "magia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Hechizo invertido",
+    "type": "aturdir",
+    "power": 1.4
+   },
+   "abilities": [
+    "Magia verbal",
+    "Ilusionismo"
+   ]
+  },
+  {
+   "id": "shazam",
+   "name": "Shazam",
+   "str": 95,
+   "spd": 90,
+   "dur": 92,
+   "cmb": 76,
+   "int": 55,
+   "pow": 90,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#dc2626",
+    "#facc15"
+   ],
+   "attackTags": [
+    "magia",
+    "electricidad"
+   ],
+   "weaknesses": {
+    "magia": 1.5
+   },
+   "special": {
+    "name": "Rayo mágico",
+    "type": "dano",
+    "power": 1.9
+   },
+   "abilities": [
+    "Sabiduría de Salomón",
+    "Fuerza de Hércules",
+    "Rayo"
+   ]
+  },
+  {
+   "id": "firestorm",
+   "name": "Firestorm",
+   "str": 65,
+   "spd": 70,
+   "dur": 75,
+   "cmb": 55,
+   "int": 70,
+   "pow": 92,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#ea580c",
+    "#facc15"
+   ],
+   "attackTags": [
+    "fuego"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Transmutación",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Transmutación de materia",
+    "Vuelo",
+    "Explosiones nucleares"
+   ]
+  },
+  {
+   "id": "plastic-man",
+   "name": "Plastic Man",
+   "str": 60,
+   "spd": 55,
+   "dur": 96,
+   "cmb": 55,
+   "int": 50,
+   "pow": 70,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#dc2626",
+    "#facc15"
+   ],
+   "attackTags": [],
+   "weaknesses": {
+    "frio": 1.4
+   },
+   "special": {
+    "name": "Forma elástica",
+    "type": "escudo",
+    "power": 1.0
+   },
+   "abilities": [
+    "Elasticidad",
+    "Cambio de forma",
+    "Casi indestructible"
+   ]
+  },
+  {
+   "id": "blue-beetle",
+   "name": "Blue Beetle",
+   "str": 58,
+   "spd": 62,
+   "dur": 72,
+   "cmb": 66,
+   "int": 66,
+   "pow": 78,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#1d4ed8",
+    "#111827"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {
+    "magia": 1.2
+   },
+   "special": {
+    "name": "Arsenal del Escarabajo",
+    "type": "dano",
+    "power": 1.7
+   },
+   "abilities": [
+    "Armadura Khaji Da",
+    "Armas adaptativas",
+    "Vuelo"
+   ]
+  },
+  {
+   "id": "booster-gold",
+   "name": "Booster Gold",
+   "str": 50,
+   "spd": 56,
+   "dur": 62,
+   "cmb": 66,
+   "int": 58,
+   "pow": 62,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#facc15",
+    "#1d4ed8"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Campo de fuerza",
+    "type": "escudo",
+    "power": 1.1
+   },
+   "abilities": [
+    "Tecnología del siglo XXV",
+    "Campo de fuerza",
+    "Vuelo"
+   ]
+  },
+  {
+   "id": "the-atom",
+   "name": "The Atom",
+   "str": 30,
+   "spd": 50,
+   "dur": 40,
+   "cmb": 70,
+   "int": 95,
+   "pow": 60,
+   "alignment": "heroe",
+   "teams": [
+    "justice-league"
+   ],
+   "colors": [
+    "#1d4ed8",
+    "#dc2626"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Golpe subatómico",
+    "type": "dano",
+    "power": 1.6
+   },
+   "abilities": [
+    "Control de tamaño y densidad",
+    "Genio científico"
+   ]
+  },
+  {
+   "id": "nightwing",
+   "name": "Nightwing",
+   "str": 42,
+   "spd": 48,
+   "dur": 45,
+   "cmb": 94,
+   "int": 86,
+   "pow": 15,
+   "alignment": "heroe",
+   "teams": [
+    "teen-titans",
+    "bat-familia"
+   ],
+   "colors": [
+    "#111827",
+    "#2563eb"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Bastones de combate",
+    "type": "dano",
+    "power": 1.5
+   },
+   "abilities": [
+    "Acróbata",
+    "Artes marciales",
+    "Líder táctico"
+   ]
+  },
+  {
+   "id": "robin-damian-wayne",
+   "name": "Robin (Damian Wayne)",
+   "str": 30,
+   "spd": 42,
+   "dur": 35,
+   "cmb": 89,
+   "int": 86,
+   "pow": 10,
+   "alignment": "heroe",
+   "teams": [
+    "teen-titans",
+    "bat-familia"
+   ],
+   "colors": [
+    "#dc2626",
+    "#15803d"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Técnica de la Liga de Asesinos",
+    "type": "dano",
+    "power": 1.5
+   },
+   "abilities": [
+    "Entrenado por la Liga de Asesinos",
+    "Espada"
+   ]
+  },
+  {
+   "id": "starfire",
+   "name": "Starfire",
+   "str": 82,
+   "spd": 82,
+   "dur": 80,
+   "cmb": 78,
+   "int": 58,
+   "pow": 86,
+   "alignment": "heroe",
+   "teams": [
+    "teen-titans"
+   ],
+   "colors": [
+    "#ea580c",
+    "#7c3aed"
+   ],
+   "attackTags": [
+    "luz"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Starbolt",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Fuerza tamaraneana",
+    "Vuelo",
+    "Starbolts"
+   ]
+  },
+  {
+   "id": "raven",
+   "name": "Raven",
+   "str": 25,
+   "spd": 40,
+   "dur": 42,
+   "cmb": 52,
+   "int": 86,
+   "pow": 96,
+   "alignment": "heroe",
+   "teams": [
+    "teen-titans"
+   ],
+   "colors": [
+    "#4c1d95",
+    "#111827"
+   ],
+   "attackTags": [
+    "magia",
+    "telepatia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Azarath Metrion Zinthos",
+    "type": "aturdir",
+    "power": 1.5
+   },
+   "abilities": [
+    "Magia oscura",
+    "Teletransporte",
+    "Empatía"
+   ]
+  },
+  {
+   "id": "beast-boy",
+   "name": "Beast Boy",
+   "str": 66,
+   "spd": 58,
+   "dur": 66,
+   "cmb": 62,
+   "int": 55,
+   "pow": 70,
+   "alignment": "heroe",
+   "teams": [
+    "teen-titans",
+    "doom-patrol"
+   ],
+   "colors": [
+    "#16a34a",
+    "#7c3aed"
+   ],
+   "attackTags": [],
+   "weaknesses": {},
+   "special": {
+    "name": "Forma de T-Rex",
+    "type": "dano",
+    "power": 1.7
+   },
+   "abilities": [
+    "Transformación animal"
+   ]
+  },
+  {
+   "id": "wonder-girl",
+   "name": "Wonder Girl",
+   "str": 82,
+   "spd": 72,
+   "dur": 78,
+   "cmb": 80,
+   "int": 58,
+   "pow": 62,
+   "alignment": "heroe",
+   "teams": [
+    "teen-titans"
+   ],
+   "colors": [
+    "#b91c1c",
+    "#1d4ed8"
+   ],
+   "attackTags": [
+    "magia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Lazo de Ares",
+    "type": "aturdir",
+    "power": 1.0
+   },
+   "abilities": [
+    "Fuerza divina",
+    "Vuelo",
+    "Lazo"
+   ]
+  },
+  {
+   "id": "superboy",
+   "name": "Superboy",
+   "str": 88,
+   "spd": 82,
+   "dur": 86,
+   "cmb": 72,
+   "int": 62,
+   "pow": 76,
+   "alignment": "heroe",
+   "teams": [
+    "teen-titans"
+   ],
+   "colors": [
+    "#111827",
+    "#dc2626"
+   ],
+   "attackTags": [],
+   "weaknesses": {
+    "kryptonita": 2.2,
+    "magia": 1.4
+   },
+   "special": {
+    "name": "Telequinesis táctil",
+    "type": "dano",
+    "power": 1.7
+   },
+   "abilities": [
+    "Superfuerza",
+    "Telequinesis táctil",
+    "Vuelo"
+   ]
+  },
+  {
+   "id": "kid-flash",
+   "name": "Kid Flash",
+   "str": 38,
+   "spd": 96,
+   "dur": 45,
+   "cmb": 62,
+   "int": 70,
+   "pow": 70,
+   "alignment": "heroe",
+   "teams": [
+    "teen-titans"
+   ],
+   "colors": [
+    "#facc15",
+    "#dc2626"
+   ],
+   "attackTags": [
+    "electricidad"
+   ],
+   "weaknesses": {
+    "frio": 1.4
+   },
+   "special": {
+    "name": "Ráfaga de velocidad",
+    "type": "dano",
+    "power": 1.6
+   },
+   "abilities": [
+    "Supervelocidad"
+   ]
+  },
+  {
+   "id": "aqualad",
+   "name": "Aqualad",
+   "str": 75,
+   "spd": 62,
+   "dur": 75,
+   "cmb": 78,
+   "int": 65,
+   "pow": 75,
+   "alignment": "heroe",
+   "teams": [
+    "teen-titans"
+   ],
+   "colors": [
+    "#15803d",
+    "#111827"
+   ],
+   "attackTags": [
+    "electricidad"
+   ],
+   "weaknesses": {
+    "fuego": 1.3
+   },
+   "special": {
+    "name": "Hidroquinesis",
+    "type": "dano",
+    "power": 1.6
+   },
+   "abilities": [
+    "Control del agua",
+    "Fuerza atlante"
+   ]
+  },
+  {
+   "id": "jay-garrick",
+   "name": "Jay Garrick",
+   "str": 40,
+   "spd": 90,
+   "dur": 45,
+   "cmb": 62,
+   "int": 72,
+   "pow": 66,
+   "alignment": "heroe",
+   "teams": [
+    "jsa"
+   ],
+   "colors": [
+    "#dc2626",
+    "#9ca3af"
+   ],
+   "attackTags": [
+    "electricidad"
+   ],
+   "weaknesses": {
+    "frio": 1.3
+   },
+   "special": {
+    "name": "Torbellino",
+    "type": "aturdir",
+    "power": 1.0
+   },
+   "abilities": [
+    "Supervelocidad"
+   ]
+  },
+  {
+   "id": "alan-scott",
+   "name": "Alan Scott",
+   "str": 45,
+   "spd": 62,
+   "dur": 72,
+   "cmb": 62,
+   "int": 72,
+   "pow": 93,
+   "alignment": "heroe",
+   "teams": [
+    "jsa"
+   ],
+   "colors": [
+    "#15803d",
+    "#dc2626"
+   ],
+   "attackTags": [
+    "magia",
+    "luz"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Llama Verde",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Anillo místico de la Llama Verde",
+    "Vuelo"
+   ]
+  },
+  {
+   "id": "doctor-fate",
+   "name": "Doctor Fate",
+   "str": 32,
+   "spd": 50,
+   "dur": 62,
+   "cmb": 55,
+   "int": 92,
+   "pow": 98,
+   "alignment": "heroe",
+   "teams": [
+    "jsa"
+   ],
+   "colors": [
+    "#1d4ed8",
+    "#facc15"
+   ],
+   "attackTags": [
+    "magia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Casco de Nabu",
+    "type": "dano",
+    "power": 2.0
+   },
+   "abilities": [
+    "Magia de Nabu",
+    "Hechicería",
+    "Precognición"
+   ]
+  },
+  {
+   "id": "hawkman",
+   "name": "Hawkman",
+   "str": 80,
+   "spd": 56,
+   "dur": 76,
+   "cmb": 90,
+   "int": 62,
+   "pow": 40,
+   "alignment": "heroe",
+   "teams": [
+    "jsa",
+    "justice-league"
+   ],
+   "colors": [
+    "#b45309",
+    "#15803d"
+   ],
+   "attackTags": [
+    "nth"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Maza de metal Nth",
+    "type": "dano",
+    "power": 1.7
+   },
+   "abilities": [
+    "Metal Nth",
+    "Vuelo",
+    "Guerrero reencarnado"
+   ]
+  },
+  {
+   "id": "wildcat",
+   "name": "Wildcat",
+   "str": 56,
+   "spd": 42,
+   "dur": 56,
+   "cmb": 92,
+   "int": 56,
+   "pow": 5,
+   "alignment": "heroe",
+   "teams": [
+    "jsa"
+   ],
+   "colors": [
+    "#111827",
+    "#facc15"
+   ],
+   "attackTags": [],
+   "weaknesses": {},
+   "special": {
+    "name": "Gancho de campeón",
+    "type": "dano",
+    "power": 1.5
+   },
+   "abilities": [
+    "Boxeador campeón",
+    "Nueve vidas"
+   ]
+  },
+  {
+   "id": "stargirl",
+   "name": "Stargirl",
+   "str": 36,
+   "spd": 56,
+   "dur": 46,
+   "cmb": 72,
+   "int": 62,
+   "pow": 72,
+   "alignment": "heroe",
+   "teams": [
+    "jsa"
+   ],
+   "colors": [
+    "#1d4ed8",
+    "#dc2626"
+   ],
+   "attackTags": [
+    "luz"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Bastón cósmico",
+    "type": "dano",
+    "power": 1.6
+   },
+   "abilities": [
+    "Bastón cósmico",
+    "Vuelo"
+   ]
+  },
+  {
+   "id": "power-girl",
+   "name": "Power Girl",
+   "str": 95,
+   "spd": 88,
+   "dur": 95,
+   "cmb": 78,
+   "int": 72,
+   "pow": 82,
+   "alignment": "heroe",
+   "teams": [
+    "jsa"
+   ],
+   "colors": [
+    "#f8fafc",
+    "#1d4ed8"
+   ],
+   "attackTags": [],
+   "weaknesses": {
+    "kryptonita": 2.5,
+    "magia": 1.6
+   },
+   "special": {
+    "name": "Supergolpe",
+    "type": "dano",
+    "power": 1.9
+   },
+   "abilities": [
+    "Superfuerza kryptoniana",
+    "Vuelo",
+    "Visión de calor"
+   ]
+  },
+  {
+   "id": "hourman",
+   "name": "Hourman",
+   "str": 60,
+   "spd": 55,
+   "dur": 62,
+   "cmb": 70,
+   "int": 80,
+   "pow": 40,
+   "alignment": "heroe",
+   "teams": [
+    "jsa"
+   ],
+   "colors": [
+    "#facc15",
+    "#111827"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Una hora de poder",
+    "type": "potenciar",
+    "power": 1.2
+   },
+   "abilities": [
+    "Miraclo",
+    "Visión temporal"
+   ]
+  },
+  {
+   "id": "harley-quinn",
+   "name": "Harley Quinn",
+   "str": 40,
+   "spd": 55,
+   "dur": 48,
+   "cmb": 78,
+   "int": 62,
+   "pow": 5,
+   "alignment": "antiheroe",
+   "teams": [
+    "suicide-squad"
+   ],
+   "colors": [
+    "#dc2626",
+    "#111827"
+   ],
+   "attackTags": [],
+   "weaknesses": {},
+   "special": {
+    "name": "Mazazo",
+    "type": "dano",
+    "power": 1.6
+   },
+   "abilities": [
+    "Acrobacia",
+    "Mazo gigante",
+    "Impredecible"
+   ]
+  },
+  {
+   "id": "deadshot",
+   "name": "Deadshot",
+   "str": 30,
+   "spd": 40,
+   "dur": 40,
+   "cmb": 92,
+   "int": 72,
+   "pow": 10,
+   "alignment": "villano",
+   "teams": [
+    "suicide-squad"
+   ],
+   "colors": [
+    "#dc2626",
+    "#9ca3af"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Tiro que nunca falla",
+    "type": "dano",
+    "power": 1.9
+   },
+   "abilities": [
+    "Puntería perfecta",
+    "Armas de muñeca"
+   ]
+  },
+  {
+   "id": "captain-boomerang",
+   "name": "Captain Boomerang",
+   "str": 26,
+   "spd": 42,
+   "dur": 36,
+   "cmb": 72,
+   "int": 52,
+   "pow": 10,
+   "alignment": "villano",
+   "teams": [
+    "suicide-squad"
+   ],
+   "colors": [
+    "#1d4ed8",
+    "#f8fafc"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Bumerán explosivo",
+    "type": "dano",
+    "power": 1.5
+   },
+   "abilities": [
+    "Bumeranes truco"
+   ]
+  },
+  {
+   "id": "king-shark",
+   "name": "King Shark",
+   "str": 86,
+   "spd": 45,
+   "dur": 82,
+   "cmb": 66,
+   "int": 30,
+   "pow": 20,
+   "alignment": "villano",
+   "teams": [
+    "suicide-squad"
+   ],
+   "colors": [
+    "#1e3a8a",
+    "#9ca3af"
+   ],
+   "attackTags": [],
+   "weaknesses": {},
+   "special": {
+    "name": "Mordida",
+    "type": "dano",
+    "power": 1.7
+   },
+   "abilities": [
+    "Fuerza bruta",
+    "Regeneración"
+   ]
+  },
+  {
+   "id": "killer-croc",
+   "name": "Killer Croc",
+   "str": 84,
+   "spd": 40,
+   "dur": 84,
+   "cmb": 66,
+   "int": 30,
+   "pow": 10,
+   "alignment": "villano",
+   "teams": [
+    "suicide-squad"
+   ],
+   "colors": [
+    "#15803d",
+    "#78350f"
+   ],
+   "attackTags": [],
+   "weaknesses": {
+    "frio": 1.3
+   },
+   "special": {
+    "name": "Embestida",
+    "type": "dano",
+    "power": 1.6
+   },
+   "abilities": [
+    "Piel de reptil",
+    "Fuerza"
+   ]
+  },
+  {
+   "id": "bloodsport",
+   "name": "Bloodsport",
+   "str": 36,
+   "spd": 40,
+   "dur": 46,
+   "cmb": 90,
+   "int": 66,
+   "pow": 15,
+   "alignment": "antiheroe",
+   "teams": [
+    "suicide-squad"
+   ],
+   "colors": [
+    "#dc2626",
+    "#9ca3af"
+   ],
+   "attackTags": [
+    "tecnologia",
+    "kryptonita"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Bala de kryptonita",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Arsenal teletransportado",
+    "Balas de kryptonita"
+   ]
+  },
+  {
+   "id": "peacemaker",
+   "name": "Peacemaker",
+   "str": 46,
+   "spd": 40,
+   "dur": 52,
+   "cmb": 86,
+   "int": 50,
+   "pow": 10,
+   "alignment": "antiheroe",
+   "teams": [
+    "suicide-squad"
+   ],
+   "colors": [
+    "#f8fafc",
+    "#1d4ed8"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Casco multiusos",
+    "type": "dano",
+    "power": 1.5
+   },
+   "abilities": [
+    "Tirador",
+    "Cascos con gadgets"
+   ]
+  },
+  {
+   "id": "el-diablo",
+   "name": "El Diablo",
+   "str": 36,
+   "spd": 40,
+   "dur": 46,
+   "cmb": 56,
+   "int": 52,
+   "pow": 86,
+   "alignment": "antiheroe",
+   "teams": [
+    "suicide-squad"
+   ],
+   "colors": [
+    "#dc2626",
+    "#111827"
+   ],
+   "attackTags": [
+    "fuego",
+    "magia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Infierno",
+    "type": "dano",
+    "power": 1.9
+   },
+   "abilities": [
+    "Piroquinesis",
+    "Invocación demoníaca"
+   ]
+  },
+  {
+   "id": "enchantress",
+   "name": "Enchantress",
+   "str": 22,
+   "spd": 40,
+   "dur": 42,
+   "cmb": 40,
+   "int": 82,
+   "pow": 94,
+   "alignment": "villano",
+   "teams": [
+    "suicide-squad"
+   ],
+   "colors": [
+    "#15803d",
+    "#4c1d95"
+   ],
+   "attackTags": [
+    "magia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Hechizo ancestral",
+    "type": "aturdir",
+    "power": 1.4
+   },
+   "abilities": [
+    "Magia ancestral",
+    "Teletransporte"
+   ]
+  },
+  {
+   "id": "katana",
+   "name": "Katana",
+   "str": 42,
+   "spd": 58,
+   "dur": 46,
+   "cmb": 93,
+   "int": 62,
+   "pow": 42,
+   "alignment": "antiheroe",
+   "teams": [
+    "suicide-squad"
+   ],
+   "colors": [
+    "#dc2626",
+    "#111827"
+   ],
+   "attackTags": [
+    "magia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Soultaker",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Espada Soultaker",
+    "Artes marciales"
+   ]
+  },
+  {
+   "id": "rick-flag",
+   "name": "Rick Flag",
+   "str": 42,
+   "spd": 42,
+   "dur": 46,
+   "cmb": 86,
+   "int": 66,
+   "pow": 5,
+   "alignment": "heroe",
+   "teams": [
+    "suicide-squad"
+   ],
+   "colors": [
+    "#15803d",
+    "#9ca3af"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Táctica militar",
+    "type": "potenciar",
+    "power": 1.1
+   },
+   "abilities": [
+    "Soldado de élite",
+    "Líder"
+   ]
+  },
+  {
+   "id": "lex-luthor",
+   "name": "Lex Luthor",
+   "str": 80,
+   "spd": 62,
+   "dur": 82,
+   "cmb": 72,
+   "int": 100,
+   "pow": 72,
+   "alignment": "villano",
+   "teams": [
+    "legion-of-doom"
+   ],
+   "colors": [
+    "#15803d",
+    "#7c3aed"
+   ],
+   "attackTags": [
+    "tecnologia",
+    "kryptonita"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Armadura de guerra",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Genio",
+    "Armadura de guerra",
+    "Kryptonita"
+   ]
+  },
+  {
+   "id": "sinestro",
+   "name": "Sinestro",
+   "str": 52,
+   "spd": 72,
+   "dur": 72,
+   "cmb": 78,
+   "int": 86,
+   "pow": 93,
+   "alignment": "villano",
+   "teams": [
+    "legion-of-doom",
+    "villanos"
+   ],
+   "colors": [
+    "#facc15",
+    "#111827"
+   ],
+   "attackTags": [
+    "miedo",
+    "luz"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Constructo del miedo",
+    "type": "aturdir",
+    "power": 1.3
+   },
+   "abilities": [
+    "Anillo amarillo",
+    "Miedo"
+   ]
+  },
+  {
+   "id": "cheetah",
+   "name": "Cheetah",
+   "str": 72,
+   "spd": 84,
+   "dur": 66,
+   "cmb": 86,
+   "int": 52,
+   "pow": 40,
+   "alignment": "villano",
+   "teams": [
+    "legion-of-doom"
+   ],
+   "colors": [
+    "#f59e0b",
+    "#78350f"
+   ],
+   "attackTags": [
+    "magia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Garras divinas",
+    "type": "dano",
+    "power": 1.6
+   },
+   "abilities": [
+    "Fuerza y velocidad feral",
+    "Garras"
+   ]
+  },
+  {
+   "id": "black-manta",
+   "name": "Black Manta",
+   "str": 72,
+   "spd": 46,
+   "dur": 72,
+   "cmb": 84,
+   "int": 72,
+   "pow": 55,
+   "alignment": "villano",
+   "teams": [
+    "legion-of-doom"
+   ],
+   "colors": [
+    "#111827",
+    "#dc2626"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Rayos ópticos",
+    "type": "dano",
+    "power": 1.7
+   },
+   "abilities": [
+    "Traje atlante",
+    "Rayos ópticos"
+   ]
+  },
+  {
+   "id": "gorilla-grodd",
+   "name": "Gorilla Grodd",
+   "str": 86,
+   "spd": 42,
+   "dur": 82,
+   "cmb": 72,
+   "int": 96,
+   "pow": 82,
+   "alignment": "villano",
+   "teams": [
+    "legion-of-doom",
+    "villanos"
+   ],
+   "colors": [
+    "#78350f",
+    "#9ca3af"
+   ],
+   "attackTags": [
+    "telepatia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Dominación mental",
+    "type": "aturdir",
+    "power": 1.5
+   },
+   "abilities": [
+    "Telepatía",
+    "Genio",
+    "Fuerza"
+   ]
+  },
+  {
+   "id": "bizarro",
+   "name": "Bizarro",
+   "str": 95,
+   "spd": 86,
+   "dur": 95,
+   "cmb": 50,
+   "int": 15,
+   "pow": 86,
+   "alignment": "villano",
+   "teams": [
+    "legion-of-doom"
+   ],
+   "colors": [
+    "#9ca3af",
+    "#1d4ed8"
+   ],
+   "attackTags": [],
+   "weaknesses": {
+    "kryptonita": 1.8
+   },
+   "special": {
+    "name": "Visión congelante",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Fuerza inversa",
+    "Aliento de fuego"
+   ]
+  },
+  {
+   "id": "captain-cold",
+   "name": "Captain Cold",
+   "str": 32,
+   "spd": 36,
+   "dur": 42,
+   "cmb": 72,
+   "int": 66,
+   "pow": 72,
+   "alignment": "villano",
+   "teams": [
+    "legion-of-doom",
+    "villanos"
+   ],
+   "colors": [
+    "#1d4ed8",
+    "#e5e7eb"
+   ],
+   "attackTags": [
+    "frio",
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Cero absoluto",
+    "type": "aturdir",
+    "power": 1.3
+   },
+   "abilities": [
+    "Pistola congelante"
+   ]
+  },
+  {
+   "id": "solomon-grundy",
+   "name": "Solomon Grundy",
+   "str": 93,
+   "spd": 32,
+   "dur": 95,
+   "cmb": 56,
+   "int": 10,
+   "pow": 40,
+   "alignment": "villano",
+   "teams": [
+    "legion-of-doom"
+   ],
+   "colors": [
+    "#f8fafc",
+    "#78350f"
+   ],
+   "attackTags": [
+    "magia"
+   ],
+   "weaknesses": {
+    "fuego": 1.3
+   },
+   "special": {
+    "name": "Golpe del pantano",
+    "type": "dano",
+    "power": 1.7
+   },
+   "abilities": [
+    "No muerto",
+    "Regeneración"
+   ]
+  },
+  {
+   "id": "scarecrow",
+   "name": "Scarecrow",
+   "str": 22,
+   "spd": 32,
+   "dur": 32,
+   "cmb": 62,
+   "int": 86,
+   "pow": 62,
+   "alignment": "villano",
+   "teams": [
+    "legion-of-doom",
+    "villanos"
+   ],
+   "colors": [
+    "#78350f",
+    "#111827"
+   ],
+   "attackTags": [
+    "toxina",
+    "miedo"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Toxina del miedo",
+    "type": "aturdir",
+    "power": 1.5
+   },
+   "abilities": [
+    "Toxina del miedo",
+    "Psicología"
+   ]
+  },
+  {
+   "id": "the-joker",
+   "name": "The Joker",
+   "str": 32,
+   "spd": 42,
+   "dur": 42,
+   "cmb": 72,
+   "int": 92,
+   "pow": 15,
+   "alignment": "villano",
+   "teams": [
+    "legion-of-doom",
+    "villanos"
+   ],
+   "colors": [
+    "#7c3aed",
+    "#16a34a"
+   ],
+   "attackTags": [
+    "toxina"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Veneno de risa",
+    "type": "aturdir",
+    "power": 1.4
+   },
+   "abilities": [
+    "Caos",
+    "Gas de la risa",
+    "Impredecible"
+   ]
+  },
+  {
+   "id": "reverse-flash",
+   "name": "Reverse-Flash",
+   "str": 46,
+   "spd": 100,
+   "dur": 56,
+   "cmb": 80,
+   "int": 86,
+   "pow": 78,
+   "alignment": "villano",
+   "teams": [
+    "legion-of-doom",
+    "villanos"
+   ],
+   "colors": [
+    "#facc15",
+    "#dc2626"
+   ],
+   "attackTags": [
+    "electricidad"
+   ],
+   "weaknesses": {
+    "frio": 1.3
+   },
+   "special": {
+    "name": "Vibración letal",
+    "type": "dano",
+    "power": 2.0
+   },
+   "abilities": [
+    "Fuerza de la Velocidad negativa"
+   ]
+  },
+  {
+   "id": "batgirl",
+   "name": "Batgirl",
+   "str": 36,
+   "spd": 52,
+   "dur": 42,
+   "cmb": 89,
+   "int": 90,
+   "pow": 5,
+   "alignment": "heroe",
+   "teams": [
+    "bat-familia"
+   ],
+   "colors": [
+    "#4c1d95",
+    "#facc15"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Hackeo táctico",
+    "type": "potenciar",
+    "power": 1.1
+   },
+   "abilities": [
+    "Artes marciales",
+    "Hacker",
+    "Memoria eidética"
+   ]
+  },
+  {
+   "id": "red-hood",
+   "name": "Red Hood",
+   "str": 42,
+   "spd": 46,
+   "dur": 52,
+   "cmb": 93,
+   "int": 82,
+   "pow": 10,
+   "alignment": "antiheroe",
+   "teams": [
+    "bat-familia"
+   ],
+   "colors": [
+    "#dc2626",
+    "#111827"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Pistolas gemelas",
+    "type": "dano",
+    "power": 1.7
+   },
+   "abilities": [
+    "Armas de fuego",
+    "Artes marciales"
+   ]
+  },
+  {
+   "id": "catwoman",
+   "name": "Catwoman",
+   "str": 36,
+   "spd": 62,
+   "dur": 42,
+   "cmb": 89,
+   "int": 78,
+   "pow": 5,
+   "alignment": "antiheroe",
+   "teams": [
+    "bat-familia"
+   ],
+   "colors": [
+    "#111827",
+    "#6b7280"
+   ],
+   "attackTags": [],
+   "weaknesses": {},
+   "special": {
+    "name": "Látigo",
+    "type": "aturdir",
+    "power": 0.9
+   },
+   "abilities": [
+    "Sigilo",
+    "Látigo",
+    "Acrobacia"
+   ]
+  },
+  {
+   "id": "batwoman",
+   "name": "Batwoman",
+   "str": 38,
+   "spd": 46,
+   "dur": 46,
+   "cmb": 89,
+   "int": 82,
+   "pow": 10,
+   "alignment": "heroe",
+   "teams": [
+    "bat-familia"
+   ],
+   "colors": [
+    "#111827",
+    "#dc2626"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Táctica militar",
+    "type": "dano",
+    "power": 1.5
+   },
+   "abilities": [
+    "Entrenamiento militar",
+    "Gadgets"
+   ]
+  },
+  {
+   "id": "red-robin",
+   "name": "Red Robin",
+   "str": 32,
+   "spd": 46,
+   "dur": 42,
+   "cmb": 86,
+   "int": 96,
+   "pow": 5,
+   "alignment": "heroe",
+   "teams": [
+    "bat-familia",
+    "teen-titans"
+   ],
+   "colors": [
+    "#dc2626",
+    "#111827"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Plan maestro",
+    "type": "potenciar",
+    "power": 1.2
+   },
+   "abilities": [
+    "Detective",
+    "Bastón"
+   ]
+  },
+  {
+   "id": "john-stewart",
+   "name": "John Stewart",
+   "str": 52,
+   "spd": 66,
+   "dur": 72,
+   "cmb": 82,
+   "int": 78,
+   "pow": 91,
+   "alignment": "heroe",
+   "teams": [
+    "green-lantern-corps",
+    "justice-league"
+   ],
+   "colors": [
+    "#16a34a",
+    "#111827"
+   ],
+   "attackTags": [
+    "luz"
+   ],
+   "weaknesses": {
+    "miedo": 1.3
+   },
+   "special": {
+    "name": "Constructo arquitectónico",
+    "type": "escudo",
+    "power": 1.2
+   },
+   "abilities": [
+    "Anillo de poder",
+    "Marine",
+    "Arquitecto"
+   ]
+  },
+  {
+   "id": "guy-gardner",
+   "name": "Guy Gardner",
+   "str": 56,
+   "spd": 66,
+   "dur": 72,
+   "cmb": 84,
+   "int": 56,
+   "pow": 89,
+   "alignment": "heroe",
+   "teams": [
+    "green-lantern-corps"
+   ],
+   "colors": [
+    "#16a34a",
+    "#dc2626"
+   ],
+   "attackTags": [
+    "luz"
+   ],
+   "weaknesses": {
+    "miedo": 1.3
+   },
+   "special": {
+    "name": "Constructo brutal",
+    "type": "dano",
+    "power": 1.7
+   },
+   "abilities": [
+    "Anillo de poder",
+    "Pelea callejera"
+   ]
+  },
+  {
+   "id": "kyle-rayner",
+   "name": "Kyle Rayner",
+   "str": 46,
+   "spd": 66,
+   "dur": 66,
+   "cmb": 72,
+   "int": 72,
+   "pow": 93,
+   "alignment": "heroe",
+   "teams": [
+    "green-lantern-corps"
+   ],
+   "colors": [
+    "#16a34a",
+    "#111827"
+   ],
+   "attackTags": [
+    "luz"
+   ],
+   "weaknesses": {
+    "miedo": 1.3
+   },
+   "special": {
+    "name": "Constructo artístico",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Anillo de poder",
+    "Imaginación"
+   ]
+  },
+  {
+   "id": "jessica-cruz",
+   "name": "Jessica Cruz",
+   "str": 46,
+   "spd": 66,
+   "dur": 66,
+   "cmb": 66,
+   "int": 62,
+   "pow": 86,
+   "alignment": "heroe",
+   "teams": [
+    "green-lantern-corps"
+   ],
+   "colors": [
+    "#16a34a",
+    "#111827"
+   ],
+   "attackTags": [
+    "luz"
+   ],
+   "weaknesses": {
+    "miedo": 1.5
+   },
+   "special": {
+    "name": "Constructo protector",
+    "type": "escudo",
+    "power": 1.1
+   },
+   "abilities": [
+    "Anillo de poder"
+   ]
+  },
+  {
+   "id": "kilowog",
+   "name": "Kilowog",
+   "str": 82,
+   "spd": 62,
+   "dur": 82,
+   "cmb": 82,
+   "int": 56,
+   "pow": 89,
+   "alignment": "heroe",
+   "teams": [
+    "green-lantern-corps"
+   ],
+   "colors": [
+    "#16a34a",
+    "#ec4899"
+   ],
+   "attackTags": [
+    "luz"
+   ],
+   "weaknesses": {
+    "miedo": 1.2
+   },
+   "special": {
+    "name": "Entrenamiento de reclutas",
+    "type": "potenciar",
+    "power": 1.2
+   },
+   "abilities": [
+    "Anillo de poder",
+    "Instructor"
+   ]
+  },
+  {
+   "id": "robotman",
+   "name": "Robotman",
+   "str": 82,
+   "spd": 40,
+   "dur": 92,
+   "cmb": 62,
+   "int": 46,
+   "pow": 10,
+   "alignment": "heroe",
+   "teams": [
+    "doom-patrol"
+   ],
+   "colors": [
+    "#9ca3af",
+    "#dc2626"
+   ],
+   "attackTags": [],
+   "weaknesses": {
+    "electricidad": 1.4
+   },
+   "special": {
+    "name": "Puño de acero",
+    "type": "dano",
+    "power": 1.6
+   },
+   "abilities": [
+    "Cuerpo robótico"
+   ]
+  },
+  {
+   "id": "negative-man",
+   "name": "Negative Man",
+   "str": 40,
+   "spd": 62,
+   "dur": 56,
+   "cmb": 50,
+   "int": 62,
+   "pow": 86,
+   "alignment": "heroe",
+   "teams": [
+    "doom-patrol"
+   ],
+   "colors": [
+    "#e5e7eb",
+    "#1d4ed8"
+   ],
+   "attackTags": [
+    "energia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Espíritu negativo",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Entidad de energía negativa"
+   ]
+  },
+  {
+   "id": "elasti-woman",
+   "name": "Elasti-Woman",
+   "str": 82,
+   "spd": 40,
+   "dur": 72,
+   "cmb": 56,
+   "int": 56,
+   "pow": 62,
+   "alignment": "heroe",
+   "teams": [
+    "doom-patrol"
+   ],
+   "colors": [
+    "#1d4ed8",
+    "#e5e7eb"
+   ],
+   "attackTags": [],
+   "weaknesses": {},
+   "special": {
+    "name": "Forma gigante",
+    "type": "dano",
+    "power": 1.6
+   },
+   "abilities": [
+    "Cambio de tamaño"
+   ]
+  },
+  {
+   "id": "crazy-jane",
+   "name": "Crazy Jane",
+   "str": 40,
+   "spd": 46,
+   "dur": 46,
+   "cmb": 72,
+   "int": 62,
+   "pow": 82,
+   "alignment": "heroe",
+   "teams": [
+    "doom-patrol"
+   ],
+   "colors": [
+    "#7c3aed",
+    "#dc2626"
+   ],
+   "attackTags": [
+    "magia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "64 personalidades",
+    "type": "aturdir",
+    "power": 1.2
+   },
+   "abilities": [
+    "Múltiples personalidades con poderes"
+   ]
+  },
+  {
+   "id": "the-chief",
+   "name": "The Chief",
+   "str": 15,
+   "spd": 20,
+   "dur": 25,
+   "cmb": 30,
+   "int": 97,
+   "pow": 20,
+   "alignment": "heroe",
+   "teams": [
+    "doom-patrol"
+   ],
+   "colors": [
+    "#9ca3af",
+    "#111827"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Estrategia del Jefe",
+    "type": "potenciar",
+    "power": 1.3
+   },
+   "abilities": [
+    "Genio científico"
+   ]
+  },
+  {
+   "id": "darkseid",
+   "name": "Darkseid",
+   "str": 98,
+   "spd": 72,
+   "dur": 98,
+   "cmb": 86,
+   "int": 95,
+   "pow": 99,
+   "alignment": "villano",
+   "teams": [
+    "villanos"
+   ],
+   "colors": [
+    "#4b5563",
+    "#1d4ed8"
+   ],
+   "attackTags": [
+    "energia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Rayos Omega",
+    "type": "dano",
+    "power": 2.2
+   },
+   "abilities": [
+    "Rayos Omega",
+    "Efecto Omega",
+    "Fuerza de dios"
+   ]
+  },
+  {
+   "id": "doomsday",
+   "name": "Doomsday",
+   "str": 99,
+   "spd": 80,
+   "dur": 99,
+   "cmb": 75,
+   "int": 10,
+   "pow": 40,
+   "alignment": "villano",
+   "teams": [
+    "villanos"
+   ],
+   "colors": [
+    "#9ca3af",
+    "#78350f"
+   ],
+   "attackTags": [],
+   "weaknesses": {},
+   "special": {
+    "name": "Adaptación",
+    "type": "potenciar",
+    "power": 1.3
+   },
+   "abilities": [
+    "Adaptación",
+    "Regeneración",
+    "Fuerza sin límite"
+   ]
+  },
+  {
+   "id": "brainiac",
+   "name": "Brainiac",
+   "str": 82,
+   "spd": 62,
+   "dur": 86,
+   "cmb": 72,
+   "int": 100,
+   "pow": 90,
+   "alignment": "villano",
+   "teams": [
+    "villanos"
+   ],
+   "colors": [
+    "#15803d",
+    "#7c3aed"
+   ],
+   "attackTags": [
+    "tecnologia",
+    "telepatia"
+   ],
+   "weaknesses": {
+    "electricidad": 1.3
+   },
+   "special": {
+    "name": "Asimilación",
+    "type": "drenar",
+    "power": 1.5
+   },
+   "abilities": [
+    "Intelecto de nivel 12",
+    "Tecnología coluana"
+   ]
+  },
+  {
+   "id": "black-adam",
+   "name": "Black Adam",
+   "str": 97,
+   "spd": 92,
+   "dur": 95,
+   "cmb": 84,
+   "int": 72,
+   "pow": 92,
+   "alignment": "antiheroe",
+   "teams": [
+    "villanos"
+   ],
+   "colors": [
+    "#111827",
+    "#facc15"
+   ],
+   "attackTags": [
+    "magia",
+    "electricidad"
+   ],
+   "weaknesses": {
+    "magia": 1.5
+   },
+   "special": {
+    "name": "Rayo de Shazam",
+    "type": "dano",
+    "power": 2.0
+   },
+   "abilities": [
+    "Poder de los dioses egipcios",
+    "Rayo"
+   ]
+  },
+  {
+   "id": "general-zod",
+   "name": "General Zod",
+   "str": 97,
+   "spd": 94,
+   "dur": 96,
+   "cmb": 92,
+   "int": 82,
+   "pow": 88,
+   "alignment": "villano",
+   "teams": [
+    "villanos"
+   ],
+   "colors": [
+    "#111827",
+    "#6b7280"
+   ],
+   "attackTags": [],
+   "weaknesses": {
+    "kryptonita": 2.5,
+    "magia": 1.6
+   },
+   "special": {
+    "name": "Visión de calor",
+    "type": "dano",
+    "power": 1.9
+   },
+   "abilities": [
+    "Poderes kryptonianos",
+    "Entrenamiento militar"
+   ]
+  },
+  {
+   "id": "deathstroke",
+   "name": "Deathstroke",
+   "str": 50,
+   "spd": 52,
+   "dur": 54,
+   "cmb": 96,
+   "int": 92,
+   "pow": 15,
+   "alignment": "villano",
+   "teams": [
+    "villanos"
+   ],
+   "colors": [
+    "#ea580c",
+    "#1d4ed8"
+   ],
+   "attackTags": [
+    "tecnologia"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Golpe calculado",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Mente mejorada",
+    "Espada",
+    "Factor curativo"
+   ]
+  },
+  {
+   "id": "ras-al-ghul",
+   "name": "Ra's al Ghul",
+   "str": 42,
+   "spd": 46,
+   "dur": 46,
+   "cmb": 96,
+   "int": 93,
+   "pow": 15,
+   "alignment": "villano",
+   "teams": [
+    "villanos"
+   ],
+   "colors": [
+    "#15803d",
+    "#facc15"
+   ],
+   "attackTags": [],
+   "weaknesses": {},
+   "special": {
+    "name": "Pozo de Lázaro",
+    "type": "cura",
+    "power": 1.2
+   },
+   "abilities": [
+    "Maestro espadachín",
+    "Pozo de Lázaro"
+   ]
+  },
+  {
+   "id": "bane",
+   "name": "Bane",
+   "str": 82,
+   "spd": 42,
+   "dur": 76,
+   "cmb": 90,
+   "int": 86,
+   "pow": 10,
+   "alignment": "villano",
+   "teams": [
+    "villanos"
+   ],
+   "colors": [
+    "#111827",
+    "#78350f"
+   ],
+   "attackTags": [
+    "toxina"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Venom",
+    "type": "potenciar",
+    "power": 1.3
+   },
+   "abilities": [
+    "Venom",
+    "Estratega"
+   ]
+  },
+  {
+   "id": "mongul",
+   "name": "Mongul",
+   "str": 95,
+   "spd": 70,
+   "dur": 95,
+   "cmb": 82,
+   "int": 72,
+   "pow": 70,
+   "alignment": "villano",
+   "teams": [
+    "villanos"
+   ],
+   "colors": [
+    "#facc15",
+    "#7c3aed"
+   ],
+   "attackTags": [],
+   "weaknesses": {},
+   "special": {
+    "name": "Puño de Warworld",
+    "type": "dano",
+    "power": 1.8
+   },
+   "abilities": [
+    "Fuerza cósmica"
+   ]
+  },
+  {
+   "id": "parallax",
+   "name": "Parallax",
+   "str": 60,
+   "spd": 75,
+   "dur": 80,
+   "cmb": 70,
+   "int": 80,
+   "pow": 98,
+   "alignment": "villano",
+   "teams": [
+    "villanos"
+   ],
+   "colors": [
+    "#facc15",
+    "#111827"
+   ],
+   "attackTags": [
+    "miedo",
+    "luz"
+   ],
+   "weaknesses": {},
+   "special": {
+    "name": "Posesión del miedo",
+    "type": "aturdir",
+    "power": 1.6
+   },
+   "abilities": [
+    "Entidad del miedo"
+   ]
+  },
+  {
+   "id": "trigon",
+   "name": "Trigon",
+   "str": 99,
+   "spd": 60,
+   "dur": 99,
+   "cmb": 72,
+   "int": 86,
+   "pow": 99,
+   "alignment": "villano",
+   "teams": [
+    "villanos"
+   ],
+   "colors": [
+    "#dc2626",
+    "#111827"
+   ],
+   "attackTags": [
+    "magia"
+   ],
+   "weaknesses": {
+    "magia": 1.2
+   },
+   "special": {
+    "name": "Llamas del infierno",
+    "type": "dano",
+    "power": 2.1
+   },
+   "abilities": [
+    "Demonio interdimensional"
+   ]
+  }
+ ],
+ "teams": [
+  {
+   "id": "justice-league",
+   "name": "Justice League",
+   "colors": [
+    "#1d4ed8",
+    "#facc15"
+   ],
+   "members": [
+    "superman",
+    "batman",
+    "wonder-woman",
+    "flash",
+    "green-lantern-hal-jordan",
+    "aquaman",
+    "martian-manhunter",
+    "cyborg",
+    "green-arrow",
+    "black-canary",
+    "hawkgirl",
+    "zatanna",
+    "shazam",
+    "firestorm",
+    "plastic-man",
+    "blue-beetle",
+    "booster-gold",
+    "the-atom",
+    "hawkman",
+    "john-stewart"
+   ]
+  },
+  {
+   "id": "teen-titans",
+   "name": "Teen Titans",
+   "colors": [
+    "#dc2626",
+    "#111827"
+   ],
+   "members": [
+    "cyborg",
+    "nightwing",
+    "robin-damian-wayne",
+    "starfire",
+    "raven",
+    "beast-boy",
+    "wonder-girl",
+    "superboy",
+    "kid-flash",
+    "aqualad",
+    "red-robin"
+   ]
+  },
+  {
+   "id": "jsa",
+   "name": "Justice Society of America",
+   "colors": [
+    "#facc15",
+    "#1d4ed8"
+   ],
+   "members": [
+    "jay-garrick",
+    "alan-scott",
+    "doctor-fate",
+    "hawkman",
+    "wildcat",
+    "stargirl",
+    "power-girl",
+    "hourman"
+   ]
+  },
+  {
+   "id": "suicide-squad",
+   "name": "Suicide Squad",
+   "colors": [
+    "#15803d",
+    "#111827"
+   ],
+   "members": [
+    "harley-quinn",
+    "deadshot",
+    "captain-boomerang",
+    "king-shark",
+    "killer-croc",
+    "bloodsport",
+    "peacemaker",
+    "el-diablo",
+    "enchantress",
+    "katana",
+    "rick-flag"
+   ]
+  },
+  {
+   "id": "legion-of-doom",
+   "name": "Legion of Doom",
+   "colors": [
+    "#4c1d95",
+    "#15803d"
+   ],
+   "members": [
+    "lex-luthor",
+    "sinestro",
+    "cheetah",
+    "black-manta",
+    "gorilla-grodd",
+    "bizarro",
+    "captain-cold",
+    "solomon-grundy",
+    "scarecrow",
+    "the-joker",
+    "reverse-flash"
+   ]
+  },
+  {
+   "id": "bat-familia",
+   "name": "Bat-familia",
+   "colors": [
+    "#111827",
+    "#facc15"
+   ],
+   "members": [
+    "batman",
+    "nightwing",
+    "robin-damian-wayne",
+    "batgirl",
+    "red-hood",
+    "catwoman",
+    "batwoman",
+    "red-robin"
+   ]
+  },
+  {
+   "id": "green-lantern-corps",
+   "name": "Green Lantern Corps",
+   "colors": [
+    "#16a34a",
+    "#111827"
+   ],
+   "members": [
+    "green-lantern-hal-jordan",
+    "john-stewart",
+    "guy-gardner",
+    "kyle-rayner",
+    "jessica-cruz",
+    "kilowog"
+   ]
+  },
+  {
+   "id": "doom-patrol",
+   "name": "Doom Patrol",
+   "colors": [
+    "#dc2626",
+    "#9ca3af"
+   ],
+   "members": [
+    "beast-boy",
+    "robotman",
+    "negative-man",
+    "elasti-woman",
+    "crazy-jane",
+    "the-chief"
+   ]
+  },
+  {
+   "id": "villanos",
+   "name": "Villanos principales",
+   "colors": [
+    "#111827",
+    "#dc2626"
+   ],
+   "members": [
+    "sinestro",
+    "gorilla-grodd",
+    "captain-cold",
+    "scarecrow",
+    "the-joker",
+    "reverse-flash",
+    "darkseid",
+    "doomsday",
+    "brainiac",
+    "black-adam",
+    "general-zod",
+    "deathstroke",
+    "ras-al-ghul",
+    "bane",
+    "mongul",
+    "parallax",
+    "trigon"
+   ]
+  }
+ ],
+ "synergies": [
+  {
+   "a": "batman",
+   "b": "robin-damian-wayne",
+   "value": 0.1,
+   "label": "Padre e hijo"
+  },
+  {
+   "a": "batman",
+   "b": "nightwing",
+   "value": 0.08,
+   "label": "Dúo dinámico original"
+  },
+  {
+   "a": "batman",
+   "b": "batgirl",
+   "value": 0.06,
+   "label": "Bat-familia"
+  },
+  {
+   "a": "batman",
+   "b": "red-robin",
+   "value": 0.07,
+   "label": "Detectives"
+  },
+  {
+   "a": "nightwing",
+   "b": "starfire",
+   "value": 0.08,
+   "label": "Pareja titán"
+  },
+  {
+   "a": "superman",
+   "b": "wonder-woman",
+   "value": 0.08,
+   "label": "Trinidad"
+  },
+  {
+   "a": "superman",
+   "b": "batman",
+   "value": 0.06,
+   "label": "World's Finest"
+  },
+  {
+   "a": "wonder-woman",
+   "b": "batman",
+   "value": 0.05,
+   "label": "Trinidad"
+  },
+  {
+   "a": "flash",
+   "b": "green-lantern-hal-jordan",
+   "value": 0.08,
+   "label": "Mejores amigos"
+  },
+  {
+   "a": "green-arrow",
+   "b": "black-canary",
+   "value": 0.1,
+   "label": "Pareja"
+  },
+  {
+   "a": "hawkman",
+   "b": "hawkgirl",
+   "value": 0.1,
+   "label": "Amor eterno"
+  },
+  {
+   "a": "blue-beetle",
+   "b": "booster-gold",
+   "value": 0.1,
+   "label": "Blue & Gold"
+  },
+  {
+   "a": "aquaman",
+   "b": "aqualad",
+   "value": 0.06,
+   "label": "Atlantes"
+  },
+  {
+   "a": "cyborg",
+   "b": "beast-boy",
+   "value": 0.07,
+   "label": "Mejores amigos titanes"
+  },
+  {
+   "a": "raven",
+   "b": "beast-boy",
+   "value": 0.05,
+   "label": "Titanes"
+  },
+  {
+   "a": "superboy",
+   "b": "wonder-girl",
+   "value": 0.06,
+   "label": "Titanes"
+  },
+  {
+   "a": "kid-flash",
+   "b": "flash",
+   "value": 0.07,
+   "label": "Mentor y alumno"
+  },
+  {
+   "a": "jay-garrick",
+   "b": "flash",
+   "value": 0.05,
+   "label": "Legado Flash"
+  },
+  {
+   "a": "alan-scott",
+   "b": "jay-garrick",
+   "value": 0.06,
+   "label": "JSA original"
+  },
+  {
+   "a": "doctor-fate",
+   "b": "alan-scott",
+   "value": 0.05,
+   "label": "Místicos de la JSA"
+  },
+  {
+   "a": "stargirl",
+   "b": "wildcat",
+   "value": 0.05,
+   "label": "JSA"
+  },
+  {
+   "a": "harley-quinn",
+   "b": "the-joker",
+   "value": 0.03,
+   "label": "Relación tóxica"
+  },
+  {
+   "a": "deadshot",
+   "b": "captain-boomerang",
+   "value": 0.04,
+   "label": "Escuadrón"
+  },
+  {
+   "a": "bloodsport",
+   "b": "peacemaker",
+   "value": 0.04,
+   "label": "Rivalidad amistosa"
+  },
+  {
+   "a": "rick-flag",
+   "b": "katana",
+   "value": 0.05,
+   "label": "Escuadrón"
+  },
+  {
+   "a": "lex-luthor",
+   "b": "brainiac",
+   "value": 0.06,
+   "label": "Genios malignos"
+  },
+  {
+   "a": "sinestro",
+   "b": "parallax",
+   "value": 0.06,
+   "label": "El miedo"
+  },
+  {
+   "a": "darkseid",
+   "b": "mongul",
+   "value": 0.03,
+   "label": "Tiranos"
+  },
+  {
+   "a": "green-lantern-hal-jordan",
+   "b": "kilowog",
+   "value": 0.07,
+   "label": "Cuerpo de Linternas"
+  },
+  {
+   "a": "john-stewart",
+   "b": "guy-gardner",
+   "value": 0.05,
+   "label": "Linternas de la Tierra"
+  },
+  {
+   "a": "kyle-rayner",
+   "b": "jessica-cruz",
+   "value": 0.05,
+   "label": "Linternas"
+  },
+  {
+   "a": "robotman",
+   "b": "negative-man",
+   "value": 0.06,
+   "label": "Doom Patrol"
+  },
+  {
+   "a": "elasti-woman",
+   "b": "the-chief",
+   "value": 0.05,
+   "label": "Doom Patrol"
+  },
+  {
+   "a": "crazy-jane",
+   "b": "robotman",
+   "value": 0.06,
+   "label": "Doom Patrol"
+  },
+  {
+   "a": "batman",
+   "b": "the-joker",
+   "value": -0.12,
+   "label": "Némesis"
+  },
+  {
+   "a": "superman",
+   "b": "lex-luthor",
+   "value": -0.12,
+   "label": "Némesis"
+  },
+  {
+   "a": "green-lantern-hal-jordan",
+   "b": "sinestro",
+   "value": -0.12,
+   "label": "Némesis"
+  },
+  {
+   "a": "flash",
+   "b": "reverse-flash",
+   "value": -0.15,
+   "label": "Némesis"
+  },
+  {
+   "a": "wonder-woman",
+   "b": "cheetah",
+   "value": -0.1,
+   "label": "Némesis"
+  },
+  {
+   "a": "aquaman",
+   "b": "black-manta",
+   "value": -0.12,
+   "label": "Némesis"
+  },
+  {
+   "a": "superman",
+   "b": "general-zod",
+   "value": -0.1,
+   "label": "Rivales kryptonianos"
+  },
+  {
+   "a": "nightwing",
+   "b": "deathstroke",
+   "value": -0.08,
+   "label": "Enemigos"
+  },
+  {
+   "a": "batman",
+   "b": "catwoman",
+   "value": 0.04,
+   "label": "Romance"
+  },
+  {
+   "a": "red-hood",
+   "b": "batman",
+   "value": -0.04,
+   "label": "Tensión familiar"
+  },
+  {
+   "a": "shazam",
+   "b": "black-adam",
+   "value": -0.12,
+   "label": "Némesis"
+  },
+  {
+   "a": "raven",
+   "b": "trigon",
+   "value": -0.15,
+   "label": "Padre demoníaco"
+  },
+  {
+   "a": "batman",
+   "b": "ras-al-ghul",
+   "value": -0.1,
+   "label": "Enemigos"
+  },
+  {
+   "a": "batman",
+   "b": "bane",
+   "value": -0.08,
+   "label": "Enemigos"
+  },
+  {
+   "a": "superman",
+   "b": "doomsday",
+   "value": -0.12,
+   "label": "Enemigos"
+  }
+ ]
+}
