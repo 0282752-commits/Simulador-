@@ -5,7 +5,8 @@ import type { DcData } from "@/engine/dc/tournaments";
 import type { FootballConfig } from "@/engine/football/season";
 
 async function get<T>(path: string): Promise<T> {
-  const r = await fetch(`/data/${path}`, { cache: "no-cache" });
+  const base = (globalThis as { __DATA_BASE?: string }).__DATA_BASE ?? "/data/";
+  const r = await fetch(`${base}${path}`, { cache: "no-cache" });
   if (!r.ok) throw new Error(`No se pudo cargar /data/${path} (${r.status})`);
   return r.json() as Promise<T>;
 }
