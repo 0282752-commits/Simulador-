@@ -106,28 +106,7 @@ for (const r of rows) {
 }
 // resolver cedidos (nombre de club → id)
 for (const p of players) if (p.loanFrom) p.loanFrom = clubs.get(p.loanFrom)?.id ?? null;
-// Plantillas incompletas en el archivo: se completan hasta 18 con canteranos genéricos marcados como relleno
-const FILL: Pos[] = ["POR", "DFC", "DFC", "LD", "LI", "MCD", "MC", "MC", "MCO", "ED", "EI", "DC", "DC", "DFC", "MC", "POR", "ED", "EI"];
-let filled = 0;
-for (const c of clubs.values()) {
-  const sq = players.filter((p) => p.clubId === c.id);
-  if (sq.length >= 18) continue;
-  const avg = Math.round(sq.reduce((a, p) => a + p.ovr, 0) / Math.max(1, sq.length));
-  const need = FILL.filter((pos, k) => k >= 0).slice();
-  let k = 0;
-  while (players.filter((p) => p.clubId === c.id).length < 18) {
-    const have = players.filter((p) => p.clubId === c.id);
-    const gks = have.filter((p) => p.positions[0] === "POR").length;
-    const pos: Pos = gks < 2 ? "POR" : need[(k++ % (need.length - 1)) + 1] === "POR" ? "MC" : need[(k % (need.length - 1)) + 1];
-    const o = Math.max(45, avg - 7);
-    const pl: Player = { id: `p${++i}`, name: `Canterano ${c.short} ${k} (relleno)`, shortName: `Cant. ${c.short} ${k}`, clubId: c.id, positions: [pos], age: 19, nationality: "—", foot: "Diestro",
-      ovr: o, pot: o + 10, pac: o, sho: pos === "DC" ? o : o - 12, pas: o - 4, dri: o - 2, def: pos === "DFC" ? o + 2 : o - 20, phy: o - 3, pen: 45, fk: 40, hea: 50, crn: 45, youth: true, custom: true, value: estimateValue(o, 19) };
-    if (pos === "POR") pl.gk = { div: o, han: o - 1, kic: o - 6, ref: o + 1, pos: o - 2 };
-    players.push(pl);
-    filled++;
-  }
-}
-if (filled) console.log(`Relleno: ${filled} canteranos genéricos (marcados "relleno") en clubes con menos de 18 jugadores en el archivo.`);
+// Las plantillas incompletas de la base se completan al crear la partida (canteranos generados, marcados como cantera).
 // reputación = media del top-16
 for (const c of clubs.values()) {
   const top = players.filter((p) => p.clubId === c.id).map((p) => p.ovr).sort((a, b) => b - a).slice(0, 16);

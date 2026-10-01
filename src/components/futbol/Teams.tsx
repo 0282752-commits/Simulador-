@@ -4,7 +4,7 @@ import type { Foot, Player, Pos } from "@/engine/football/types";
 import { squadOf } from "@/engine/football/lineup";
 import { clubStrength, getIndex, invalidateStrength, playerStatus } from "@/engine/football/season";
 import { playerStats } from "@/engine/football/career";
-import { estimateWage, renewContract } from "@/engine/football/market";
+import { estimateWage, prestige, prestigeStars, renewContract, squadValue } from "@/engine/football/market";
 import { Badge, Field, Modal, cx } from "@/components/ui";
 import { fmtMoney, useF } from "./ctx";
 
@@ -41,7 +41,7 @@ export function Teams({ focus }: { focus: string | null }) {
         <Badge colors={club.colors} label={club.short} size={44} />
         <div className="min-w-0 flex-1">
           <div className="text-lg font-bold">{club.name}</div>
-          <div className="text-xs text-gray-400">{club.leagueId ? save.comps[club.leagueId]?.name : club.country} · media top-16: {clubStrength(cid, save.players).toFixed(1)} · {squad.length} jugadores{save.moneyMode ? ` · presupuesto ${fmtMoney(club.budget)}` : ""}</div>
+          <div className="text-xs text-gray-400">{club.leagueId ? save.comps[club.leagueId]?.name : club.country} · media top-16: {clubStrength(cid, save.players).toFixed(1)} · prestigio {prestigeStars(prestige(save, cid))}★ · valor de plantilla {fmtMoney(squadValue(save, cid))} · {squad.length} jugadores{save.moneyMode ? ` · presupuesto ${fmtMoney(club.budget)}` : ""}</div>
           {save.honours[cid]?.length ? <div className="mt-1 text-xs">🏆 {save.honours[cid].map((h) => `${h.comp} ${h.season}`).join(" · ")}</div> : null}
         </div>
         <div className="flex flex-wrap gap-1">
@@ -63,7 +63,7 @@ export function Teams({ focus }: { focus: string | null }) {
               return (
                 <tr key={p.id} className="cursor-pointer border-t border-borde/60 hover:bg-white/5" onClick={() => openPlayer(p.id)}>
                   <td className="td text-xs">{p.positions.join("/")}</td>
-                  <td className="td"><span className="font-medium">{p.name}</span>{p.loanFrom && <span className="ml-1 text-[10px] text-sky-300">cedido</span>}{p.custom && <span className="ml-1 text-[10px] text-yellow-300">editado</span>}</td>
+                  <td className="td"><span className="font-medium">{p.name}</span>{p.youth && <span className="ml-1 text-[10px] text-emerald-300">cantera</span>}{p.loanFrom && <span className="ml-1 text-[10px] text-sky-300">cedido</span>}{p.custom && <span className="ml-1 text-[10px] text-yellow-300">editado</span>}</td>
                   <td className="td tabular">{p.age}</td>
                   <td className="td font-bold tabular">{p.ovr}</td>
                   <td className="td tabular text-gray-400">{p.pot}</td>

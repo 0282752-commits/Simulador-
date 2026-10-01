@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import type { Player, TransferOffer } from "@/engine/football/types";
 import { invalidateStrength } from "@/engine/football/season";
-import { answerOffer, askingPrice, ensureContracts, estimateWage, proposeTransfer, windowOpen } from "@/engine/football/market";
+import { answerOffer, askingPrice, ensureContracts, estimateWage, prestige, prestigeStars, proposeTransfer, roleIn, squadValue, windowOpen } from "@/engine/football/market";
 import { Badge, Field, Tabs, cx } from "@/components/ui";
 import { fmtMoney, useF } from "./ctx";
 
@@ -20,6 +20,7 @@ export function Market() {
   const [wage, setWage] = useState(0);
   const [swap, setSwap] = useState("");
   const [msg, setMsg] = useState<string | null>(null);
+  const [nego, setNego] = useState<{ fee?: number; wage?: number } | null>(null);
   const [onlyFree, setOnlyFree] = useState(false);
   const [maxAge, setMaxAge] = useState(40);
   const [minOvr, setMinOvr] = useState(70);
@@ -41,15 +42,21 @@ export function Market() {
     setWage(Math.round(((x.wage ?? estimateWage(x.ovr, x.age)) * 1.15) / 500) * 500);
     setKind("traspaso");
   };
-  const send = () => {
+  const send = (feeOverride?: number, wageOverride?: number) => {
     if (!p || !buyer) return setMsg("Elige el club que hace la oferta.");
+    const f = feeOverride ?? fee, w = wageOverride ?? wage;
+    if (feeOverride !== undefined) setFee(feeOverride);
+    if (wageOverride !== undefined) setWage(wageOverride);
     let text = "";
+    let n: { fee?: number; wage?: number } | null = null;
     mutate((s) => {
-      const r = proposeTransfer(s, { player: p.id, from: p.clubId, to: buyer, fee: kind === "cesion" ? 0 : fee, kind: kind === "cesion" ? "cesion" : "traspaso", swap: kind === "intercambio" ? swap || undefined : undefined, wage });
-      text = r.status === "aceptada" ? `✔ ¡Hecho! ${r.result.reason}` : r.status === "contraoferta" ? `↔ ${r.note} Puedes subir tu oferta a ${fmtMoney(r.counter)}.` : `✘ ${r.note}`;
-      if (r.status === "contraoferta" && r.counter) setFee(r.counter);
+      const r = proposeTransfer(s, { player: p.id, from: p.clubId, to: buyer, fee: kind === "cesion" ? 0 : f, kind: kind === "cesion" ? "cesion" : "traspaso", swap: kind === "intercambio" ? swap || undefined : undefined, wage: w });
+      text = r.status === "aceptada" ? `✔ ¡Fichado! ${r.result.reason}` : r.status === "contraoferta" ? `↔ El club contraoferta: ${r.note}` : `✘ ${r.note}`;
+      if (r.status === "contraoferta" && r.counter) n = { fee: r.counter };
+      if (r.status === "rechazada_jugador" && r.counterWage) n = { wage: r.counterWage };
     });
     setMsg(text);
+    setNego(n);
   };
 
   return (
@@ -68,7 +75,7 @@ export function Market() {
               {clubs.map((c) => <option key={c.id} value={c.id}>{c.name}{c.id === save.userClub ? " ★" : ""}</option>)}
             </select>
           </Field>
-          {buyer && save.moneyMode && <div className="text-xs text-gray-400">Presupuesto de fichajes de {save.clubs[buyer].name}: <b className="text-white">{fmtMoney(save.clubs[buyer].budget)}</b></div>}
+          {buyer && <div className="text-xs text-gray-400">{save.clubs[buyer].name}: prestigio {"★".repeat(Math.floor(prestigeStars(prestige(save, buyer))))}{prestigeStars(prestige(save, buyer)) % 1 ? "½" : ""} · valor de plantilla {fmtMoney(squadValue(save, buyer))}{save.moneyMode && <> · presupuesto <b className="text-white">{fmtMoney(save.clubs[buyer].budget)}</b></>}</div>}
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             <input className="input col-span-2" placeholder="Buscar jugador o club…" value={q} onChange={(e) => setQ(e.target.value)} />
             <label className="text-xs">Media mín. <input type="number" className="input !py-1" value={minOvr} onChange={(e) => setMinOvr(Number(e.target.value) || 0)} /></label>
@@ -92,7 +99,7 @@ export function Market() {
           {p && buyer && (
             <div className="card space-y-2">
               <div className="font-semibold">{p.name} <span className="text-xs text-gray-400">({p.clubId ? save.clubs[p.clubId].name : "agente libre"}) · {p.positions[0]} · {p.ovr} · {p.age} años</span></div>
-              <div className="text-xs text-gray-400">Valor {fmtMoney(p.value)} · contrato hasta {p.contractEnd ?? "—"} · sueldo {fmtMoney(p.wage)}/sem{p.clubId ? ` · su club pide aprox. ${fmtMoney(askingPrice(save, p))}` : ""}</div>
+              <div className="text-xs text-gray-400">Valor {fmtMoney(p.value)} · contrato hasta {p.contractEnd ?? "—"} · sueldo {fmtMoney(p.wage)}/sem{p.clubId ? ` · su club pide aprox. ${fmtMoney(askingPrice(save, p))} · ${["estrella", "titular", "rotación", "suplente"][roleIn(save, p)]} en su club · prestigio de su club ${prestigeStars(prestige(save, p.clubId))}★ vs ${prestigeStars(prestige(save, buyer))}★ del tuyo` : ""}</div>
               {p.clubId && <div className="flex flex-wrap gap-1">{(["traspaso", "cesion", "intercambio"] as Kind[]).map((k) => <button key={k} onClick={() => setKind(k)} className={cx("btn-sm btn", kind === k ? "bg-acento text-black" : "border border-borde")}>{{ traspaso: "Traspaso", cesion: "Pedir cesión", intercambio: "Intercambio + dinero" }[k]}</button>)}</div>}
               {kind !== "cesion" && p.clubId && <Field label={`Oferta al club (€)`}><input type="number" step={100000} className="input" value={fee} onChange={(e) => setFee(Number(e.target.value) || 0)} /></Field>}
               {kind === "intercambio" && (
@@ -101,10 +108,17 @@ export function Market() {
                 </Field>
               )}
               <Field label="Sueldo que ofreces al jugador (€/semana)"><input type="number" step={500} className="input" value={wage} onChange={(e) => setWage(Number(e.target.value) || 0)} /></Field>
-              <button className="btn-primary w-full" onClick={send}>{p.clubId ? "Enviar oferta" : "Ofrecer contrato"}</button>
+              <button className="btn-primary w-full" onClick={() => send()}>{p.clubId ? "Enviar oferta" : "Ofrecer contrato"}</button>
+              {msg && (
+                <div className="rounded-lg border border-borde p-2 text-sm">
+                  {msg}
+                  {nego?.fee && <div className="mt-2 flex gap-1"><button className="btn-primary btn-sm" onClick={() => send(nego.fee)}>Aceptar su precio ({fmtMoney(nego.fee)})</button><button className="btn-ghost btn-sm" onClick={() => send(Math.round((fee + nego.fee!) / 2 / 1e5) * 1e5)}>Ofrecer la mitad de la diferencia</button></div>}
+                  {nego?.wage && <div className="mt-2 flex gap-1"><button className="btn-primary btn-sm" onClick={() => send(undefined, nego.wage)}>Subir sueldo a {fmtMoney(nego.wage)}/sem</button></div>}
+                </div>
+              )}
             </div>
           )}
-          {msg && <div className="card text-sm">{msg}</div>}
+          {msg && !(p && buyer) && <div className="card text-sm">{msg}</div>}
         </>
       )}
 

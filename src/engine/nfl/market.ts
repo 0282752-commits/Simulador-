@@ -47,6 +47,7 @@ export function ensureNflContracts(save: NflSave) {
     p.contract = { years: yrs, salary: p.practiceSquad ? MIN_SAL : estimateSalary(p.pos, p.ovr, p.age) };
   }
   if (!any) return;
+  for (const t of Object.keys(save.teams)) cutRoster(save, t, false);
   // ajustar para que la nómina media quede cerca del 92 % del tope
   const teams = Object.keys(save.teams);
   const avg = teams.reduce((a, t) => a + payroll(save, t), 0) / teams.length;
@@ -139,6 +140,23 @@ export function evaluateTradeFor(save: NflSave, team: string, receive: string[],
   return { accept: false, reason: `${save.teams[team].abbr} lo rechaza: da ${Math.round(gv)} pts de valor y recibe ${Math.round(rv)}.`, receive: rv, give: gv };
 }
 
+// Roster activo de 53 armado por posiciones (mínimos tipo depth chart) y el resto al practice squad (16)
+export const ROSTER_MIN: Partial<Record<NflPos, number>> = { QB: 2, RB: 3, WR: 5, TE: 3, OT: 4, OG: 4, C: 2, DE: 4, DT: 4, LB: 5, CB: 5, S: 4, K: 1, P: 1, LS: 1 };
+export function cutRoster(save: NflSave, team: string, release = true) {
+  const r = teamPlayers(save, team).slice().sort((a, b) => b.ovr - a.ovr);
+  const active = new Set<string>();
+  for (const [pos, n] of Object.entries(ROSTER_MIN)) r.filter((p) => p.pos === pos && !p.injuryWeeks).slice(0, n).forEach((p) => active.add(p.id));
+  for (const p of r) { if (active.size >= 53) break; if (!active.has(p.id) && !(p.pos === "K" || p.pos === "P" || p.pos === "LS")) active.add(p.id); }
+  let ps = 0;
+  for (const p of r) {
+    if (active.has(p.id)) { p.practiceSquad = false; continue; }
+    if (ps < 16 && p.age <= 27) { p.practiceSquad = true; p.contract = p.contract ?? { years: 1, salary: MIN_SAL }; ps++; continue; }
+    if (release) { p.teamId = null; p.exTeam = team; p.contract = undefined; p.practiceSquad = false; }
+    else p.practiceSquad = true;
+  }
+  invalidateNflCache(save);
+}
+
 export function tradeWindowOpen(save: NflSave): boolean {
   return save.phase !== "temporada" || save.week <= 9; // fecha límite de traspasos: semana 9
 }
@@ -147,6 +165,7 @@ export function executeTrade(save: NflSave, a: string, b: string, aGives: string
   const move = (ids: string[], to: string) => { for (const id of ids) { const p = save.players[id]; if (p) { p.teamId = to; p.practiceSquad = false; } const pk = save.picks.find((x) => x.id === id); if (pk) pk.owner = to; } };
   move(aGives, b); move(bGives, a);
   invalidateNflCache(save);
+  for (const t of [a, b]) cutRoster(save, t, false);
   for (const t of [a, b]) save.teams[t].autoDepth = save.teams[t].autoDepth || t !== save.userTeam;
   save.transactions.unshift({ date: stamp(save), text: `TRADE: ${save.teams[a].abbr} envía ${aGives.map((x) => assetLabel(save, x)).join(", ") || "nada"} a ${save.teams[b].abbr} por ${bGives.map((x) => assetLabel(save, x)).join(", ") || "nada"}.` });
   save.version++;
@@ -189,6 +208,7 @@ export function offerContract(save: NflSave, team: string, pid: string, salary: 
 function sign(save: NflSave, p: NflPlayer, team: string, salary: number, years: number) {
   p.teamId = team; p.contract = { years, salary }; p.practiceSquad = false; p.exTeam = null;
   invalidateNflCache(save);
+  cutRoster(save, team, false);
   save.transactions.unshift({ date: stamp(save), text: `FIRMA: ${save.teams[team].abbr} contrata a ${p.pos} ${p.name} (${p.ovr}) · ${years} año(s), ${fmtUsd(salary)}.` });
 }
 
@@ -203,7 +223,9 @@ export function aiSignings(save: NflSave, rng: Rng, intensity = 1) {
     const roomBase = capRoom(save, t);
     const size = teamPlayers(save, t).length;
     // posición más necesitada
-    const needs = (Object.keys(STARTERS) as NflPos[]).map((pos) => ({ pos, n: positionNeed(save, t, pos) })).sort((a, b) => b.n - a.n);
+    const act = teamPlayers(save, t).filter((p) => !p.practiceSquad);
+    const short = (Object.keys(ROSTER_MIN) as NflPos[]).find((pos) => act.filter((p) => p.pos === pos).length < ROSTER_MIN[pos]!);
+    const needs = (Object.keys(STARTERS) as NflPos[]).map((pos) => ({ pos, n: positionNeed(save, t, pos) + (pos === short ? 20 : 0) })).sort((a, b) => b.n - a.n);
     const top = needs[0];
     if (top.n < 4 && size >= 53) continue;
     const cand = fas.find((p) => !p.teamId && p.pos === top.pos && askingSalary(save, p) <= roomBase * 0.5);

@@ -2,7 +2,7 @@
 import { Rng, clamp } from "../../lib/rng";
 import type { NflPlayer, NflSave } from "./types";
 import { createNflSchedule, nflChampion, nflRows, recordNflCampaign, roster, type NflConfig } from "./season";
-import { aiSignings, aiTrades, ensureNflContracts, estimateSalary, invalidateNflCache, positionNeed, rookieSalary, stamp } from "./market";
+import { aiSignings, aiTrades, cutRoster, ensureNflContracts, estimateSalary, invalidateNflCache, positionNeed, rookieSalary, stamp } from "./market";
 
 // 1) Cierre de temporada: historial, progresión, retiros, contratos que vencen, clase y orden del draft
 export function beginOffseason(save: NflSave) {
@@ -130,10 +130,11 @@ export function faDayAdvance(save: NflSave) {
 export function startNflSeason(save: NflSave, cfg: NflConfig) {
   const rng = new Rng(save.seed + save.seasonYear * 3);
   for (let k = 0; k < 3; k++) aiSignings(save, rng, 1.5);
-  for (const t of Object.keys(save.teams)) {
-    const r = roster(save, t).sort((a, b) => b.ovr - a.ovr);
-    r.forEach((p, i) => { p.practiceSquad = i >= 53; if (i >= 69) { p.teamId = null; p.contract = undefined; } });
-  }
+  for (const t of Object.keys(save.teams)) cutRoster(save, t, true);
+  for (let k = 0; k < 2; k++) aiSignings(save, rng, 2); // cubrir posiciones que quedaron cortas
+  // agentes libres que nadie quiere se retiran
+  for (const p of Object.values(save.players)) if (!p.teamId && !p.retired && (p.age >= 31 || p.ovr < 58)) p.retired = true;
+  invalidateNflCache(save);
   for (const t of Object.keys(save.teams)) for (let r = 1; r <= 7; r++) { const y = save.seasonYear + 4; if (!save.picks.some((p) => p.year === y && p.round === r && p.originalTeam === t)) save.picks.push({ id: `${y}-${r}-${t}`, year: y, round: r, originalTeam: t, owner: t }); }
   save.picks = save.picks.filter((p) => p.year > save.seasonYear + 1 || p.used);
   for (const o of save.tradeOffers ?? []) if (o.status === "pendiente") o.status = "caducada";

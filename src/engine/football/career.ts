@@ -3,7 +3,9 @@ import { Rng, clamp, addDays } from "../../lib/rng";
 import type { Club, Fixture, FootballSave, Player, Pos, SeasonArchive } from "./types";
 import { createSeason, leagueTable, nextMatchDate, playDay, seasonFinished, seasonLabel, type FootballConfig } from "./season";
 import { tieOutcome } from "./competitions";
-import { ensureContracts, estimateValue as estValue, expireContracts, aiMarketDay, clubBudgetBase } from "./market";
+import { ensureContracts, estimateValue as estValue, expireContracts, aiMarketDay, clubBudgetBase, fillSquadHoles, GROUP, GROUP_LIMITS, type Group } from "./market";
+import { FIRST, LAST } from "./names";
+import { clubStrength } from "./strength";
 
 export interface FootballData {
   cfg: FootballConfig;
@@ -21,6 +23,8 @@ export function newFootballSave(data: FootballData, seed = Math.floor(Math.rando
     dataSource: data.players.meta, seed,
   };
   ensureContracts(save);
+  const rng = new Rng(seed + 5);
+  fillSquadHoles(save, rng, (c, pos) => makeYouth(c, rng, save.seasonYear, 0, pos));
   createSeason(save, data.cfg, undefined, data.europe);
   return save;
 }
@@ -76,19 +80,26 @@ export function archiveSeason(save: FootballSave): SeasonArchive {
 
 const POS_POOL: Pos[] = ["POR", "DFC", "DFC", "LD", "LI", "MCD", "MC", "MC", "MCO", "ED", "EI", "DC"];
 
-export function makeYouth(club: Club, rng: Rng, year: number, idNum: number): Player {
-  const pos = rng.pick(POS_POOL);
+const NAT_POOL: Record<string, [string, string]> = { ENG: ["ENG", "Inglaterra"], ESP: ["ESP", "España"], ITA: ["ITA", "Italia"], GER: ["GER", "Alemania"], FRA: ["FRA", "Francia"], POR: ["POR", "Portugal"], NED: ["NED", "Países Bajos"] };
+let youthSeq = 0;
+// Canterano generado (ficticio): nombre según el país del club, nivel según el prestigio de la academia
+export function makeYouth(club: Club, rng: Rng, year: number, _idNum = 0, pos: Pos = rng.pick(POS_POOL)): Player {
   const rep = club.reputation ?? 70;
-  const ovr = clamp(Math.round(rng.normal(rep - 20, 4)), 42, 68);
-  const pot = clamp(Math.round(ovr + rng.normal(18, 6) + (rep - 70) * 0.3), ovr + 4, 94);
-  const a = (d: number) => clamp(Math.round(ovr + d + rng.normal(0, 5)), 20, 90);
-  const age = rng.int(16, 18);
+  const [poolKey, natName] = NAT_POOL[club.country] ?? (rng.chance(0.5) ? ["GEN", "—"] : [rng.pick(["BRA", "ARG", "AFR"]), "—"]);
+  const first = rng.pick(FIRST[poolKey] ?? FIRST.GEN), last = rng.pick(LAST[poolKey] ?? LAST.GEN);
+  const age = rng.int(17, 19);
+  const ovr = clamp(Math.round(rng.normal(rep - 19 + (age - 17) * 2, 3.5)), 45, 72);
+  const pot = clamp(Math.round(ovr + rng.normal(14, 5) + (rep - 72) * 0.35), ovr + 3, 93);
+  const a = (d: number) => clamp(Math.round(ovr + d + rng.normal(0, 4)), 20, 90);
+  const ATT = ["DC", "SD", "ED", "EI"].includes(pos), DEF = ["DFC", "LD", "LI", "CAD", "CAI", "MCD"].includes(pos);
+  const id = `y${year}_${club.id}_${++youthSeq}_${rng.int(0, 1e6)}`;
   const p: Player = {
-    id: `y${year}_${idNum}`, name: `Juvenil ${club.short} ${idNum % 1000}`, shortName: `Juv. ${club.short} ${idNum % 1000}`, clubId: club.id, positions: [pos], age, birthYear: year - age,
-    nationality: "—", foot: rng.chance(0.25) ? "Zurdo" : "Diestro", ovr, pot, pac: a(4), sho: a(pos === "DC" ? 2 : -10), pas: a(-2), dri: a(0), def: a(pos === "DFC" ? 4 : -20), phy: a(-4),
-    pen: a(-10), fk: a(-14), hea: a(-8), crn: a(-12), youth: true, value: 100000,
+    id, name: `${first} ${last}`, shortName: `${first[0]}. ${last}`, clubId: club.id, positions: [pos], age, birthYear: year - age,
+    nationality: natName === "—" ? club.country : natName, foot: rng.chance(0.25) ? "Zurdo" : "Diestro", ovr, pot,
+    pac: a(ATT ? 6 : 0), sho: a(ATT ? 2 : DEF ? -18 : -6), pas: a(DEF ? -6 : 0), dri: a(ATT ? 3 : -4), def: a(DEF ? 4 : -25), phy: a(-2),
+    pen: a(-10), fk: a(-14), hea: a(pos === "DFC" || pos === "DC" ? 0 : -10), crn: a(-10), youth: true, value: estValue(ovr, age), contractEnd: year + 3,
   };
-  if (pos === "POR") p.gk = { div: a(0), han: a(0), kic: a(-6), ref: a(1), pos: a(-2) };
+  if (pos === "POR") { p.gk = { div: a(1), han: a(0), kic: a(-6), ref: a(1), pos: a(-2) }; Object.assign(p, { pac: a(-30), sho: a(-50), def: a(-50) }); }
   return p;
 }
 
@@ -161,26 +172,40 @@ export function startNewSeason(save: FootballSave, cfg: FootballConfig): Offseas
       p.clubId = null;
     }
   }
+  // Agentes libres: los veteranos o de bajo nivel que nadie fichó se retiran
+  for (const p of Object.values(save.players)) {
+    if (p.clubId || p.retired) continue;
+    if (p.age >= 33 || p.ovr < 58 || (p.age >= 30 && rng.chance(0.4))) { p.retired = true; report.retired.push(p.id); }
+  }
   // Contratos que terminan → agentes libres
   expireContracts(save, rng);
-  // Juveniles y relleno de plantillas
+  // Prestigio: mezcla del anterior, la fuerza actual de la plantilla y los títulos de la temporada
+  for (const c of Object.values(save.clubs)) {
+    const titles = Object.entries(arch.winners).filter(([k, w]) => w === c.id && !k.includes(":")).length;
+    const str = clubStrength(c.id, save.players);
+    if (str > 0) c.reputation = Math.round((0.55 * (c.reputation ?? str) + 0.45 * str + Math.min(2, titles * 0.7)) * 10) / 10;
+  }
+  // Cantera: 0-2 canteranos por club según su academia, en la posición más necesitada
   let n = 0;
   for (const club of Object.values(save.clubs)) {
-    const squad = Object.values(save.players).filter((p) => p.clubId === club.id && !p.retired);
-    const want = Math.max(2, 24 - squad.length);
-    const gks = squad.filter((p) => p.positions[0] === "POR").length;
-    for (let i = 0; i < want; i++) {
-      const y = makeYouth(club, rng, save.seasonYear + 1, ++n);
-      if (i === 0 && gks < 3) { y.positions = ["POR"]; y.gk = { div: y.ovr, han: y.ovr - 1, kic: y.ovr - 6, ref: y.ovr + 1, pos: y.ovr - 2 }; }
-      save.players[y.id] = y;
+    const sq = Object.values(save.players).filter((p) => p.clubId === club.id && !p.retired);
+    if (sq.length >= 30) continue;
+    const k = (rng.chance(0.65) ? 1 : 0) + ((club.reputation ?? 70) >= 78 && rng.chance(0.35) ? 1 : 0);
+    for (let i = 0; i < k; i++) {
+      const counts = (g: Group) => sq.filter((p) => GROUP[p.positions[0]] === g).length / GROUP_LIMITS[g][0];
+      const g = (["POR", "DEF", "MED", "ATA"] as Group[]).sort((a, b) => counts(a) - counts(b))[0];
+      const pos = rng.pick({ POR: ["POR"], DEF: ["DFC", "LD", "LI", "DFC"], MED: ["MC", "MCD", "MCO"], ATA: ["DC", "ED", "EI"] }[g] as Pos[]);
+      const y = makeYouth(club, rng, save.seasonYear + 1, ++n, pos);
+      save.players[y.id] = y; sq.push(y);
     }
-    report.youth += want;
+    report.youth += k;
     if (club.lineup) club.lineup = { ...club.lineup, autoRotate: true };
   }
   // Presupuestos de la nueva temporada y mercado de verano (julio)
   for (const c of Object.values(save.clubs)) c.budget = Math.round(((c.budget ?? 0) * 0.5 + clubBudgetBase(c.reputation ?? 70)) / 1e5) * 1e5;
   save.date = `${save.seasonYear + 1}-07-01`;
   for (let k = 0; k < 30; k++) { aiMarketDay(save, rng); save.date = `${save.seasonYear + 1}-07-${String(1 + Math.floor(k / 1.1)).padStart(2, "0")}`; }
+  fillSquadHoles(save, rng, (c, pos) => makeYouth(c, rng, save.seasonYear + 1, 0, pos));
   // Nueva temporada
   save.seasonYear++;
   for (const c of Object.values(save.clubs)) if (c.lineup) c.lineup.starters = c.lineup.starters.map((id) => (id && save.players[id]?.clubId === c.id ? id : null));

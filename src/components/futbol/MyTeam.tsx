@@ -3,6 +3,8 @@ import { useMemo, useState } from "react";
 import { nextClubMatch, recordMyCampaign, startNewSeason, teamCampaign } from "@/engine/football/career";
 import { nextMatchDate, playDay, seasonFinished, seasonLabel, setResult, simulateFixture, leagueTable } from "@/engine/football/season";
 import { fmtDate } from "@/lib/rng";
+import { prestigeStars, squadValue } from "@/engine/football/market";
+import { fmtMoney } from "./ctx";
 import { Badge, Empty, Modal, cx } from "@/components/ui";
 import { useF } from "./ctx";
 import { FixtureRow } from "./FixtureRow";
@@ -29,7 +31,7 @@ export function TeamPicker({ onClose }: { onClose?: () => void }) {
               <div className="grid grid-cols-2 gap-1 sm:grid-cols-4">
                 {ids.map((id) => (
                   <button key={id} className="flex items-center gap-2 rounded-lg border border-borde p-2 text-left text-sm hover:border-acento" onClick={() => { mutate((s) => { s.userClub = id; s.focusMode = true; }); onClose?.(); }}>
-                    <Badge colors={save.clubs[id].colors} label={save.clubs[id].short} size={24} /><span className="truncate">{save.clubs[id].name}</span>
+                    <Badge colors={save.clubs[id].colors} label={save.clubs[id].short} size={24} /><span className="min-w-0 flex-1 truncate">{save.clubs[id].name}</span><span className="text-[10px] text-yellow-300">{prestigeStars(save.clubs[id].reputation ?? 70)}★</span>
                   </button>
                 ))}
               </div>
@@ -83,7 +85,7 @@ export function MyTeam({ run }: { run: (label: string, task: (progress: (t: stri
         <Badge colors={club.colors} label={club.short} size={48} />
         <div className="min-w-0 flex-1">
           <div className="text-lg font-bold">{club.name}</div>
-          <div className="text-xs text-gray-400">Temporada {seasonLabel(save.seasonYear)} · {club.leagueId ? `${save.comps[club.leagueId]?.name}: ${league.findIndex((r) => r.club === club.id) + 1}º` : ""}</div>
+          <div className="text-xs text-gray-400">Temporada {seasonLabel(save.seasonYear)} · {club.leagueId ? `${save.comps[club.leagueId]?.name}: ${league.findIndex((r) => r.club === club.id) + 1}º` : ""} · prestigio {prestigeStars(club.reputation ?? 70)}★ · plantilla {fmtMoney(squadValue(save, club.id))}{save.moneyMode ? ` · presupuesto ${fmtMoney(club.budget)}` : ""}</div>
         </div>
         <button className="btn-ghost btn-sm" onClick={() => openLineup(club.id, next)}>Alineación</button>
         <button className="btn-ghost btn-sm" onClick={() => setPicker(true)}>Cambiar equipo</button>
