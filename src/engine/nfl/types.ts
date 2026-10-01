@@ -24,6 +24,10 @@ export interface NflPlayer {
   kpw: number; // potencia de pateo
   kac: number; // precisión de pateo
   injuryWeeks?: number;
+  contract?: { years: number; salary: number }; // salario anual en USD (estimado)
+  prospect?: boolean; // en la clase del draft
+  draftPick?: number;
+  exTeam?: string | null;
   retired?: boolean;
   rookie?: boolean;
   college?: string;
@@ -113,6 +117,25 @@ export interface NflSave {
   userTeam?: string | null;
   focusMode?: boolean;
   myHistory?: { season: number; team: string; lines: string[]; champion: boolean }[];
+  phase?: "temporada" | "draft" | "agencia";
+  cap?: number;
+  draftOrder?: string[]; // ids de selección en orden
+  draftPos?: number;
+  draftLog?: { pick: number; round: number; team: string; player: string }[];
+  faDay?: number;
+  tradeOffers?: NflTradeOffer[];
+  freeMarket?: boolean;
   dataSource: { source: string; updated: string; demo: boolean };
   seed: number;
+}
+
+export interface NflTradeOffer {
+  id: string;
+  week: string;
+  from: string; // equipo que propone
+  to: string; // equipo que recibe la propuesta
+  give: string[]; // activos que entrega "from" (jugadores o selecciones)
+  get: string[]; // activos que pide
+  status: "pendiente" | "aceptada" | "rechazada" | "caducada";
+  note?: string;
 }

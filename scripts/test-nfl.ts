@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
-import { newNflSave, currentWeek, playNflWeek, nflChampion, nflOffseason, divisionStandings, nflRows, conferenceSeeds } from "../src/engine/nfl/season";
+import { nflOffseason } from "../src/engine/nfl/offseason";
+import { newNflSave, currentWeek, playNflWeek, nflChampion, divisionStandings, nflRows, conferenceSeeds } from "../src/engine/nfl/season";
 const cfg = JSON.parse(readFileSync("data/nfl/teams.json", "utf8"));
 const players = JSON.parse(readFileSync("data/nfl/players.json", "utf8"));
 const save = newNflSave({ cfg, players }, 5);
@@ -16,6 +17,6 @@ for (let s = 0; s < 2; s++) {
   console.log(`Temporada ${save.seasonYear}: campeón ${save.teams[nflChampion(save)!].name}`);
   console.log("  AFC seeds:", conferenceSeeds(save, "AFC", rows).slice(0, 7).map((t) => `${t} ${rows.get(t)!.w}-${rows.get(t)!.l}`).join(", "));
   console.log("  NFC Norte:", d["NFC Norte"].map((t) => `${t} ${rows.get(t)!.w}-${rows.get(t)!.l}-${rows.get(t)!.t}`).join(", "));
-  const r = nflOffseason(save, cfg);
-  console.log(`  Draft: ${r.draft.length} elecciones, 1ª para ${r.draft[0].team}; retiros ${r.retired}`);
+  nflOffseason(save, cfg);
+  console.log(`  Draft: ${save.draftLog?.length ?? 0} elecciones; movimientos registrados: ${save.transactions.length}`);
 }

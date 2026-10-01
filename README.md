@@ -27,6 +27,21 @@ Deploy en Vercel: importar el repositorio, framework "Next.js", sin variables de
   resumen de cada campaña (posición, copas, Europa o playoffs, títulos).
 - **Todas las competiciones:** controlas el calendario completo, partido a partido o por bloques.
 
+## Mercado realista
+
+- **Fútbol:** ventanas de verano (15 jun – 1 sep) e invierno (enero). Cada traspaso se negocia: primero el club
+  (precio según valor, rol en la plantilla y años de contrato; puede contraofertar) y luego el jugador (sueldo,
+  nivel del club y minutos). Cesiones, intercambios con dinero y agentes libres. La IA ficha y vende entre todos
+  los clubes según sus necesidades y presupuesto, y hace ofertas por tus jugadores (aceptar, rechazar o
+  contraofertar). Contratos con fecha de fin: si no renuevas, el jugador se va libre en verano. Valores,
+  sueldos y contratos son estimaciones de la app (la base de EA no los trae). "Modo editor" para mover
+  jugadores sin negociar.
+- **NFL:** tope salarial (estimado en 300 M USD) y contratos estimados; trades que debe aprobar el otro equipo
+  (o ambos si no controlas a ninguno) según el valor de jugadores y selecciones (tabla de valor del draft),
+  necesidades y tope; fecha límite en la semana 9; la IA hace trades entre sí y te ofrece trades. Temporada baja
+  por fases: draft interactivo de 7 rondas (eliges cuando te toca o simulas), agencia libre por días (la IA
+  firma, los precios bajan) y recortes a 53 + practice squad.
+
 ## Reglas comunes
 
 Cada partido/batalla: **⚡ Simular**, **▶ En vivo** (pausa, x1, x2, x5, x10, saltar al final) o **✍ Manual**

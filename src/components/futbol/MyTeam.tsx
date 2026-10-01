@@ -105,6 +105,17 @@ export function MyTeam({ run }: { run: (label: string, task: (progress: (t: stri
         </div>
       </div>
 
+      {(() => {
+        const pend = (save.offers ?? []).filter((o) => !o.byUser && o.status === "pendiente" && o.from === club.id).length;
+        const exp = Object.values(save.players).filter((p) => p.clubId === club.id && !p.retired && (p.contractEnd ?? 9999) <= save.seasonYear + 1).length;
+        return pend || exp ? (
+          <div className="card border-yellow-700/60 text-xs">
+            {pend > 0 && <div>📨 Tienes {pend} oferta(s) de otros clubes por tus jugadores (Mercado → Ofertas).</div>}
+            {exp > 0 && <div>📝 {exp} jugador(es) terminan contrato este verano: renuévalos en Equipos o se irán libres.</div>}
+          </div>
+        ) : null;
+      })()}
+
       {next && (
         <div>
           <h4 className="mb-1 text-sm font-semibold text-gray-300">Próximo partido · {fmtDate(next.date)}</h4>

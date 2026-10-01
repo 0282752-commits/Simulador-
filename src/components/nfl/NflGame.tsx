@@ -2,14 +2,16 @@
 import { useEffect, useMemo, useState } from "react";
 import type { DepthSlot, NflGame as Game, NflPlayer, NflResult, NflSave } from "@/engine/nfl/types";
 import { DEPTH_SLOTS, DEPTH_STARTERS } from "@/engine/nfl/types";
-import { nflTeamSummary, nextTeamGame, recordNflCampaign, simulateNflSeason, applyNflResult, conferenceSeeds, currentWeek, divisionStandings, gameInput, nflChampion, nflLeaders, nflOffseason, nflRows, playNflWeek, roster, simulateGame, teamStrength, type NflConfig } from "@/engine/nfl/season";
+import { nflTeamSummary, nextTeamGame, recordNflCampaign, simulateNflSeason, applyNflResult, conferenceSeeds, currentWeek, divisionStandings, gameInput, nflChampion, nflLeaders, nflRows, playNflWeek, roster, simulateGame, teamStrength, type NflConfig } from "@/engine/nfl/season";
+import { nflOffseason, beginOffseason, draftBoard, onTheClock, makePick, simDraft, faDayAdvance, startNflSeason } from "@/engine/nfl/offseason";
+import { answerTradeOffer, askingSalary, assetLabel, assetValue, capRoom, evaluateTradeFor, fmtUsd, freeAgents, offerContract, payroll, proposeTrade, tradeWindowOpen, ensureNflContracts, estimateSalary } from "@/engine/nfl/market";
 import { teamDepth, teamOverall, slotValue, SLOT_POS } from "@/engine/nfl/depth";
 import { NflGameSim } from "@/engine/nfl/game";
 import { loadNflData } from "@/lib/data";
 import { Badge, Empty, Field, Modal, Progress, SpeedControls, Stat, Tabs, cx } from "@/components/ui";
 import { fmtDate } from "@/lib/rng";
 
-type Tab = "mi" | "semana" | "standings" | "playoffs" | "lideres" | "equipos" | "mercado" | "historial";
+type Tab = "mi" | "draft" | "agencia" | "semana" | "standings" | "playoffs" | "lideres" | "equipos" | "mercado" | "historial";
 type Mut = (fn: (s: NflSave) => void) => void;
 const WEEK_LABEL = (w: number) => (w <= 18 ? `Semana ${w}` : ({ 19: "Wild Card", 20: "Divisional", 21: "Campeonatos de conferencia", 22: "Super Bowl" } as Record<number, string>)[w]);
 
@@ -62,12 +64,15 @@ export default function NflGame({ save, tick, mutate }: { save: NflSave; tick: n
         <div className="flex items-center justify-between gap-2">
           <div>
             <div className="text-xs text-gray-400">Temporada NFL {save.seasonYear}{save.dataSource.demo && <span className="ml-1 rounded bg-yellow-500/20 px-1 text-yellow-300">JUGADORES DEMO</span>}</div>
-            <div className="font-semibold">{cw ? WEEK_LABEL(cw) : champ ? `Campeón: ${save.teams[champ].city} ${save.teams[champ].name}` : "Temporada terminada"}</div>
+            <div className="font-semibold">{cw ? WEEK_LABEL(cw) : save.phase === "draft" ? `Draft ${save.seasonYear + 1}` : save.phase === "agencia" ? `Agencia libre · día ${(save.faDay ?? 0) + 1}` : champ ? `Campeón: ${save.teams[champ].city} ${save.teams[champ].name}` : "Temporada terminada"}</div>
           </div>
-          {cw ? <button className="btn-primary" onClick={() => simUntil("semana")}>Simular semana ▸</button> : <button className="btn-primary" onClick={() => { if (confirm("¿Pasar a la siguiente temporada? Habrá draft, progresión y retiros.")) newSeason(); }}>Nueva temporada ▸</button>}
+          {cw ? <button className="btn-primary" onClick={() => simUntil("semana")}>Simular semana ▸</button>
+            : save.phase === "draft" ? <button className="btn-primary" onClick={() => setTab("draft")}>Ir al draft ▸</button>
+            : save.phase === "agencia" ? <button className="btn-primary" onClick={async () => { const c = await getCfg(); mutate((s) => startNflSeason(s, c)); setWeek(1); setTab(save.focusMode ? "mi" : "semana"); }}>Empezar temporada {save.seasonYear + 1} ▸</button>
+            : <button className="btn-primary" onClick={() => { mutate((s) => { beginOffseason(s); }); setTab("draft"); }}>Temporada baja: draft ▸</button>}
         </div>
         {cw && <div className="mt-2 flex gap-1"><button className="btn-ghost btn-sm" disabled={cw > 18} onClick={() => simUntil("regular")}>Hasta fin de temporada regular</button><button className="btn-ghost btn-sm" onClick={() => simUntil("fin")}>⏭ Simular temporada completa</button></div>}
-        <Tabs<Tab> value={tab} onChange={setTab} tabs={[...(save.focusMode || save.userTeam ? [{ id: "mi" as Tab, label: "★ Mi equipo" }] : []), { id: "semana", label: "Partidos" }, { id: "standings", label: "Standings" }, { id: "playoffs", label: "Playoffs" }, { id: "lideres", label: "Líderes" }, { id: "equipos", label: "Equipos" }, { id: "mercado", label: "Mercado" }, { id: "historial", label: "Historial" }]} />
+        <Tabs<Tab> value={tab} onChange={setTab} tabs={[...(save.focusMode || save.userTeam ? [{ id: "mi" as Tab, label: "★ Mi equipo" }] : []), { id: "semana", label: "Partidos" }, { id: "draft", label: save.phase === "draft" ? "● Draft" : "Draft" }, { id: "agencia", label: save.phase === "agencia" ? "● Agentes libres" : "Agentes libres" }, { id: "standings", label: "Standings" }, { id: "playoffs", label: "Playoffs" }, { id: "lideres", label: "Líderes" }, { id: "equipos", label: "Equipos" }, { id: "mercado", label: "Mercado" }, { id: "historial", label: "Historial" }]} />
       </div>
 
       {tab === "mi" && <MyNfl save={save} mutate={mutate} run={run} getCfg={getCfg} onLive={setLive} onManual={setManual} onDetail={setDetail} />}
@@ -82,6 +87,8 @@ export default function NflGame({ save, tick, mutate }: { save: NflSave; tick: n
           {!games.length && <Empty>Sin partidos.</Empty>}
         </div>
       )}
+      {tab === "draft" && <DraftRoom save={save} mutate={mutate} />}
+      {tab === "agencia" && <FreeAgency save={save} mutate={mutate} />}
       {tab === "standings" && <Standings save={save} tick={tick} />}
       {tab === "playoffs" && <Playoffs save={save} onDetail={setDetail} />}
       {tab === "lideres" && <Leaders save={save} tick={tick} />}
@@ -427,7 +434,7 @@ function TeamView({ save, mutate, team, setTeam }: { save: NflSave; mutate: Mut;
       </select>
       <div className="card mt-3 flex flex-wrap items-center gap-3">
         <Badge colors={t.colors} label={t.abbr} size={44} />
-        <div className="flex-1"><div className="text-lg font-bold">{t.city} {t.name}</div><div className="text-xs text-gray-400">OVR {ov.ovr} · Ataque {ov.off} · Defensa {ov.def} · Especiales {ov.st} · {r.filter((p) => !p.practiceSquad).length} en el roster + {r.filter((p) => p.practiceSquad).length} en practice squad</div></div>
+        <div className="flex-1"><div className="text-lg font-bold">{t.city} {t.name}</div><div className="text-xs text-gray-400">Nómina {fmtUsd(payroll(save, team))} · espacio bajo el tope {fmtUsd(capRoom(save, team))} · OVR {ov.ovr} · Ataque {ov.off} · Defensa {ov.def} · Especiales {ov.st} · {r.filter((p) => !p.practiceSquad).length} en el roster + {r.filter((p) => p.practiceSquad).length} en practice squad</div></div>
         <label className="flex items-center gap-1 text-xs"><input type="checkbox" checked={t.autoDepth !== false} onChange={(e) => mutate((s) => { s.teams[team].autoDepth = e.target.checked; if (!e.target.checked) s.teams[team].depth = teamDepth(s.teams[team], roster(s, team)); })} /> Depth chart automático</label>
         <button className="btn-ghost btn-sm" onClick={() => setEdit({ id: `nu${Date.now().toString(36)}`, name: "Nuevo Jugador", teamId: team, pos: "WR", ovr: 70, age: 23, number: 0, practiceSquad: false, spd: 80, str: 60, thp: 30, tha: 30, cth: 72, car: 60, rbk: 40, pbk: 40, tak: 40, prs: 30, cov: 35, kpw: 20, kac: 20 })}>+ Crear jugador</button>
       </div>
@@ -437,13 +444,14 @@ function TeamView({ save, mutate, team, setTeam }: { save: NflSave; mutate: Mut;
       </details>
       <div className="scroll-x mt-3">
         <table className="w-full min-w-[640px] text-sm">
-          <thead><tr>{["Pos", "Jugador", "Edad", "OVR", "VEL", "FUE", "PRE", "POT", "ATR", "TAC", "COB", "BLQ", "Estado"].map((h) => <th key={h} className="th">{h}</th>)}</tr></thead>
+          <thead><tr>{["Pos", "Jugador", "Edad", "OVR", "VEL", "FUE", "PRE", "POT", "ATR", "TAC", "COB", "BLQ", "Estado", "Contrato"].map((h) => <th key={h} className="th">{h}</th>)}</tr></thead>
           <tbody>
             {r.sort((a, b) => Object.values(SLOT_POS).flat().indexOf(a.pos) - Object.values(SLOT_POS).flat().indexOf(b.pos) || b.ovr - a.ovr).map((p) => (
               <tr key={p.id} className="cursor-pointer border-t border-borde/60 hover:bg-white/5" onClick={() => setEdit(p)}>
                 <td className="td">{p.pos}</td><td className="td">{p.name}{p.practiceSquad && <span className="ml-1 text-[10px] text-gray-400">PS</span>}{p.rookie && <span className="ml-1 text-[10px] text-sky-300">novato</span>}</td>
                 <td className="td">{p.age}</td><td className="td font-bold">{p.ovr}</td><td className="td">{p.spd}</td><td className="td">{p.str}</td><td className="td">{p.tha}</td><td className="td">{p.thp}</td><td className="td">{p.cth}</td><td className="td">{p.tak}</td><td className="td">{p.cov}</td><td className="td">{Math.round((p.rbk + p.pbk) / 2)}</td>
                 <td className="td text-xs">{p.injuryWeeks ? `🚑 ${p.injuryWeeks} sem.` : "✔"}</td>
+                <td className="td whitespace-nowrap text-xs">{p.contract ? `${fmtUsd(p.contract.salary)} · ${p.contract.years}a` : "—"}{team === save.userTeam && p.contract && p.contract.years <= 1 && <button className="btn-ghost btn-sm ml-1 !px-1 !py-0" onClick={(e) => { e.stopPropagation(); const sal = Math.round(estimateSalary(p.pos, p.ovr, p.age) * 1.05 / 5e4) * 5e4; if (capRoom(save, team) + p.contract!.salary < sal) { alertMsg(`Sin espacio: extender a ${p.name} cuesta ${fmtUsd(sal)}/año.`); return; } mutate((s) => { s.players[p.id].contract = { years: p.age >= 31 ? 2 : 4, salary: sal }; s.transactions.unshift({ date: `${s.seasonYear}`, text: `EXTENSIÓN: ${s.teams[team].abbr} renueva a ${p.name} (${fmtUsd(sal)}/año).` }); }); }}>Extender</button>}</td>
               </tr>
             ))}
           </tbody>
@@ -471,40 +479,162 @@ function NflPlayerEditor({ p: p0, onClose, onSave }: { p: NflPlayer; onClose: ()
   );
 }
 
-// ===== Mercado: intercambios de jugadores y selecciones =====
+// ===== Mercado: trades que deben aprobar ambos equipos =====
+function alertMsg(m: string) { if (typeof window !== "undefined") window.alert?.(m); }
 function NflMarket({ save, mutate }: { save: NflSave; mutate: Mut }) {
+  ensureNflContracts(save);
   const ids = Object.keys(save.teams).sort();
-  const [a, setA] = useState(ids[0]);
-  const [b, setB] = useState(ids[1]);
+  const [a, setA] = useState(save.userTeam ?? ids[0]);
+  const [b, setB] = useState(ids.find((x) => x !== (save.userTeam ?? ids[0]))!);
   const [selA, setSelA] = useState<string[]>([]);
   const [selB, setSelB] = useState<string[]>([]);
+  const [msg, setMsg] = useState<string | null>(null);
   const assets = (t: string) => [
-    ...roster(save, t).sort((x, y) => y.ovr - x.ovr).map((p) => ({ id: p.id, label: `${p.pos} ${p.name} (${p.ovr})` })),
-    ...save.picks.filter((pk) => pk.owner === t && !pk.used).sort((x, y) => x.year - y.year || x.round - y.round).map((pk) => ({ id: pk.id, label: `🎟 ${pk.year} ronda ${pk.round}${pk.originalTeam !== t ? ` (de ${pk.originalTeam})` : ""}` })),
+    ...roster(save, t).sort((x, y) => y.ovr - x.ovr).map((p) => ({ id: p.id, label: `${p.pos} ${p.name} (${p.ovr}, ${p.age}a, ${p.contract ? fmtUsd(p.contract.salary) : "—"})` })),
+    ...save.picks.filter((pk) => pk.owner === t && !pk.used).sort((x, y) => x.year - y.year || x.round - y.round).map((pk) => ({ id: pk.id, label: `🎟 ${assetLabel(save, pk.id)}` })),
   ];
+  const sum = (l: string[]) => l.reduce((s, id) => s + assetValue(save, id), 0);
   const toggle = (arr: string[], set: (v: string[]) => void, id: string) => set(arr.includes(id) ? arr.filter((x) => x !== id) : [...arr, id]);
-  const col = (t: string, setT: (v: string) => void, sel: string[], setSel: (v: string[]) => void) => (
+  const col = (t: string, setT: (v: string) => void, sel: string[], setSel: (v: string[]) => void, title: string) => (
     <div>
-      <select className="input" value={t} onChange={(e) => { setT(e.target.value); setSel([]); }}>{ids.map((x) => <option key={x} value={x}>{save.teams[x].city} {save.teams[x].name}</option>)}</select>
+      <div className="text-xs text-gray-400">{title}</div>
+      <select className="input" value={t} onChange={(e) => { setT(e.target.value); setSel([]); setMsg(null); }}>{ids.map((x) => <option key={x} value={x}>{save.teams[x].city} {save.teams[x].name}{x === save.userTeam ? " ★" : ""}</option>)}</select>
+      <div className="mt-1 text-[11px] text-gray-400">Espacio bajo el tope: {fmtUsd(capRoom(save, t))}</div>
       <div className="mt-1 max-h-72 overflow-y-auto rounded border border-borde p-1">
-        {assets(t).map((x) => <label key={x.id} className="flex items-center gap-2 text-xs"><input type="checkbox" checked={sel.includes(x.id)} onChange={() => toggle(sel, setSel, x.id)} />{x.label}</label>)}
+        {assets(t).map((x) => <label key={x.id} className="flex items-center gap-2 text-xs"><input type="checkbox" checked={sel.includes(x.id)} onChange={() => toggle(sel, setSel, x.id)} /><span className="flex-1">{x.label}</span><span className="text-gray-500">{assetValue(save, x.id)}</span></label>)}
       </div>
     </div>
   );
+  const va = sum(selA), vb = sum(selB);
+  const preview = a !== b && (selA.length || selB.length) ? [a, b].filter((t) => t !== save.userTeam).map((t) => (t === a ? evaluateTradeFor(save, a, selB, selA) : evaluateTradeFor(save, b, selA, selB))) : [];
   return (
-    <div className="mt-3">
-      <p className="text-xs text-gray-400">Intercambio libre de jugadores y selecciones del draft entre dos equipos.</p>
-      <div className="mt-2 grid gap-3 md:grid-cols-2">{col(a, setA, selA, setSelA)}{col(b, setB, selB, setSelB)}</div>
-      <button className="btn-primary mt-3 w-full" disabled={a === b || (!selA.length && !selB.length)} onClick={() => {
-        mutate((s) => {
-          const move = (list: string[], to: string) => { for (const id of list) { if (s.players[id]) s.players[id].teamId = to; const pk = s.picks.find((x) => x.id === id); if (pk) pk.owner = to; } };
-          move(selA, b); move(selB, a);
-          const lbl = (list: string[]) => list.map((id) => s.players[id]?.name ?? id).join(", ") || "nada";
-          s.transactions.unshift({ date: `${s.seasonYear} S${s.week}`, text: `${s.teams[a].abbr} envía ${lbl(selA)} a ${s.teams[b].abbr} por ${lbl(selB)}` });
-          for (const t of [a, b]) if (s.teams[t].depth) s.teams[t].autoDepth = true;
-        });
-        setSelA([]); setSelB([]);
-      }}>Confirmar intercambio</button>
+    <div className="mt-3 space-y-3">
+      <div className="card text-xs text-gray-400">
+        {tradeWindowOpen(save) ? "Ventana de trades abierta (fecha límite: semana 9; se reabre en la temporada baja)." : "Pasó la fecha límite de trades (semana 9). Se reabre al terminar la temporada."}
+        {" "}Cada equipo controlado por la IA evalúa el valor que recibe (jugadores según media, edad, posición y contrato; selecciones según la tabla de valor del draft), sus necesidades y el tope salarial. Contratos y salarios son estimaciones de la app.
+      </div>
+      <TradeInbox save={save} mutate={mutate} />
+      <div className="grid gap-3 md:grid-cols-2">{col(a, setA, selA, setSelA, "Equipo A entrega")}{col(b, setB, selB, setSelB, "Equipo B entrega")}</div>
+      <div className="text-sm">Valor: {save.teams[a].abbr} entrega <b>{va}</b> · {save.teams[b].abbr} entrega <b>{vb}</b></div>
+      {preview.map((v, i) => <div key={i} className={cx("text-xs", v.accept ? "text-acento" : "text-yellow-300")}>{v.accept ? "Probablemente acepten: " : "Ahora mismo no aceptarían: "}{v.reason}</div>)}
+      <button className="btn-primary w-full" disabled={a === b || (!selA.length && !selB.length)} onClick={() => { let r = { ok: false, msg: "" }; mutate((s) => { r = proposeTrade(s, a, b, selA, selB); }); setMsg(r.msg); if (r.ok) { setSelA([]); setSelB([]); } }}>Proponer trade</button>
+      {msg && <div className="card text-sm">{msg}</div>}
+      <div className="text-xs text-gray-400">{save.userTeam ? `Como ${save.teams[save.userTeam].abbr} aceptas tu parte; el otro equipo decide.` : "Sin equipo propio: deben aceptar los dos equipos."}</div>
+    </div>
+  );
+}
+
+function TradeInbox({ save, mutate }: { save: NflSave; mutate: Mut }) {
+  const [msg, setMsg] = useState<string | null>(null);
+  const pend = (save.tradeOffers ?? []).filter((o) => o.status === "pendiente" && o.to === save.userTeam);
+  if (!pend.length && !msg) return null;
+  return (
+    <div className="card space-y-2">
+      <h4 className="text-sm font-semibold">📨 Ofertas de trade por tus jugadores</h4>
+      {pend.map((o) => (
+        <div key={o.id} className="rounded border border-borde p-2 text-sm">
+          <b>{save.teams[o.from].city} {save.teams[o.from].name}</b> ofrece {o.give.map((x) => assetLabel(save, x)).join(", ")} por {o.get.map((x) => assetLabel(save, x)).join(", ")}
+          <div className="text-[11px] text-gray-400">Valor que recibes {o.give.reduce((s, x) => s + assetValue(save, x), 0)} · valor que das {o.get.reduce((s, x) => s + assetValue(save, x), 0)}</div>
+          <div className="mt-1 flex gap-1"><button className="btn-primary btn-sm" onClick={() => { let t = ""; mutate((s) => { t = answerTradeOffer(s, o.id, true); }); setMsg(t); }}>Aceptar</button><button className="btn-ghost btn-sm" onClick={() => { let t = ""; mutate((s) => { t = answerTradeOffer(s, o.id, false); }); setMsg(t); }}>Rechazar</button></div>
+        </div>
+      ))}
+      {msg && <div className="text-xs">{msg}</div>}
+    </div>
+  );
+}
+
+// ===== Sala de draft =====
+function DraftRoom({ save, mutate }: { save: NflSave; mutate: Mut }) {
+  const [pos, setPos] = useState("");
+  const [msg, setMsg] = useState<string | null>(null);
+  if (save.phase !== "draft") {
+    const log = save.draftLog ?? [];
+    return (
+      <div className="mt-3 space-y-2">
+        <p className="text-sm text-gray-400">{save.phase === "agencia" ? "El draft terminó." : "El draft se abre al terminar el Super Bowl (botón “Temporada baja”)."} {log.length ? "Resultados del último draft:" : ""}</p>
+        <div className="max-h-[60vh] overflow-y-auto text-xs">{log.map((l) => { const p = save.players[l.player]; return <div key={l.pick} className={cx("border-b border-borde/50 py-0.5", l.team === save.userTeam && "text-acento")}>#{l.pick} (R{l.round}) {save.teams[l.team].abbr}: {p?.pos} {p?.name} · {p?.college} · {p?.ovr}</div>; })}</div>
+      </div>
+    );
+  }
+  const pk = onTheClock(save);
+  const mine = pk?.owner === save.userTeam;
+  const board = draftBoard(save).filter((p) => !pos || p.pos === pos).slice(0, 60);
+  const recent = [...(save.draftLog ?? [])].reverse().slice(0, 12);
+  return (
+    <div className="mt-3 space-y-3">
+      <div className={cx("card", mine && "ring-2 ring-acento")}>
+        <div className="text-sm">Selección #{(save.draftPos ?? 0) + 1} · ronda {pk?.round} · en el reloj: <b>{pk ? `${save.teams[pk.owner].city} ${save.teams[pk.owner].name}` : "—"}</b>{pk && pk.originalTeam !== pk.owner ? ` (vía ${pk.originalTeam})` : ""}</div>
+        <div className="mt-2 flex flex-wrap gap-1">
+          {save.userTeam && <button className="btn-ghost btn-sm" disabled={mine} onClick={() => mutate((s) => simDraft(s, true))}>⏩ Simular hasta mi turno</button>}
+          <button className="btn-ghost btn-sm" onClick={() => mutate((s) => simDraft(s, false))}>⏭ Simular draft completo</button>
+        </div>
+        {mine && <p className="mt-2 text-sm text-acento">¡Te toca! Elige un jugador del tablero.</p>}
+      </div>
+      <div className="flex flex-wrap gap-1">{["", "QB", "RB", "WR", "TE", "OT", "OG", "C", "DE", "DT", "LB", "CB", "S", "K", "P"].map((p) => <button key={p} onClick={() => setPos(p)} className={cx("btn-sm btn", pos === p ? "bg-acento text-black" : "border border-borde")}>{p || "Todos"}</button>)}</div>
+      <div className="grid gap-3 md:grid-cols-[1fr_260px]">
+        <div className="space-y-1">
+          {board.map((p, i) => (
+            <div key={p.id} className="flex items-center gap-2 rounded border border-borde px-2 py-1 text-sm">
+              <span className="w-6 text-xs text-gray-500">{i + 1}</span>
+              <span className="w-8 text-xs font-bold">{p.pos}</span>
+              <span className="min-w-0 flex-1 truncate">{p.name} <span className="text-xs text-gray-400">{p.college} · {p.age}a · VEL {p.spd}</span></span>
+              <b className="tabular">{p.ovr}</b>
+              {mine && <button className="btn-primary btn-sm" onClick={() => { let t = ""; mutate((s) => { t = makePick(s, p.id); if (s.userTeam) simDraft(s, true); }); setMsg(t); }}>Elegir</button>}
+            </div>
+          ))}
+        </div>
+        <div className="card text-xs">
+          <div className="mb-1 font-semibold">Últimas selecciones</div>
+          {recent.map((l) => { const p = save.players[l.player]; return <div key={l.pick} className={cx(l.team === save.userTeam && "text-acento")}>#{l.pick} {save.teams[l.team].abbr}: {p?.pos} {p?.name} ({p?.ovr})</div>; })}
+        </div>
+      </div>
+      {msg && <div className="text-sm">{msg}</div>}
+      <p className="text-[11px] text-gray-500">Clase del draft generada por la app (los prospectos reales de años futuros no se conocen).</p>
+    </div>
+  );
+}
+
+// ===== Agencia libre =====
+function FreeAgency({ save, mutate }: { save: NflSave; mutate: Mut }) {
+  ensureNflContracts(save);
+  const [pos, setPos] = useState("");
+  const [team, setTeam] = useState(save.userTeam ?? Object.keys(save.teams)[0]);
+  const [offer, setOffer] = useState<{ id: string; salary: number; years: number } | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
+  const list = freeAgents(save).filter((p) => !pos || p.pos === pos).sort((a, b) => b.ovr - a.ovr).slice(0, 80);
+  return (
+    <div className="mt-3 space-y-3">
+      <div className="card text-xs text-gray-400">
+        {save.phase === "agencia" ? `Agencia libre abierta (día ${(save.faDay ?? 0) + 1}). Cada día que avanzas, la IA firma jugadores y los precios bajan.` : "Durante la temporada puedes firmar agentes libres disponibles (por ejemplo, para cubrir lesiones)."}
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <select className="input !w-auto" value={team} onChange={(e) => setTeam(e.target.value)}>{Object.keys(save.teams).sort().map((t) => <option key={t} value={t}>{save.teams[t].city} {save.teams[t].name}</option>)}</select>
+        <span className="text-xs text-gray-400">Espacio bajo el tope: <b className="text-white">{fmtUsd(capRoom(save, team))}</b> · {roster(save, team).length} jugadores</span>
+        {save.phase === "agencia" && <button className="btn-primary btn-sm ml-auto" onClick={() => mutate((s) => faDayAdvance(s))}>Avanzar un día ▸</button>}
+      </div>
+      <div className="flex flex-wrap gap-1">{["", "QB", "RB", "WR", "TE", "OT", "OG", "C", "DE", "DT", "LB", "CB", "S", "K", "P"].map((p) => <button key={p} onClick={() => setPos(p)} className={cx("btn-sm btn", pos === p ? "bg-acento text-black" : "border border-borde")}>{p || "Todos"}</button>)}</div>
+      <div className="space-y-1">
+        {list.map((p) => (
+          <div key={p.id} className="flex flex-wrap items-center gap-2 rounded border border-borde px-2 py-1 text-sm">
+            <span className="w-8 text-xs font-bold">{p.pos}</span>
+            <span className="min-w-0 flex-1 truncate">{p.name} <span className="text-xs text-gray-400">{p.age}a{p.exTeam ? ` · ex ${p.exTeam}` : ""} · pide {fmtUsd(askingSalary(save, p))}/año</span></span>
+            <b className="tabular">{p.ovr}</b>
+            <button className="btn-ghost btn-sm" onClick={() => { setOffer({ id: p.id, salary: askingSalary(save, p), years: p.age >= 31 ? 1 : 3 }); setMsg(null); }}>Ofertar</button>
+          </div>
+        ))}
+        {!list.length && <Empty>No hay agentes libres en esa posición.</Empty>}
+      </div>
+      {offer && (
+        <Modal title={`Oferta a ${save.players[offer.id].name}`} onClose={() => setOffer(null)}>
+          <div className="grid grid-cols-2 gap-2">
+            <Field label="Salario anual (USD)"><input type="number" step={50000} className="input" value={offer.salary} onChange={(e) => setOffer({ ...offer, salary: Number(e.target.value) || 0 })} /></Field>
+            <Field label="Años"><select className="input" value={offer.years} onChange={(e) => setOffer({ ...offer, years: Number(e.target.value) })}>{[1, 2, 3, 4, 5].map((y) => <option key={y} value={y}>{y}</option>)}</select></Field>
+          </div>
+          <button className="btn-primary mt-3 w-full" onClick={() => { let r = { ok: false, msg: "" }; mutate((s) => { r = offerContract(s, team, offer.id, offer.salary, offer.years); }); setMsg(r.msg); if (r.ok) setOffer(null); }}>Enviar oferta</button>
+          {msg && <p className="mt-2 text-sm">{msg}</p>}
+        </Modal>
+      )}
+      {msg && !offer && <div className="card text-sm">{msg}</div>}
     </div>
   );
 }
@@ -536,6 +666,7 @@ function MyNfl({ save, mutate, run, getCfg, onLive, onManual, onDetail }: { save
   if (!team) return <div className="mt-6 text-center"><button className="btn-primary" onClick={() => setPicker(true)}>Elegir equipo</button>{picker && <NflTeamPicker save={save} mutate={mutate} onClose={() => setPicker(false)} />}</div>;
   const next = nextTeamGame(save, team.id);
   const done = currentWeek(save) === null;
+  const phase = save.phase ?? "temporada";
   const sum = nflTeamSummary(save, team.id);
   const mine = save.games.filter((g) => g.result && (g.home === team.id || g.away === team.id)).sort((a, b) => b.week - a.week).slice(0, 6);
   const wait = () => new Promise((r) => setTimeout(r, 0));
@@ -550,7 +681,7 @@ function MyNfl({ save, mutate, run, getCfg, onLive, onManual, onDetail }: { save
   const seasons = (n: number) => run(`Simulando ${n} temporada${n > 1 ? "s" : ""}…`, async (p) => {
     const c = await getCfg();
     const years: number[] = [];
-    if (currentWeek(save) === null) nflOffseason(save, c);
+    if (currentWeek(save) === null || save.phase !== "temporada") nflOffseason(save, c);
     for (let k = 0; k < n; k++) {
       simulateNflSeason(save, (w) => p(`Temporada ${save.seasonYear} · ${WEEK_LABEL(w)}`, (k + w / 22) / n));
       years.push(save.seasonYear);
@@ -573,11 +704,17 @@ function MyNfl({ save, mutate, run, getCfg, onLive, onManual, onDetail }: { save
             <button className="btn-ghost !py-3" disabled={!next} onClick={() => toMyGame(false)}>⏩ Avanzar hasta mi partido (para verlo en vivo)</button>
             <button className="btn-primary !py-3 sm:col-span-2" onClick={() => seasons(1)}>⏭ Simular toda la temporada (regular + playoffs)</button>
           </>
+        ) : phase === "temporada" ? (
+          <>
+            <button className="btn-primary !py-3" onClick={() => mutate((s) => { beginOffseason(s); })}>Temporada baja: ir al draft ▸</button>
+            <button className="btn-ghost !py-3" onClick={async () => { const c = await getCfg(); mutate((s) => { nflOffseason(s, c); }); }}>Simular draft y agencia libre automáticamente</button>
+          </>
         ) : (
-          <button className="btn-primary !py-3 sm:col-span-2" onClick={async () => { const c = await getCfg(); mutate((s) => { nflOffseason(s, c); }); }}>Draft y temporada {save.seasonYear + 1} ▸</button>
+          <div className="card text-sm sm:col-span-2">{phase === "draft" ? "📋 Estás en el draft: ve a la pestaña Draft para hacer tus selecciones." : "✍ Agencia libre abierta: ficha jugadores en la pestaña Agentes libres y luego empieza la temporada."}</div>
         )}
         <div className="flex flex-wrap items-center gap-1 sm:col-span-2"><span className="text-xs text-gray-400">Simular varias temporadas seguidas (con draft):</span>{[3, 5, 10].map((n) => <button key={n} className="btn-ghost btn-sm" onClick={() => seasons(n)}>{n} temporadas</button>)}</div>
       </div>
+      <TradeInbox save={save} mutate={mutate} />
       {next && <div><h4 className="mb-1 text-sm font-semibold text-gray-300">Próximo partido</h4><GameRow g={next} save={save} mutate={mutate} onLive={() => onLive(next)} onManual={() => onManual(next)} onDetail={() => onDetail(next)} /></div>}
       {mine.length > 0 && <div><h4 className="mb-1 text-sm font-semibold text-gray-300">Últimos resultados</h4><div className="grid gap-2 md:grid-cols-2">{mine.map((g) => <GameRow key={g.id} g={g} save={save} mutate={mutate} onLive={() => onLive(g)} onManual={() => onManual(g)} onDetail={() => onDetail(g)} />)}</div></div>}
       {(save.myHistory?.length ?? 0) > 0 && (

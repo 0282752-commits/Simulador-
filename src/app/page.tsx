@@ -19,7 +19,7 @@ export default function Home() {
   const [saves, setSaves] = useState<SaveMeta[] | null>(null);
   const [creating, setCreating] = useState<Mode | null>(null);
   const [name, setName] = useState("");
-  const [money, setMoney] = useState(false);
+  const [money, setMoney] = useState(true);
   const [focus, setFocus] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -40,7 +40,6 @@ export default function Home() {
         const s = newFootballSave(await loadFootballData());
         s.moneyMode = money;
         s.focusMode = focus;
-        if (money) for (const c of Object.values(s.clubs)) c.budget = Math.round(((c.reputation ?? 70) - 55) ** 2.4 * 40000);
         await writeSave({ id, name: title, mode: "futbol", created }, s);
       } else if (creating === "nfl") {
         const s = newNflSave(await loadNflData());
@@ -120,7 +119,7 @@ export default function Home() {
           {creating === "futbol" && (
             <label className="mt-3 flex items-center gap-2 text-sm">
               <input type="checkbox" checked={money} onChange={(e) => setMoney(e.target.checked)} />
-              Modo con presupuestos y valores de mercado (si no, mercado libre sin dinero)
+              Mercado con dinero: presupuestos, valores de mercado y negociación (recomendado)
             </label>
           )}
           <button className="btn-primary mt-4 w-full" onClick={create}>Crear</button>

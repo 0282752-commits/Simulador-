@@ -3,6 +3,7 @@ import { Rng, addDays, clamp } from "../../lib/rng";
 import type { DraftPick, NflGame, NflPlayer, NflResult, NflSave, NflTeam } from "./types";
 import { NflGameSim, type NflGameInput } from "./game";
 import { teamDepth } from "./depth";
+import { aiSignings, aiTrades, ensureNflContracts } from "./market";
 
 export interface NflConfig {
   season: number;
@@ -19,9 +20,10 @@ export function newNflSave(data: NflData, seed = Math.floor(Math.random() * 1e9)
     mode: "nfl", version: 0, seasonYear: data.cfg.season, week: 1,
     teams: Object.fromEntries(data.cfg.teams.map((t) => [t.id, { ...structuredClone(t), autoDepth: true }])),
     players: Object.fromEntries(data.players.players.map((p) => [p.id, structuredClone(p)])),
-    games: [], picks: [], history: [], transactions: [], dataSource: data.players.meta, seed,
+    games: [], picks: [], history: [], transactions: [], dataSource: data.players.meta, seed, phase: "temporada",
   };
   for (const t of Object.values(save.teams)) for (let y = save.seasonYear + 1; y <= save.seasonYear + 3; y++) for (let r = 1; r <= 7; r++) save.picks.push({ id: `${y}-${r}-${t.id}`, year: y, round: r, originalTeam: t.id, owner: t.id });
+  ensureNflContracts(save);
   createNflSchedule(save, data.cfg);
   return save;
 }
@@ -326,6 +328,9 @@ export function playNflWeek(save: NflSave, week: number, skip?: (g: NflGame) => 
   for (const p of Object.values(save.players)) if (p.injuryWeeks) p.injuryWeeks = Math.max(0, p.injuryWeeks - 1);
   for (const g of games) for (const i of g.result!.injuries ?? []) { const p = save.players[i.player]; if (p) p.injuryWeeks = (p.injuryWeeks ?? 0) + i.weeks; }
   save.week = week + 1;
+  // movimientos de la IA: fichajes por lesiones/necesidad y trades antes de la fecha límite
+  const rng = new Rng(save.seed + save.seasonYear * 100 + week);
+  if (!save.freeMarket) { aiSignings(save, rng, 0.25); if (week <= 9) aiTrades(save, rng, 3); }
   save.version++;
   progressNfl(save);
 }
@@ -383,81 +388,6 @@ export function nflLeaders(save: NflSave) {
     }
   }
   return tot;
-}
-
-// ===== Fin de temporada: draft, progresión, retiros =====
-export function nflOffseason(save: NflSave, cfg: NflConfig): { draft: { pick: number; team: string; player: string }[]; retired: number } {
-  recordNflCampaign(save);
-  const rng = new Rng(save.seed + save.seasonYear * 13);
-  const rows = nflRows(save);
-  const champ = nflChampion(save);
-  const sb = save.games.find((g) => g.week === 22);
-  const runner = sb?.result ? (champ === sb.home ? sb.away : sb.home) : "";
-  const standings = [...rows.values()].sort((a, b) => b.pct - a.pct).map((r) => ({ team: r.team, w: r.w, l: r.l, t: r.t }));
-  save.history.push({ season: save.seasonYear, champion: champ ?? "", runnerUp: runner, standings });
-  // orden del draft: no clasificados por peor récord, luego por ronda de eliminación
-  const po = save.games.filter((g) => g.playoff && g.result);
-  const elimRound = new Map<string, number>();
-  for (const g of po) { const loser = g.result!.hs > g.result!.as ? g.away : g.home; elimRound.set(loser, g.week); }
-  if (champ) elimRound.set(champ, 23);
-  const order = Object.keys(save.teams).sort((a, b) => (elimRound.get(a) ?? 0) - (elimRound.get(b) ?? 0) || rows.get(a)!.pct - rows.get(b)!.pct);
-  const year = save.seasonYear + 1;
-  // clase del draft (prospectos ficticios generados)
-  const POS: NflPlayer["pos"][] = ["QB", "RB", "WR", "WR", "TE", "OT", "OG", "C", "DE", "DT", "LB", "LB", "CB", "CB", "S", "K", "P"];
-  const pool: NflPlayer[] = [];
-  for (let i = 0; i < 300; i++) {
-    const pos = rng.pick(POS);
-    const ovr = clamp(Math.round(78 - i * 0.07 + rng.normal(0, 4)), 48, 86);
-    const a = (d: number) => clamp(Math.round(ovr + d + rng.normal(0, 5)), 25, 99);
-    pool.push({ id: `d${year}_${i}`, name: `Prospecto ${year}-${i + 1}`, teamId: null, pos, ovr, age: rng.int(21, 23), number: 0, practiceSquad: false, rookie: true,
-      spd: a(0), str: a(-5), thp: a(pos === "QB" ? 0 : -40), tha: a(pos === "QB" ? -3 : -45), cth: a(["WR", "TE"].includes(pos) ? 0 : -30), car: a(pos === "RB" ? 0 : -30),
-      rbk: a(["OT", "OG", "C", "TE"].includes(pos) ? 0 : -40), pbk: a(["OT", "OG", "C"].includes(pos) ? 0 : -40), tak: a(["LB", "S", "DE", "DT", "CB"].includes(pos) ? 0 : -40),
-      prs: a(["DE", "DT"].includes(pos) ? 0 : -35), cov: a(["CB", "S"].includes(pos) ? 0 : -35), kpw: a(pos === "K" || pos === "P" ? 0 : -50), kac: a(pos === "K" || pos === "P" ? 0 : -50) });
-  }
-  pool.sort((a, b) => b.ovr - a.ovr + (rng.next() - 0.5) * 4);
-  const draft: { pick: number; team: string; player: string }[] = [];
-  let n = 0;
-  for (let round = 1; round <= 7; round++) {
-    for (const orig of order) {
-      const pick = save.picks.find((p) => p.year === year && p.round === round && p.originalTeam === orig && !p.used);
-      if (!pick) continue;
-      const team = pick.owner;
-      // necesidad: posición con menos profundidad
-      const r = roster(save, team);
-      const need = (pos: string) => r.filter((p) => p.pos === pos).length;
-      const choice = pool.slice(0, 8).sort((a, b) => (b.ovr - need(b.pos) * 1.5) - (a.ovr - need(a.pos) * 1.5))[0];
-      pool.splice(pool.indexOf(choice), 1);
-      choice.teamId = team;
-      save.players[choice.id] = choice;
-      pick.used = true; pick.playerId = choice.id;
-      draft.push({ pick: ++n, team, player: choice.id });
-    }
-  }
-  // progresión y retiros
-  let retired = 0;
-  for (const p of Object.values(save.players)) {
-    if (p.retired) continue;
-    p.age++;
-    p.injuryWeeks = 0;
-    p.rookie = false;
-    const d = Math.round(p.age <= 24 ? rng.normal(2.5, 2) : p.age <= 28 ? rng.normal(0.5, 1.5) : p.age <= 31 ? rng.normal(-1.2, 1.5) : rng.normal(-3, 2));
-    const k = (v: number) => clamp(v + d + Math.round(rng.normal(0, 0.7)), 20, 99);
-    p.ovr = clamp(p.ovr + d, 35, 99);
-    p.spd = k(p.spd - (p.age >= 30 ? 1 : 0)); p.str = k(p.str); p.tha = k(p.tha); p.thp = k(p.thp); p.cth = k(p.cth); p.car = k(p.car); p.rbk = k(p.rbk); p.pbk = k(p.pbk); p.tak = k(p.tak); p.prs = k(p.prs); p.cov = k(p.cov); p.kpw = k(p.kpw); p.kac = k(p.kac);
-    const pr = p.age >= 37 ? 0.8 : p.age >= 34 ? 0.35 : p.age >= 32 ? 0.12 : 0;
-    if (rng.chance(pr * (p.pos === "K" || p.pos === "P" || p.pos === "QB" ? 0.5 : 1))) { p.retired = true; p.teamId = null; retired++; }
-  }
-  // recortar rosters a 53 + 16 (practice squad)
-  for (const t of Object.keys(save.teams)) {
-    const r = roster(save, t).sort((a, b) => b.ovr - a.ovr);
-    r.forEach((p, i) => { p.practiceSquad = i >= 53; if (i >= 69) { p.teamId = null; } });
-  }
-  // nuevas selecciones futuras
-  for (const t of Object.keys(save.teams)) for (let r = 1; r <= 7; r++) save.picks.push({ id: `${year + 3}-${r}-${t}`, year: year + 3, round: r, originalTeam: t, owner: t });
-  save.picks = save.picks.filter((p) => p.year > year || p.used);
-  save.seasonYear++;
-  createNflSchedule(save, cfg);
-  return { draft, retired };
 }
 
 export type { DraftPick };

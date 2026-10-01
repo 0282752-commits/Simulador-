@@ -4,6 +4,7 @@ import type { Foot, Player, Pos } from "@/engine/football/types";
 import { squadOf } from "@/engine/football/lineup";
 import { clubStrength, getIndex, invalidateStrength, playerStatus } from "@/engine/football/season";
 import { playerStats } from "@/engine/football/career";
+import { estimateWage, renewContract } from "@/engine/football/market";
 import { Badge, Field, Modal, cx } from "@/components/ui";
 import { fmtMoney, useF } from "./ctx";
 
@@ -14,6 +15,7 @@ export function Teams({ focus }: { focus: string | null }) {
   const [q, setQ] = useState("");
   const [cid, setCid] = useState<string>(focus ?? save.userClub ?? Object.keys(save.clubs)[0]);
   const [creating, setCreating] = useState(false);
+  const [renew, setRenew] = useState<string | null>(null);
   useEffect(() => { if (focus) setCid(focus); }, [focus]);
   const club = save.clubs[cid];
   const squad = squadOf(cid, save.players).sort((a, b) => POS_ORDER.indexOf(a.positions[0]) - POS_ORDER.indexOf(b.positions[0]) || b.ovr - a.ovr);
@@ -54,7 +56,7 @@ export function Teams({ focus }: { focus: string | null }) {
       </div>
       <div className="scroll-x mt-3">
         <table className="w-full min-w-[560px]">
-          <thead><tr><th className="th">Pos</th><th className="th">Jugador</th><th className="th">Edad</th><th className="th">Med</th><th className="th">Pot</th><th className="th">Físico</th><th className="th">Forma</th><th className="th">Estado</th>{save.moneyMode && <th className="th">Valor</th>}</tr></thead>
+          <thead><tr><th className="th">Pos</th><th className="th">Jugador</th><th className="th">Edad</th><th className="th">Med</th><th className="th">Pot</th><th className="th">Físico</th><th className="th">Forma</th><th className="th">Estado</th><th className="th">Contrato</th>{save.moneyMode && <th className="th">Valor</th>}</tr></thead>
           <tbody>
             {squad.map((p) => {
               const st = playerStatus(save, p.id, save.date);
@@ -68,6 +70,10 @@ export function Teams({ focus }: { focus: string | null }) {
                   <td className="td tabular">{st.fitness}%</td>
                   <td className="td">{st.form > 0.5 ? "▲" : st.form < -0.5 ? "▼" : "—"}</td>
                   <td className="td text-xs">{st.injuredUntil ? `🚑 hasta ${st.injuredUntil}` : "✔"}</td>
+                  <td className="td text-xs">
+                    <span className={cx((p.contractEnd ?? 9999) <= save.seasonYear + 1 && "text-yellow-300")}>{p.contractEnd ?? "—"}</span>
+                    {cid === save.userClub && (p.contractEnd ?? 9999) <= save.seasonYear + 2 && <button className="btn-ghost btn-sm ml-1 !px-1 !py-0" onClick={(e) => { e.stopPropagation(); setRenew(p.id); }}>Renovar</button>}
+                  </td>
                   {save.moneyMode && <td className="td text-xs">{fmtMoney(p.value)}</td>}
                 </tr>
               );
@@ -76,6 +82,7 @@ export function Teams({ focus }: { focus: string | null }) {
         </table>
       </div>
       {creating && <PlayerEditor clubId={cid} onClose={() => setCreating(false)} />}
+      {renew && <RenewModal pid={renew} onClose={() => setRenew(null)} />}
     </div>
   );
 }
@@ -158,6 +165,25 @@ export function PlayerEditor({ player, clubId, onClose }: { player?: Player; clu
         {save.moneyMode && <Field label="Valor (€)"><input type="number" className="input" value={p.value ?? 0} onChange={(e) => setP({ ...p, value: Number(e.target.value) || 0 })} /></Field>}
       </div>
       <button className="btn-primary mt-4 w-full" onClick={() => { mutate((s) => { s.players[p.id] = { ...p, custom: true }; invalidateStrength(s.players); s.version++; }); onClose(); }}>Guardar</button>
+    </Modal>
+  );
+}
+
+function RenewModal({ pid, onClose }: { pid: string; onClose: () => void }) {
+  const { save, mutate } = useF();
+  const p = save.players[pid];
+  const [years, setYears] = useState(p.age >= 31 ? 1 : 3);
+  const [wage, setWage] = useState(Math.round(((p.wage ?? estimateWage(p.ovr, p.age)) * 1.15) / 500) * 500);
+  const [msg, setMsg] = useState<string | null>(null);
+  return (
+    <Modal title={`Renovar a ${p.name}`} onClose={onClose}>
+      <p className="text-xs text-gray-400">Contrato actual hasta {p.contractEnd} · sueldo {fmtMoney(p.wage)}/semana (estimado).</p>
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        <Field label="Años adicionales"><select className="input" value={years} onChange={(e) => setYears(Number(e.target.value))}>{[1, 2, 3, 4, 5].map((y) => <option key={y} value={y}>{y}</option>)}</select></Field>
+        <Field label="Sueldo (€/semana)"><input type="number" step={500} className="input" value={wage} onChange={(e) => setWage(Number(e.target.value) || 0)} /></Field>
+      </div>
+      <button className="btn-primary mt-3 w-full" onClick={() => { let t = ""; mutate((s) => { t = renewContract(s, pid, years, wage); }); setMsg(t); }}>Ofrecer renovación</button>
+      {msg && <p className="mt-2 text-sm">{msg}</p>}
     </Modal>
   );
 }

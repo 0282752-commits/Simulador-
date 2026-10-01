@@ -34,7 +34,8 @@ export interface Player {
   hea: number; // cabezazo
   crn: number; // córners/centros
   value?: number; // valor de mercado (EUR)
-  wage?: number;
+  wage?: number; // sueldo semanal estimado (EUR)
+  contractEnd?: number; // año en que termina (junio)
   shirt?: number;
   retired?: boolean;
   custom?: boolean; // creado/editado por el usuario
@@ -176,6 +177,23 @@ export interface TransferRecord {
   date: string; player: string; from: string | null; to: string | null; fee?: number; type: "fichaje" | "cesion" | "intercambio" | "libre" | "fin_cesion" | "retiro";
 }
 
+export interface TransferOffer {
+  id: string;
+  date: string;
+  player: string;
+  from: string | null; // club vendedor (null = agente libre)
+  to: string; // club comprador
+  fee: number;
+  kind: "traspaso" | "cesion";
+  swap?: string; // jugador que va a cambio
+  wage?: number;
+  status: "pendiente" | "aceptada" | "rechazada" | "contraoferta" | "rechazada_jugador" | "cancelada";
+  counter?: number;
+  byUser: boolean; // la hizo el usuario
+  expires: string;
+  note?: string;
+}
+
 export interface SeasonArchive {
   season: string;
   tables: Record<string, { club: string; pts: number; w: number; d: number; l: number; gf: number; ga: number }[]>;
@@ -196,6 +214,9 @@ export interface FootballSave {
   history: SeasonArchive[];
   honours: Record<string, { comp: string; season: string }[]>; // por club
   moneyMode: boolean;
+  freeMarket?: boolean; // modo editor: mover jugadores sin negociar
+  offers?: TransferOffer[];
+  news?: { date: string; text: string }[];
   userClub?: string | null;
   focusMode?: boolean; // modo "mi equipo"
   myHistory?: { season: string; club: string; lines: string[]; titles: string[] }[];

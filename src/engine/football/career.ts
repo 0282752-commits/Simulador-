@@ -3,6 +3,7 @@ import { Rng, clamp, addDays } from "../../lib/rng";
 import type { Club, Fixture, FootballSave, Player, Pos, SeasonArchive } from "./types";
 import { createSeason, leagueTable, nextMatchDate, playDay, seasonFinished, seasonLabel, type FootballConfig } from "./season";
 import { tieOutcome } from "./competitions";
+import { ensureContracts, estimateValue as estValue, expireContracts, aiMarketDay, clubBudgetBase } from "./market";
 
 export interface FootballData {
   cfg: FootballConfig;
@@ -16,9 +17,10 @@ export function newFootballSave(data: FootballData, seed = Math.floor(Math.rando
     mode: "futbol", version: 0, seasonYear: data.cfg.seasonYear, date: data.cfg.start,
     clubs: Object.fromEntries(data.clubs.clubs.map((c) => [c.id, structuredClone(c)])),
     players: Object.fromEntries(data.players.players.map((p) => [p.id, structuredClone(p)])),
-    comps: {}, fixtures: [], transfers: [], history: [], honours: {}, moneyMode: false, userClub: null,
+    comps: {}, fixtures: [], transfers: [], history: [], honours: {}, moneyMode: true, userClub: null,
     dataSource: data.players.meta, seed,
   };
+  ensureContracts(save);
   createSeason(save, data.cfg, undefined, data.europe);
   return save;
 }
@@ -109,7 +111,7 @@ function develop(p: Player, rng: Rng) {
   p.pac = adj(p.pac, paceK); p.sho = adj(p.sho); p.pas = adj(p.pas, 0.8); p.dri = adj(p.dri); p.def = adj(p.def); p.phy = adj(p.phy, p.age >= 31 ? 1.2 : 1);
   p.pen = adj(p.pen, 0.5); p.fk = adj(p.fk, 0.5); p.hea = adj(p.hea, 0.7); p.crn = adj(p.crn, 0.5);
   if (p.gk) p.gk = { div: adj(p.gk.div), han: adj(p.gk.han), kic: adj(p.gk.kic, 0.6), ref: adj(p.gk.ref), pos: adj(p.gk.pos) };
-  if (p.value !== undefined) p.value = estimateValue(p.ovr, p.age);
+  if (p.value !== undefined) p.value = estValue(p.ovr, p.age);
 }
 
 export interface OffseasonReport { promoted: string[]; relegated: string[]; retired: string[]; youth: number; champions: Record<string, string> }
@@ -159,6 +161,8 @@ export function startNewSeason(save: FootballSave, cfg: FootballConfig): Offseas
       p.clubId = null;
     }
   }
+  // Contratos que terminan → agentes libres
+  expireContracts(save, rng);
   // Juveniles y relleno de plantillas
   let n = 0;
   for (const club of Object.values(save.clubs)) {
@@ -173,6 +177,10 @@ export function startNewSeason(save: FootballSave, cfg: FootballConfig): Offseas
     report.youth += want;
     if (club.lineup) club.lineup = { ...club.lineup, autoRotate: true };
   }
+  // Presupuestos de la nueva temporada y mercado de verano (julio)
+  for (const c of Object.values(save.clubs)) c.budget = Math.round(((c.budget ?? 0) * 0.5 + clubBudgetBase(c.reputation ?? 70)) / 1e5) * 1e5;
+  save.date = `${save.seasonYear + 1}-07-01`;
+  for (let k = 0; k < 30; k++) { aiMarketDay(save, rng); save.date = `${save.seasonYear + 1}-07-${String(1 + Math.floor(k / 1.1)).padStart(2, "0")}`; }
   // Nueva temporada
   save.seasonYear++;
   for (const c of Object.values(save.clubs)) if (c.lineup) c.lineup.starters = c.lineup.starters.map((id) => (id && save.players[id]?.clubId === c.id ? id : null));
@@ -185,11 +193,7 @@ export function fixturesOfClub(save: FootballSave, clubId: string): Fixture[] {
   return save.fixtures.filter((f) => f.home === clubId || f.away === clubId);
 }
 
-// Valor de mercado estimado por la app (no es un dato de EA ni de Transfermarkt)
-export function estimateValue(ovr: number, age: number): number {
-  const f = age < 21 ? 1.6 : age < 24 ? 1.35 : age <= 28 ? 1 : age <= 30 ? 0.7 : age <= 32 ? 0.45 : 0.25;
-  return Math.round((0.45e6 * Math.exp((ovr - 65) * 0.21) * f) / 1e5) * 1e5;
-}
+export { estimateValue } from "./market";
 
 // ===== Modo "mi equipo" =====
 export interface CampaignLine { comp: string; name: string; status: string; won: boolean; done: boolean; pos?: number; record?: string }
