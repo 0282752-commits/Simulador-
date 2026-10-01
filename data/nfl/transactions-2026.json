@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "description": "Movimientos reales de la pretemporada/inicio de temporada 2026 que no aparecen en los ratings de lanzamiento de Madden 27. Las medias NO se tocan; solo cambia el equipo.",
+    "updated": "2026-10-01",
+    "source": "Prensa deportiva y transacciones oficiales reportadas (agosto-septiembre 2026), verificadas por búsqueda web",
+    "pending": [
+      "BJ Ojulari: se reportó su corte pero no se pudo confirmar de qué equipo; se deja como en Madden.",
+      "Nate Thomas (traspasado por HOU) y CJ Okoye (BAL→NYG): no están en la base de Madden 27.",
+      "Kyle Trask, Emmanuel Ogbah, Taylor Rapp, Scotty Miller, Dante Pettis, Brett Rypien: no están en la base de Madden 27."
+    ]
+  },
+  "moves": [
+    { "player": "Gervon Dexter Sr", "type": "trade", "from": "CHI", "to": "ATL" },
+    { "player": "Diego Pounds", "type": "trade", "from": "BAL", "to": "KC" },
+    { "player": "Quinn Ewers", "type": "trade", "from": "MIA", "to": "JAX" },
+    { "player": "Kyle McCord", "type": "trade", "from": "GB", "to": "MIA" },
+    { "player": "Kaleb Johnson", "type": "trade", "from": "PIT", "to": "GB" },
+    { "player": "Kayshon Boutte", "type": "trade", "from": "NE", "to": "HOU" },
+    { "player": "Tutu Atwell", "type": "trade", "from": "MIA", "to": "LAR" },
+    { "player": "Jarquez Hunter", "type": "trade", "from": "LAR", "to": "MIA" },
+    { "player": "Hunter Long", "type": "trade", "from": "JAX", "to": "ARI" },
+    { "player": "Jordan Meredith", "type": "trade", "from": "LV", "to": "NYJ" },
+    { "player": "J.J. McCarthy", "type": "trade", "from": "MIN", "to": "NYG", "note": "28-sep-2026, por una 5.ª ronda" },
+    { "player": "Will Levis", "type": "cut", "from": "TEN" },
+    { "player": "Nick Mullens", "type": "cut", "from": "JAX" },
+    { "player": "Evan Neal", "type": "cut", "from": "NYG" },
+    { "player": "Jedrick Wills Jr", "type": "cut", "from": "CHI" },
+    { "player": "Mecole Hardman", "type": "cut", "from": "BUF" },
+    { "player": "Kaiir Elam", "type": "cut", "from": "KC" },
+    { "player": "Hakeem Butler", "type": "cut", "from": "DEN" },
+    { "player": "Johnny Wilson", "type": "cut", "from": "PHI" },
+    { "player": "Quez Watkins", "type": "cut", "from": "PHI" },
+    { "player": "Marquez Valdes-Scantling", "type": "cut", "from": "DAL" },
+    { "player": "Tyrel Dodson", "type": "cut", "from": "MIA" },
+    { "player": "Johnny Hekker", "type": "practice", "to": "MIN" },
+    { "player": "Phidarian Mathis", "type": "practice", "to": "BUF" }
+  ]
+}

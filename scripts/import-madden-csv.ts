@@ -2,6 +2,7 @@
 // Uso: npm run datos:nfl -- ruta/al/archivo.csv [--fuente "Madden NFL 27, AAAA-MM-DD"]
 import { writeFileSync, readFileSync } from "node:fs";
 import { basename } from "node:path";
+import { execSync } from "node:child_process";
 import { readCsv, pick, num, arg, norm } from "./csv";
 import type { NflPlayer, NflPos } from "../src/engine/nfl/types";
 
@@ -55,3 +56,7 @@ const meta = { source: arg("fuente") ?? `CSV importado: ${basename(file)}`, upda
 writeFileSync("data/nfl/players.json", JSON.stringify({ meta, players }));
 console.log(`OK: ${players.length} jugadores.`);
 if (unknown.size) console.log(`Ignorados: ${[...unknown].slice(0, 20).join(", ")}`);
+// Movimientos reales posteriores a los ratings de lanzamiento (si no se pasa --sin-movimientos)
+if (!process.argv.includes("--sin-movimientos")) {
+  try { readFileSync("data/nfl/transactions-2026.json"); execSync("bun scripts/apply-nfl-transactions.ts data/nfl/ data/nfl/transactions-2026.json || npx tsx scripts/apply-nfl-transactions.ts data/nfl/ data/nfl/transactions-2026.json", { stdio: "inherit" }); } catch { /* sin archivo */ }
+}

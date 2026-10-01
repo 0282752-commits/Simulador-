@@ -39,6 +39,7 @@ export interface Player {
   shirt?: number;
   retired?: boolean;
   custom?: boolean; // creado/editado por el usuario
+  estimated?: boolean; // no está en la base de EA FC 27: medias estimadas
   youth?: boolean;
 }
 

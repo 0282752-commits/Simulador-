@@ -26,6 +26,20 @@ for (const t of transfers) {
   p.transferNote = `${t.loan ? "Cedido" : "Fichado"} en verano 2026 (${t.source})`;
   done++;
 }
+// Fichajes que no están en la base de EA: se crean con medias estimadas
+let added = 0;
+try {
+  const extra = JSON.parse(readFileSync(file.replace(/[^/]*$/, "added-players-2026.json"), "utf8")).players;
+  for (const e of extra) {
+    const club = findClub(e.club);
+    if (!club) { missing.push(`${e.name}: club ${e.club} no está en la base`); continue; }
+    if (playersF.players.some((x: any) => norm(x.name) === norm(e.name))) continue;
+    const { club: _c, source, ...rest } = e;
+    playersF.players.push({ id: "px_" + norm(e.name).replace(/ /g, "_"), clubId: club.id, ...rest, estimated: true, transferNote: `Fichado en verano 2026 (${source}) · medias estimadas, no de EA` });
+    added++;
+  }
+} catch { /* sin archivo */ }
+console.log(`Añadidos con media estimada: ${added}`);
 playersF.meta.source += ` + traspasos del cierre del verano 2026 (${file.split("/").pop()}, ${done} aplicados)`;
 writeFileSync(dir + "players.json", JSON.stringify(playersF));
 console.log(`Aplicados ${done} · ya estaban ${already} · salen de las ligas simuladas ${removed} · sin aplicar ${missing.length}`);

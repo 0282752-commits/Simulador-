@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "description": "Fichajes reales que NO aparecen en la base de EA FC 27 (su club de origen no está en ella). Sus medias son ESTIMACIONES propias, no de EA; se marcan como 'media estimada'.",
+    "updated": "2026-10-01"
+  },
+  "players": [
+    {
+      "name": "Allan Elias", "shortName": "Allan", "club": "Manchester City", "positions": ["ED", "EI", "MCO"], "age": 22, "nationality": "Brazil", "foot": "Diestro",
+      "ovr": 76, "pot": 84, "pac": 86, "sho": 70, "pas": 72, "dri": 81, "def": 35, "phy": 62, "pen": 60, "fk": 58, "hea": 45, "crn": 68,
+      "source": "Palmeiras → Manchester City, 31-ago-2026, £32m (+£2m), contrato a 5 años (aljazeera.com/sports/2026/8/31/manchester-city-sign-brazilian-winger-allan-elias-from-palmeiras)"
+    }
+  ]
+}

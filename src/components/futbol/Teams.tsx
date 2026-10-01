@@ -63,7 +63,7 @@ export function Teams({ focus }: { focus: string | null }) {
               return (
                 <tr key={p.id} className="cursor-pointer border-t border-borde/60 hover:bg-white/5" onClick={() => openPlayer(p.id)}>
                   <td className="td text-xs">{p.positions.join("/")}</td>
-                  <td className="td"><span className="font-medium">{p.name}</span>{p.youth && <span className="ml-1 text-[10px] text-emerald-300">cantera</span>}{p.loanFrom && <span className="ml-1 text-[10px] text-sky-300">cedido</span>}{p.custom && <span className="ml-1 text-[10px] text-yellow-300">editado</span>}</td>
+                  <td className="td"><span className="font-medium">{p.name}</span>{p.youth && <span className="ml-1 text-[10px] text-emerald-300">cantera</span>}{p.loanFrom && <span className="ml-1 text-[10px] text-sky-300">cedido</span>}{p.custom && <span className="ml-1 text-[10px] text-yellow-300">editado</span>}{p.estimated && <span className="ml-1 text-[10px] text-orange-300" title="No está en la base de EA FC 27">media estimada</span>}</td>
                   <td className="td tabular">{p.age}</td>
                   <td className="td font-bold tabular">{p.ovr}</td>
                   <td className="td tabular text-gray-400">{p.pot}</td>
