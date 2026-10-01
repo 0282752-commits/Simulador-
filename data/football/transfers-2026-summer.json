@@ -1,0 +1,783 @@
+{
+ "_nota": "Traspasos del verano de 2026 posteriores a la base de EA (sobre todo agosto y el cierre del 1 de septiembre), recopilados de medios mediante búsqueda web el 2026-10-01. 'FUERA' = club fuera de las ligas simuladas. Se omitieron los casos con fuentes contradictorias.",
+ "updated": "2026-10-01",
+ "transfers": [
+  {
+   "player": "Enzo Fernández",
+   "to": "Manchester City",
+   "loan": false,
+   "source": "https://www.lbc.co.uk/article/premier-league-deadline-day-transfers-5Hjdgr9_2/",
+   "from": "Chelsea"
+  },
+  {
+   "player": "Iliman Ndiaye",
+   "to": "Manchester City",
+   "loan": false,
+   "source": "https://www.lbc.co.uk/article/premier-league-deadline-day-transfers-5Hjdgr9_2/",
+   "from": "Everton"
+  },
+  {
+   "player": "Jack Grealish",
+   "to": "Everton",
+   "loan": true,
+   "source": "https://www.lbc.co.uk/article/premier-league-deadline-day-transfers-5Hjdgr9_2/",
+   "from": "Manchester City"
+  },
+  {
+   "player": "Ibrahim Mbaye",
+   "to": "Aston Villa",
+   "loan": false,
+   "source": "https://www.culturepsg.com/news/mercato/le-tableau-mercato-du-psg-ete-2026/59647",
+   "from": "Paris SG"
+  },
+  {
+   "player": "Morgan Rogers",
+   "to": "Chelsea",
+   "loan": false,
+   "source": "https://www.goal.com/en/lists/summer-transfer-window-2026-biggest-deals-graded/bltba6505bafe3b2faa",
+   "from": "Aston Villa"
+  },
+  {
+   "player": "Sandro Tonali",
+   "to": "Spurs",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Newcastle Utd"
+  },
+  {
+   "player": "Mateus Fernandes",
+   "to": "Spurs",
+   "loan": false,
+   "source": "https://www.goal.com/en/lists/summer-transfer-window-2026-biggest-deals-graded/bltba6505bafe3b2faa",
+   "from": "West Ham"
+  },
+  {
+   "player": "Savinho",
+   "to": "Spurs",
+   "loan": false,
+   "source": "https://www.goal.com/en/lists/summer-transfer-window-2026-biggest-deals-graded/bltba6505bafe3b2faa",
+   "from": "Manchester City"
+  },
+  {
+   "player": "Omar Marmoush",
+   "to": "Spurs",
+   "loan": true,
+   "source": "https://www.goal.com/en/lists/summer-transfer-window-2026-biggest-deals-graded/bltba6505bafe3b2faa",
+   "from": "Manchester City"
+  },
+  {
+   "player": "Ayyoub Bouaddi",
+   "to": "Manchester City",
+   "loan": false,
+   "source": "https://www.goal.com/en/lists/summer-transfer-window-2026-biggest-deals-graded/bltba6505bafe3b2faa",
+   "from": "LOSC Lille"
+  },
+  {
+   "player": "Maxence Lacroix",
+   "to": "Chelsea",
+   "loan": false,
+   "source": "https://www.goal.com/en/lists/summer-transfer-window-2026-biggest-deals-graded/bltba6505bafe3b2faa",
+   "from": "Crystal Palace"
+  },
+  {
+   "player": "Marco Palestra",
+   "to": "Chelsea",
+   "loan": false,
+   "source": "https://www.goal.com/en/lists/summer-transfer-window-2026-biggest-deals-graded/bltba6505bafe3b2faa",
+   "from": "Bergamo Calcio"
+  },
+  {
+   "player": "Andrey Santos",
+   "to": "Man Utd",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Chelsea"
+  },
+  {
+   "player": "Youri Tielemans",
+   "to": "Man Utd",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Aston Villa"
+  },
+  {
+   "player": "Carlos Baleba",
+   "to": "Man Utd",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Brighton"
+  },
+  {
+   "player": "Tyrique George",
+   "to": "Everton",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Chelsea"
+  },
+  {
+   "player": "Alejandro Garnacho",
+   "to": "Aston Villa",
+   "loan": true,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Chelsea"
+  },
+  {
+   "player": "Liam Delap",
+   "to": "Nott'm Forest",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Chelsea"
+  },
+  {
+   "player": "Nicolas Jackson",
+   "to": "Aston Villa",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Chelsea"
+  },
+  {
+   "player": "Marc Guiu",
+   "to": "RB Leipzig",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Chelsea"
+  },
+  {
+   "player": "Mykhailo Mudryk",
+   "to": "Spurs",
+   "loan": true,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Chelsea"
+  },
+  {
+   "player": "Luka Vušković",
+   "to": "Brighton",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Spurs"
+  },
+  {
+   "player": "André Onana",
+   "to": "Trabzonspor",
+   "loan": true,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Man Utd"
+  },
+  {
+   "player": "Andrew Robertson",
+   "to": "Spurs",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Liverpool"
+  },
+  {
+   "player": "Curtis Jones",
+   "to": "Milano FC",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Liverpool"
+  },
+  {
+   "player": "Stefan Bajcetic",
+   "to": "Celta",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Liverpool"
+  },
+  {
+   "player": "Harvey Elliott",
+   "to": "Valencia CF",
+   "loan": true,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Liverpool"
+  },
+  {
+   "player": "Lukas Hornicek",
+   "to": "Newcastle Utd",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "SC Braga"
+  },
+  {
+   "player": "Sean Steur",
+   "to": "Newcastle Utd",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Ajax"
+  },
+  {
+   "player": "Bradley Barcola",
+   "to": "Liverpool",
+   "loan": false,
+   "source": "https://www.culturepsg.com/news/mercato/le-tableau-mercato-du-psg-ete-2026/59647",
+   "from": "Paris SG"
+  },
+  {
+   "player": "Ollie Watkins",
+   "to": "FUERA",
+   "loan": false,
+   "source": "https://english.alarabiya.net/News/saudi-arabia/2026/08/26/biggest-summer-2026-transfers-in-the-saudi-pro-league",
+   "from": "Aston Villa"
+  },
+  {
+   "player": "Tijjani Reijnders",
+   "to": "FUERA",
+   "loan": false,
+   "source": "https://english.alarabiya.net/News/saudi-arabia/2026/08/26/biggest-summer-2026-transfers-in-the-saudi-pro-league",
+   "from": "Manchester City"
+  },
+  {
+   "player": "Francisco Trincão",
+   "to": "FUERA",
+   "loan": false,
+   "source": "https://english.alarabiya.net/News/saudi-arabia/2026/08/26/biggest-summer-2026-transfers-in-the-saudi-pro-league",
+   "from": "Sporting CP"
+  },
+  {
+   "player": "Crysencio Summerville",
+   "to": "FUERA",
+   "loan": false,
+   "source": "https://english.alarabiya.net/News/saudi-arabia/2026/08/26/biggest-summer-2026-transfers-in-the-saudi-pro-league",
+   "from": "West Ham"
+  },
+  {
+   "player": "Souffian El Karouani",
+   "to": "FUERA",
+   "loan": false,
+   "source": "https://english.alarabiya.net/News/saudi-arabia/2026/08/26/biggest-summer-2026-transfers-in-the-saudi-pro-league",
+   "from": "FC Utrecht"
+  },
+  {
+   "player": "Hwang Hee Chan",
+   "to": "FC Schalke 04",
+   "loan": true,
+   "source": "https://www.fussballdaten.de/news/bundesliga-deadline-day-2026-alle-offiziellen-transfers-ueberblick/",
+   "from": "Wolves"
+  },
+  {
+   "player": "Ethan Nwaneri",
+   "to": "Borussia Dortmund",
+   "loan": true,
+   "source": "https://www.fussballdaten.de/news/bundesliga-deadline-day-2026-alle-offiziellen-transfers-ueberblick/",
+   "from": "Arsenal"
+  },
+  {
+   "player": "Guéla Doué",
+   "to": "Leverkusen",
+   "loan": false,
+   "source": "https://www.fussballdaten.de/news/bundesliga-deadline-day-2026-alle-offiziellen-transfers-ueberblick/",
+   "from": "Strasbourg"
+  },
+  {
+   "player": "Nicolás Kühn",
+   "to": "M'gladbach",
+   "loan": true,
+   "source": "https://www.fussballdaten.de/news/bundesliga-deadline-day-2026-alle-offiziellen-transfers-ueberblick/",
+   "from": "Como"
+  },
+  {
+   "player": "Samuel Mbangula",
+   "to": "Bologna",
+   "loan": true,
+   "source": "https://www.fussballdaten.de/news/bundesliga-deadline-day-2026-alle-offiziellen-transfers-ueberblick/",
+   "from": "SV Werder Bremen"
+  },
+  {
+   "player": "Konstantinos Karetsas",
+   "to": "Borussia Dortmund",
+   "loan": false,
+   "source": "https://www.flashscore.de/news/fu-ball-bundesliga-bundesliga-alle-neuzugange-abgange-im-sommer-2026/SCidvab2/",
+   "from": "KRC Genk"
+  },
+  {
+   "player": "Giannis Konstantelias",
+   "to": "Borussia Dortmund",
+   "loan": false,
+   "source": "https://www.flashscore.de/news/fu-ball-bundesliga-bundesliga-alle-neuzugange-abgange-im-sommer-2026/SCidvab2/",
+   "from": "PAOK"
+  },
+  {
+   "player": "Joey Veerman",
+   "to": "Borussia Dortmund",
+   "loan": false,
+   "source": "https://www.flashscore.de/news/fu-ball-bundesliga-bundesliga-alle-neuzugange-abgange-im-sommer-2026/SCidvab2/",
+   "from": "PSV"
+  },
+  {
+   "player": "Maxime Estève",
+   "to": "RB Leipzig",
+   "loan": false,
+   "source": "https://www.flashscore.de/news/fu-ball-bundesliga-bundesliga-alle-neuzugange-abgange-im-sommer-2026/SCidvab2/",
+   "from": "Burnley"
+  },
+  {
+   "player": "Rocco Reitz",
+   "to": "RB Leipzig",
+   "loan": false,
+   "source": "https://www.flashscore.de/news/fu-ball-bundesliga-bundesliga-alle-neuzugange-abgange-im-sommer-2026/SCidvab2/",
+   "from": "M'gladbach"
+  },
+  {
+   "player": "Lois Openda",
+   "to": "Juventus",
+   "loan": false,
+   "source": "https://www.flashscore.de/news/fu-ball-bundesliga-bundesliga-alle-neuzugange-abgange-im-sommer-2026/SCidvab2/",
+   "from": "RB Leipzig"
+  },
+  {
+   "player": "Péter Gulácsi",
+   "to": "Villarreal CF",
+   "loan": false,
+   "source": "https://www.flashscore.de/news/fu-ball-bundesliga-bundesliga-alle-neuzugange-abgange-im-sommer-2026/SCidvab2/",
+   "from": "RB Leipzig"
+  },
+  {
+   "player": "Xaver Schlager",
+   "to": "Nott'm Forest",
+   "loan": false,
+   "source": "https://www.flashscore.de/news/fu-ball-bundesliga-bundesliga-alle-neuzugange-abgange-im-sommer-2026/SCidvab2/",
+   "from": "RB Leipzig"
+  },
+  {
+   "player": "Gabriel Jesus",
+   "to": "FC Barcelona",
+   "loan": false,
+   "source": "https://www.libertaddigital.com/deportes/liga/2026-09-01/ultimo-dia-del-mercado-de-fichajes-7453508/",
+   "from": "Arsenal"
+  },
+  {
+   "player": "Guille Fernández",
+   "to": "RCD Mallorca",
+   "loan": false,
+   "source": "https://www.libertaddigital.com/deportes/liga/2026-09-01/ultimo-dia-del-mercado-de-fichajes-7453508/",
+   "from": "FC Barcelona"
+  },
+  {
+   "player": "Toni Fernández",
+   "to": "Venezia",
+   "loan": false,
+   "source": "https://www.libertaddigital.com/deportes/liga/2026-09-01/ultimo-dia-del-mercado-de-fichajes-7453508/",
+   "from": "FC Barcelona"
+  },
+  {
+   "player": "Jonathan David",
+   "to": "Atlético de Madrid",
+   "loan": false,
+   "source": "https://www.libertaddigital.com/deportes/liga/2026-09-01/ultimo-dia-del-mercado-de-fichajes-7453508/",
+   "from": "Juventus"
+  },
+  {
+   "player": "Jens Cajuste",
+   "to": "Málaga CF",
+   "loan": true,
+   "source": "https://www.libertaddigital.com/deportes/liga/2026-09-01/ultimo-dia-del-mercado-de-fichajes-7453508/",
+   "from": "SSC Napoli"
+  },
+  {
+   "player": "Alejandro Grimaldo",
+   "to": "Atlético de Madrid",
+   "loan": false,
+   "source": "https://www.elpespunte.es/articulo/futbol/mercado-fichajes-laliga-2026-27-fichajes-altas-bajas-todos-equipos-primera-division/20260901073854148606.html",
+   "from": "Leverkusen"
+  },
+  {
+   "player": "Morten Hjulmand",
+   "to": "Atlético de Madrid",
+   "loan": false,
+   "source": "https://www.elpespunte.es/articulo/futbol/mercado-fichajes-laliga-2026-27-fichajes-altas-bajas-todos-equipos-primera-division/20260901073854148606.html",
+   "from": "Sporting CP"
+  },
+  {
+   "player": "Lee Kang In",
+   "to": "Atlético de Madrid",
+   "loan": false,
+   "source": "https://www.elpespunte.es/articulo/futbol/mercado-fichajes-laliga-2026-27-fichajes-altas-bajas-todos-equipos-primera-division/20260901073854148606.html",
+   "from": "Paris SG"
+  },
+  {
+   "player": "Cristian Romero",
+   "to": "Atlético de Madrid",
+   "loan": false,
+   "source": "https://www.elpespunte.es/articulo/futbol/mercado-fichajes-laliga-2026-27-fichajes-altas-bajas-todos-equipos-primera-division/20260901073854148606.html",
+   "from": "Spurs"
+  },
+  {
+   "player": "Belghali",
+   "to": "Torino",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Hellas Verona"
+  },
+  {
+   "player": "Beto",
+   "to": "Fiorentina",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Everton"
+  },
+  {
+   "player": "Duje Ćaleta-Car",
+   "to": "Sassuolo",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "OL"
+  },
+  {
+   "player": "Diego Carlos",
+   "to": "Parma",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Fenerbahçe"
+  },
+  {
+   "player": "Ghidotti",
+   "to": "Parma",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Sampdoria"
+  },
+  {
+   "player": "Moise Kean",
+   "to": "Como",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Fiorentina"
+  },
+  {
+   "player": "Pape Matar Sarr",
+   "to": "Juventus",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Spurs"
+  },
+  {
+   "player": "Nick Woltemade",
+   "to": "Juventus",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Newcastle Utd"
+  },
+  {
+   "player": "Jovanović",
+   "to": "Udinese",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "VfB Stuttgart"
+  },
+  {
+   "player": "Ibrahim Sulemana",
+   "to": "Sassuolo",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Bergamo Calcio"
+  },
+  {
+   "player": "Delli Carri",
+   "to": "Sampdoria",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Monza"
+  },
+  {
+   "player": "Iannoni",
+   "to": "Hellas Verona",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Sassuolo"
+  },
+  {
+   "player": "Yukinari Sugawara",
+   "to": "Cagliari",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Southampton"
+  },
+  {
+   "player": "Jonathan Rowe",
+   "to": "Bergamo Calcio",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Bologna"
+  },
+  {
+   "player": "Cody Drameh",
+   "to": "Genoa",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Hull City"
+  },
+  {
+   "player": "Davide Frattesi",
+   "to": "SSC Napoli",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Milano FC"
+  },
+  {
+   "player": "Rolando Mandragora",
+   "to": "Torino",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Fiorentina"
+  },
+  {
+   "player": "Pedro Gonçalves",
+   "to": "Fiorentina",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Sporting CP"
+  },
+  {
+   "player": "M'Bala Nzola",
+   "to": "Cagliari",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Fiorentina"
+  },
+  {
+   "player": "Robert Sánchez",
+   "to": "Como",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Chelsea"
+  },
+  {
+   "player": "Youssouf Fofana",
+   "to": "Sevilla FC",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Lombardia FC"
+  },
+  {
+   "player": "Wilfried Gnonto",
+   "to": "Fiorentina",
+   "loan": false,
+   "source": "https://www.goal.com/it/liste/acquisti-ultimo-giorno-calciomercato-estivo-2026-serie-tutti-affari-ufficiali/blt83c95aa301f84682",
+   "from": "Leeds United"
+  },
+  {
+   "player": "John Stones",
+   "to": "Milano FC",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Manchester City"
+  },
+  {
+   "player": "Ivan Provedel",
+   "to": "Milano FC",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Latium"
+  },
+  {
+   "player": "Djed Spence",
+   "to": "Milano FC",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Spurs"
+  },
+  {
+   "player": "Nicolás González",
+   "to": "Juventus",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Atlético de Madrid"
+  },
+  {
+   "player": "Douglas Luiz",
+   "to": "Juventus",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Aston Villa"
+  },
+  {
+   "player": "Daniele Rugani",
+   "to": "Juventus",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Fiorentina"
+  },
+  {
+   "player": "Jeff Ekhator",
+   "to": "Juventus",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Genoa"
+  },
+  {
+   "player": "Zeki Çelik",
+   "to": "Juventus",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "AS Roma"
+  },
+  {
+   "player": "Randal Kolo Muani",
+   "to": "Juventus",
+   "loan": false,
+   "source": "https://www.culturepsg.com/news/mercato/le-tableau-mercato-du-psg-ete-2026/59647",
+   "from": "Paris SG"
+  },
+  {
+   "player": "Jhon Lucumí",
+   "to": "Juventus",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Bologna"
+  },
+  {
+   "player": "Guglielmo Vicario",
+   "to": "Juventus",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Spurs"
+  },
+  {
+   "player": "Kamil Grabara",
+   "to": "Juventus",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "VfL Wolfsburg"
+  },
+  {
+   "player": "Juan Pedraza",
+   "to": "SSC Napoli",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Villarreal CF"
+  },
+  {
+   "player": "Josip Šutalo",
+   "to": "SSC Napoli",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Ajax"
+  },
+  {
+   "player": "Andrea Pinamonti",
+   "to": "SSC Napoli",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Sassuolo"
+  },
+  {
+   "player": "Albert Gudmundsson",
+   "to": "SSC Napoli",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Fiorentina"
+  },
+  {
+   "player": "Couhaib Driouech",
+   "to": "AS Roma",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "PSV"
+  },
+  {
+   "player": "Santiago Castro",
+   "to": "AS Roma",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Bologna"
+  },
+  {
+   "player": "Konstantinos Koulierakis",
+   "to": "AS Roma",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "VfL Wolfsburg"
+  },
+  {
+   "player": "Nahuel Molina",
+   "to": "AS Roma",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Atlético de Madrid"
+  },
+  {
+   "player": "Leonardo Balerdi",
+   "to": "AS Roma",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "OM"
+  },
+  {
+   "player": "Marten de Roon",
+   "to": "AS Roma",
+   "loan": false,
+   "source": "https://sport.sky.it/calciomercato/calciomercato-serie-a-estate-2026-acquisti-ufficiali",
+   "from": "Bergamo Calcio"
+  },
+  {
+   "player": "Jean-Clair Todibo",
+   "to": "RC Lens",
+   "loan": true,
+   "source": "https://ligue1.com/fr/articles/l1_article_5794-mercato-les-mouvements-du-dernier-jour-4",
+   "from": "West Ham"
+  },
+  {
+   "player": "Boulaye Dia",
+   "to": "Stade Rennais FC",
+   "loan": true,
+   "source": "https://ligue1.com/fr/articles/l1_article_5794-mercato-les-mouvements-du-dernier-jour-4",
+   "from": "Latium"
+  },
+  {
+   "player": "Conrad Harder",
+   "to": "Strasbourg",
+   "loan": true,
+   "source": "https://ligue1.com/fr/articles/l1_article_5794-mercato-les-mouvements-du-dernier-jour-4",
+   "from": "RB Leipzig"
+  },
+  {
+   "player": "Cameron Archer",
+   "to": "AJ Auxerre",
+   "loan": true,
+   "source": "https://ligue1.com/fr/articles/l1_article_5794-mercato-les-mouvements-du-dernier-jour-4",
+   "from": "Southampton"
+  },
+  {
+   "player": "Noham Kamara",
+   "to": "OL",
+   "loan": false,
+   "source": "https://www.culturepsg.com/news/mercato/le-tableau-mercato-du-psg-ete-2026/59647",
+   "from": "Paris SG"
+  },
+  {
+   "player": "Radu Drăgușin",
+   "to": "Fiorentina",
+   "loan": true,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Spurs"
+  },
+  {
+   "player": "Will Lankshear",
+   "to": "Middlesbrough",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Spurs"
+  },
+  {
+   "player": "Alfie Devine",
+   "to": "Preston",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Spurs"
+  },
+  {
+   "player": "Alejo Véliz",
+   "to": "FUERA",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Spurs"
+  },
+  {
+   "player": "Ewen Jaouen",
+   "to": "Newcastle Utd",
+   "loan": false,
+   "source": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+   "from": "Stade de Reims"
+  }
+ ]
+}

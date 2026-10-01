@@ -147,6 +147,13 @@ Escocia, etc.; los clubes con plantilla incompleta en la base de EA se completan
 El potencial y el valor de mercado no vienen en ese archivo: la app los estima. Los colores de club salen de
 `data/football/club-colors.json`. Este repositorio es público, así que los datos de EA no se suben: solo los demo.
 
+### Traspasos del cierre del mercado (verano 2026)
+
+La base de EA no recoge los traspasos de las últimas semanas del mercado. `data/football/transfers-2026-summer.json` tiene más de
+100 movimientos reales recopilados de medios (ESPN, Goal, Sky Italia, Fussballdaten, Ligue 1…), cada uno con su fuente.
+El importador los aplica solo (o a mano: `bun scripts/apply-transfers.ts data/football/`). Se omitieron los casos con fuentes
+contradictorias. Las medias siguen siendo las de EA SPORTS FC 27.
+
 ### NFL real: Madden 27
 
 [zachxwalton/madden-ratings-breakdown](https://github.com/zachxwalton/madden-ratings-breakdown) tiene

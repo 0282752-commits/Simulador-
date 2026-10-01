@@ -2,6 +2,7 @@
 // Uso: npm run datos:futbol -- ruta/al/archivo.csv [--fuente "texto"] [--otras-ligas "Liga Portugal,Eredivisie"] [--todas]
 // Genera data/football/clubs.json y data/football/players.json (reemplaza los datos de demostración).
 import { writeFileSync, readFileSync } from "node:fs";
+import { execSync } from "node:child_process";
 import { basename } from "node:path";
 import { readCsv, pick, num, arg, norm, colorFromName } from "./csv";
 import type { Club, Player, Pos } from "../src/engine/football/types";
@@ -117,6 +118,10 @@ const meta = { source, updated: new Date().toISOString().slice(0, 10), demo: fal
 writeFileSync("data/football/clubs.json", JSON.stringify({ meta, clubs: [...clubs.values()] }));
 writeFileSync("data/football/players.json", JSON.stringify({ meta, players }));
 console.log(`OK: ${clubs.size} clubes y ${players.length} jugadores.`);
+// Traspasos posteriores a la base de EA (si existe el archivo y no se pasa --sin-traspasos)
+if (!process.argv.includes("--sin-traspasos")) {
+  try { readFileSync("data/football/transfers-2026-summer.json"); execSync("bun scripts/apply-transfers.ts data/football/ data/football/transfers-2026-summer.json || npx tsx scripts/apply-transfers.ts data/football/ data/football/transfers-2026-summer.json", { stdio: "inherit" }); } catch { /* sin archivo */ }
+}
 for (const lg of cfg.leagues) {
   const n = [...clubs.values()].filter((c) => c.leagueId === lg.id).length;
   console.log(`  ${lg.name.padEnd(22)} ${String(n).padStart(3)} clubes${n !== lg.teams ? `  ⚠ se esperaban ${lg.teams}` : ""}`);
