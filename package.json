@@ -19,7 +19,8 @@
     "calibrar:nfl": "tsx scripts/calibrate-nfl.ts",
     "calibrar:dc": "tsx scripts/calibrate-dc.ts",
     "calibrar": "npm run calibrar:futbol && npm run calibrar:nfl && npm run calibrar:dc",
-    "test": "tsx scripts/test-season.ts && tsx scripts/test-nfl.ts && tsx scripts/test-dc.ts"
+    "test": "tsx scripts/test-season.ts && tsx scripts/test-nfl.ts && tsx scripts/test-dc.ts && tsx scripts/test-cup.ts",
+    "datos:selecciones": "tsx scripts/build-nations.ts"
   },
   "dependencies": {
     "next": "^15.5.0",

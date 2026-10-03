@@ -7,11 +7,14 @@ import { newFootballSave } from "@/engine/football/career";
 import { newNflSave } from "@/engine/nfl/season";
 import { newDcSave } from "@/engine/dc/tournaments";
 import { Modal, Progress, cx } from "@/components/ui";
+import { NewCup } from "@/components/torneo/NewCup";
+import type { CupSave } from "@/engine/cup/types";
 
 const MODES: { id: Mode; name: string; desc: string; color: string; icon: string }[] = [
   { id: "futbol", name: "Fútbol", desc: "Ligas, copas y Europa en un calendario unificado. Motor minuto a minuto.", color: "from-green-600 to-emerald-900", icon: "⚽" },
   { id: "nfl", name: "NFL", desc: "Franquicia: 17 partidos, playoffs, Super Bowl y draft. Motor jugada por jugada.", color: "from-blue-700 to-indigo-950", icon: "🏈" },
   { id: "dc", name: "DC Comics", desc: "Batallas y torneos simultáneos con sinergias, debilidades y ranking histórico.", color: "from-red-700 to-zinc-900", icon: "⚡" },
+  { id: "torneo", name: "Torneos", desc: "Arma tu torneo: grupos, eliminatoria, liga + final o formato Champions. Clubes, selecciones (Mundial 2026), NFL o DC.", color: "from-amber-600 to-orange-950", icon: "🏆" },
 ];
 
 export default function Home() {
@@ -27,6 +30,15 @@ export default function Home() {
 
   const refresh = () => listSaves().then(setSaves).catch((e) => setErr(String(e)));
   useEffect(() => { refresh(); }, []);
+
+  async function createCupSave(save: CupSave, title: string) {
+    setBusy("Creando torneo…");
+    try {
+      const id = `p_${Date.now().toString(36)}`;
+      await writeSave({ id, name: title, mode: "torneo", created: new Date().toISOString() }, save);
+      router.push(`/partida?id=${id}`);
+    } catch (e) { setErr(String(e)); setBusy(null); }
+  }
 
   async function create() {
     if (!creating) return;
@@ -61,7 +73,7 @@ export default function Home() {
       <p className="mt-1 text-sm text-gray-400">Gestiona, simula, mete resultados a mano y mira los partidos en vivo. Sin jugar: solo mánager.</p>
 
       <h2 className="mt-6 text-sm font-semibold uppercase text-gray-400">Nueva partida</h2>
-      <div className="mt-2 grid gap-3 sm:grid-cols-3">
+      <div className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {MODES.map((m) => (
           <button key={m.id} onClick={() => { setCreating(m.id); setName(""); }} className={cx("rounded-2xl bg-gradient-to-br p-4 text-left shadow-lg transition active:scale-[.98]", m.color)}>
             <div className="text-3xl">{m.icon}</div>
@@ -101,7 +113,12 @@ export default function Home() {
         Sin escudos, logos ni imágenes oficiales: colores e iniciales propios. Los datos de /data indican su fuente y fecha; los datos incluidos de fútbol y los jugadores NFL son de DEMOSTRACIÓN hasta que importes los reales (fútbol: npm run datos:fc27). Los stats del modo DC son una escala propia de la app.
       </p>
 
-      {creating && (
+      {creating === "torneo" && (
+        <Modal title="Nuevo torneo personalizado" onClose={() => setCreating(null)} wide>
+          <NewCup onCreate={createCupSave} onError={(e) => setErr(e)} />
+        </Modal>
+      )}
+      {creating && creating !== "torneo" && (
         <Modal title={`Nueva partida · ${MODES.find((m) => m.id === creating)!.name}`} onClose={() => setCreating(null)}>
           <label className="block text-sm">Nombre
             <input className="input mt-1" value={name} onChange={(e) => setName(e.target.value)} placeholder="Mi partida" />

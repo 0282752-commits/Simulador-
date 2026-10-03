@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import type { Fixture, MatchEvent, MatchResult, PlayerLine } from "@/engine/football/types";
 import { matchInputs, setResult } from "@/engine/football/season";
 import { Modal, Field } from "@/components/ui";
+import type { MatchTeamInput } from "@/engine/football/match";
 import { useF } from "./ctx";
 
 interface GoalRow { scorer: string; assist: string; min: number; og?: boolean }
@@ -10,18 +11,22 @@ interface GoalRow { scorer: string; assist: string; min: number; og?: boolean }
 export function ManualResult({ f, onClose }: { f: Fixture; onClose: () => void }) {
   const { save, mutate, cfg } = useF();
   const inputs = useMemo(() => matchInputs(save, f), [save, f]);
-  const prev = f.result;
+  const decisive = !!f.tieId && (f.leg === 2 || !save.fixtures.some((x) => x.tieId === f.tieId && x.id !== f.id));
+  const l1 = f.leg === 2 ? save.fixtures.find((x) => x.tieId === f.tieId && x.leg === 1)?.result : undefined;
+  return <ManualResultView home={inputs.home} away={inputs.away} prev={f.result} decisive={decisive} l1={l1} onClose={onClose} onSave={(r) => { mutate((s) => setResult(s, f.id, r, cfg)); onClose(); }} />;
+}
+
+// Formulario reutilizable (también lo usan los torneos personalizados). l1 = resultado de la ida tal como se guardó.
+export function ManualResultView({ home, away, prev, decisive, l1, onClose, onSave }: { home: MatchTeamInput; away: MatchTeamInput; prev?: MatchResult; decisive: boolean; l1?: MatchResult; onClose: () => void; onSave: (r: MatchResult) => void }) {
   const [hg, setHg] = useState(prev?.hg ?? 0);
   const [ag, setAg] = useState(prev?.ag ?? 0);
   const [et, setEt] = useState(!!prev?.et);
   const [pens, setPens] = useState<[number, number]>(prev?.pens ?? [0, 0]);
   const initGoals = (side: 0 | 1): GoalRow[] => (prev?.events ?? []).filter((e) => (e.type === "gol" || e.type === "gol_pp") && e.side === side).map((e) => ({ scorer: e.player ?? "", assist: e.player2 ?? "", min: e.min, og: e.type === "gol_pp" }));
   const [goals, setGoals] = useState<[GoalRow[], GoalRow[]]>([initGoals(0), initGoals(1)]);
-  const decisive = !!f.tieId && (f.leg === 2 || !save.fixtures.some((x) => x.tieId === f.tieId && x.id !== f.id));
-  const l1 = f.leg === 2 ? save.fixtures.find((x) => x.tieId === f.tieId && x.leg === 1)?.result : undefined;
   const aggH = hg + (l1?.ag ?? 0), aggA = ag + (l1?.hg ?? 0);
   const needPens = decisive && aggH === aggA;
-  const sides = [inputs.home, inputs.away];
+  const sides = [home, away];
 
   const syncGoals = (side: 0 | 1, n: number) => setGoals((g) => {
     const c: [GoalRow[], GoalRow[]] = [[...g[0]], [...g[1]]];
@@ -74,7 +79,7 @@ export function ManualResult({ f, onClose }: { f: Fixture; onClose: () => void }
           </Field>
         ))}
       </div>
-      {f.leg === 2 && l1 && <p className="mt-2 text-xs text-gray-400">Ida: {l1.hg}-{l1.ag}. Global: {aggH}-{aggA}.</p>}
+      {l1 && <p className="mt-2 text-xs text-gray-400">Ida: {l1.hg}-{l1.ag}. Global: {aggH}-{aggA}.</p>}
       {decisive && <label className="mt-2 flex items-center gap-2 text-sm"><input type="checkbox" checked={et} onChange={(e) => setEt(e.target.checked)} /> Hubo prórroga</label>}
       {needPens && (
         <div className="mt-2 grid grid-cols-2 gap-3">
@@ -110,7 +115,7 @@ export function ManualResult({ f, onClose }: { f: Fixture; onClose: () => void }
         <p className="mt-2 text-[11px] text-gray-500">Se registran como titulares las alineaciones actuales de ambos equipos (puedes cambiarlas antes en “Alineaciones”).</p>
       </details>
       {!pensOk && <p className="mt-2 text-xs text-red-300">La eliminatoria está empatada: indica un ganador en los penales.</p>}
-      <button className="btn-primary mt-4 w-full" disabled={!pensOk} onClick={() => { mutate((s) => setResult(s, f.id, build(), cfg)); onClose(); }}>Guardar</button>
+      <button className="btn-primary mt-4 w-full" disabled={!pensOk} onClick={() => onSave(build())}>Guardar</button>
     </Modal>
   );
 }

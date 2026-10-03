@@ -111,6 +111,24 @@ cualquier cambio afecta a la simulación.
 > El mensaje original se cortó en "Cada batalla se…". Se implementó igual que en los otros modos:
 > cada batalla se puede simular, ver en vivo o meter a mano, y queda guardada con su resumen.
 
+## Torneos personalizados
+
+Cuarto modo de la portada (🏆). Eliges deporte, formato y participantes:
+
+- **Deportes:** fútbol (cualquier club de la base), **selecciones nacionales**, NFL y DC (personajes 1 vs 1 o equipos de 3/5/7).
+- **Formatos:** eliminatoria directa (4, 8, 16, 32, 64, 128 o cualquier número, con exentos), liga (solo tabla o con fase
+  final, p. ej. Final Four), grupos + eliminatoria (Mundial 48, Mundial 32, Eurocopa 24, Champions clásica…) y
+  **liga suiza estilo Champions actual** (36 equipos, 8 partidos, 1.º-8.º directos, 9.º-24.º playoff).
+  Todo editable: número de grupos, clasificados por grupo, mejores terceros, ida y vuelta, tercer puesto, bombos.
+- **Mundial 2026** con las 48 selecciones y los 12 grupos reales del sorteo (5-dic-2025) y la repesca de marzo de 2026.
+  El cruce de dieciseisavos no copia la tabla oficial de FIFA: se ordena por rendimiento y evita rivales del mismo grupo.
+- Cada partido: simular, ver en vivo (los mismos visores de cada modo) o resultado manual; editar o borrar recalcula
+  tablas y cuadro (los cruces que no cambian conservan su resultado). Tablas, cuadro, goleadores/líderes y plantillas.
+- **Selecciones:** convocatoria **estimada** de 26 (3 POR, 9 DEF, 8 MED, 6 DEL por media) a partir de toda la base de
+  EA FC 27, incluidas ligas no simuladas (MLS, Arabia, Brasil…). No son las listas oficiales. Las selecciones con pocos
+  jugadores en la base (Catar, Irán, Jordania, Uzbekistán…) se completan con jugadores de **relleno** marcados como no reales.
+  Se generan con `bun scripts/build-nations.ts players.csv` (sin ese archivo, la app las arma con las ligas simuladas).
+
 ## Datos (`/data`)
 
 | Archivo | Contenido | Estado |
@@ -121,6 +139,8 @@ cualquier cambio afecta a la simulación.
 | `nfl/teams.json` | 32 equipos, divisiones, colores, rotación del calendario | Estructura real; rotación 2026 deducida de la fórmula: **verificar** |
 | `nfl/players.json` | Rosters | **DEMO ficticia** hasta importar el CSV real |
 | `dc/characters.json` | Personajes, equipos y sinergias | Escala propia (no oficial) |
+| `football/nations-meta.json` | Selecciones: nombre, código, colores, confederación y grupos del Mundial 2026 | Grupos reales con fuente |
+| `football/nations.json` | Convocatorias estimadas (generado, no se sube) | Se crea con `scripts/build-nations.ts` |
 
 Cada archivo guarda `meta.source` y `meta.updated`; la app muestra "DATOS DEMO" mientras se usen los ficticios.
 

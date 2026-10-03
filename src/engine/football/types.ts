@@ -41,6 +41,8 @@ export interface Player {
   custom?: boolean; // creado/editado por el usuario
   estimated?: boolean; // no está en la base de EA FC 27: medias estimadas
   youth?: boolean;
+  clubName?: string; // selecciones: club donde juega
+  filler?: boolean; // selecciones: relleno genérico (no es un jugador real)
 }
 
 export interface Tactics {

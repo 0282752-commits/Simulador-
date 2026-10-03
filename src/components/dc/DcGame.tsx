@@ -100,7 +100,7 @@ function MatchRow({ m, save, mutate, onLive, onManual, onDetail }: { m: DcMatch;
 }
 
 // ===== Batalla en vivo =====
-function DcLive({ m, save, onClose, onSave }: { m: DcMatch; save: DcSave; onClose: () => void; onSave: (r: BattleResult) => void }) {
+export function DcLive({ m, save, onClose, onSave }: { m: DcMatch; save: DcSave; onClose: () => void; onSave: (r: BattleResult) => void }) {
   const t = save.tournaments.find((x) => x.id === m.tournament)!;
   const [b] = useState(() => new Battle(sidesFor(save, m), save.synergies, t.randomness));
   const [, setV] = useState(0);
@@ -136,7 +136,7 @@ function DcLive({ m, save, onClose, onSave }: { m: DcMatch; save: DcSave; onClos
   );
 }
 
-function DcManual({ m, save, onClose, onSave }: { m: DcMatch; save: DcSave; onClose: () => void; onSave: (r: BattleResult) => void }) {
+export function DcManual({ m, save, onClose, onSave }: { m: DcMatch; save: DcSave; onClose: () => void; onSave: (r: BattleResult) => void }) {
   const sides = sidesFor(save, m);
   const [winner, setWinner] = useState(m.result?.winner ?? 0);
   const [kos, setKos] = useState<Record<string, number>>({});
@@ -173,7 +173,7 @@ function DcManual({ m, save, onClose, onSave }: { m: DcMatch; save: DcSave; onCl
   );
 }
 
-function DcDetail({ m, save, onClose }: { m: DcMatch; save: DcSave; onClose: () => void }) {
+export function DcDetail({ m, save, onClose }: { m: DcMatch; save: DcSave; onClose: () => void }) {
   const r = m.result!;
   return (
     <Modal title={`${m.stage} · Día ${m.day}`} onClose={onClose}>

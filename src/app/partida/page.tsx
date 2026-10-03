@@ -7,9 +7,11 @@ import { exportJson } from "@/lib/db";
 import FootballGame from "@/components/futbol/FootballGame";
 import NflGame from "@/components/nfl/NflGame";
 import DcGame from "@/components/dc/DcGame";
+import CupGame from "@/components/torneo/CupGame";
 import type { FootballSave } from "@/engine/football/types";
 import type { NflSave } from "@/engine/nfl/types";
 import type { DcSave } from "@/engine/dc/types";
+import type { CupSave } from "@/engine/cup/types";
 
 function Inner() {
   const id = useSearchParams().get("id");
@@ -29,6 +31,7 @@ function Inner() {
       {header}
       {state.data.mode === "futbol" && <FootballGame save={state.data as FootballSave} tick={tick} mutate={mutate as (fn: (s: FootballSave) => void) => void} />}
       {state.data.mode === "nfl" && <NflGame save={state.data as NflSave} tick={tick} mutate={mutate as (fn: (s: NflSave) => void) => void} />}
+      {state.data.mode === "torneo" && <CupGame save={state.data as CupSave} tick={tick} mutate={mutate as (fn: (s: CupSave) => void) => void} />}
       {state.data.mode === "dc" && <DcGame save={state.data as DcSave} tick={tick} mutate={mutate as (fn: (s: DcSave) => void) => void} />}
     </div>
   );

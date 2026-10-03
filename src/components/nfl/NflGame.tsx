@@ -149,7 +149,7 @@ function GameRow({ g, save, mutate, onLive, onManual, onDetail }: { g: Game; sav
 }
 
 // ===== Visor en vivo =====
-function NflLive({ g, save, onClose, onSave }: { g: Game; save: NflSave; onClose: () => void; onSave: (r: NflResult) => void }) {
+export function NflLive({ g, save, onClose, onSave }: { g: Game; save: NflSave; onClose: () => void; onSave: (r: NflResult) => void }) {
   const [sim] = useState(() => new NflGameSim(gameInput(save, g.home), gameInput(save, g.away), { neutral: g.neutral, playoff: g.playoff }));
   const [, setV] = useState(0);
   const [speed, setSpeed] = useState(1);
@@ -270,7 +270,7 @@ function DepthEditor({ players, depth, onChange, disabled }: { players: NflPlaye
 }
 
 // ===== Resultado manual =====
-function NflManual({ g, save, onClose, onSave }: { g: Game; save: NflSave; onClose: () => void; onSave: (r: NflResult) => void }) {
+export function NflManual({ g, save, onClose, onSave }: { g: Game; save: NflSave; onClose: () => void; onSave: (r: NflResult) => void }) {
   const [hs, setHs] = useState(g.result?.hs ?? 0);
   const [as, setAs] = useState(g.result?.as ?? 0);
   const [ot, setOt] = useState(!!g.result?.ot);
@@ -319,7 +319,7 @@ function NflManual({ g, save, onClose, onSave }: { g: Game; save: NflSave; onClo
   );
 }
 
-function NflDetail({ g, save, onClose }: { g: Game; save: NflSave; onClose: () => void }) {
+export function NflDetail({ g, save, onClose }: { g: Game; save: NflSave; onClose: () => void }) {
   const r = g.result!;
   const lines = Object.entries(r.players);
   const nm = (id: string) => save.players[id]?.name ?? "?";

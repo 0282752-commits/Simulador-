@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import type { Fixture, MatchEvent, Tactics } from "@/engine/football/types";
+import type { Fixture, MatchEvent, MatchResult, Tactics } from "@/engine/football/types";
 import { FootballMatch } from "@/engine/football/match";
 import { matchInputs, setResult } from "@/engine/football/season";
 import { FORMATION_NAMES } from "@/engine/football/lineup";
@@ -22,6 +22,11 @@ function useTicker(active: boolean, speed: number, fn: () => void) {
 export function LiveMatch({ f, onClose }: { f: Fixture; onClose: () => void }) {
   const { save, mutate, cfg } = useF();
   const [m] = useState(() => { const { home, away, opts } = matchInputs(save, f); return new FootballMatch(home, away, opts); });
+  return <LiveMatchView m={m} title={`${save.comps[f.comp]?.name} · ${f.stage}`} onClose={onClose} onSave={(r) => { mutate((s) => setResult(s, f.id, r, cfg)); onClose(); }} />;
+}
+
+// Vista en vivo reutilizable (también la usan los torneos personalizados)
+export function LiveMatchView({ m, title, onClose, onSave }: { m: FootballMatch; title: string; onClose: () => void; onSave: (r: MatchResult) => void }) {
   const [, setV] = useState(0);
   const [speed, setSpeed] = useState(1);
   const [tab, setTab] = useState<"narracion" | "stats" | "campo" | "gestion">("narracion");
@@ -31,10 +36,10 @@ export function LiveMatch({ f, onClose }: { f: Fixture; onClose: () => void }) {
 
   const [H, A] = m.sides;
   const r = m.result();
-  const save_ = () => { mutate((s) => setResult(s, f.id, m.result(), cfg)); onClose(); };
+  const save_ = () => onSave(m.result());
   const evs = [...m.events].reverse().filter((e) => e.type !== "info" || e.text);
   return (
-    <Modal title={`${save.comps[f.comp]?.name} · ${f.stage}`} onClose={onClose} wide>
+    <Modal title={title} onClose={onClose} wide>
       <div className="rounded-xl bg-gradient-to-r from-sky-900/40 to-rose-900/40 p-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 flex-1 items-center gap-2"><Badge colors={H.input.colors} label={H.input.short} size={34} /><span className="truncate font-semibold">{H.input.name}</span></div>

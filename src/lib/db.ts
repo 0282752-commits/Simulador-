@@ -2,8 +2,9 @@
 import type { FootballSave } from "@/engine/football/types";
 import type { NflSave } from "@/engine/nfl/types";
 import type { DcSave } from "@/engine/dc/types";
+import type { CupSave } from "@/engine/cup/types";
 
-export type AnySave = FootballSave | NflSave | DcSave;
+export type AnySave = FootballSave | NflSave | DcSave | CupSave;
 export type Mode = AnySave["mode"];
 export interface SaveMeta { id: string; name: string; mode: Mode; created: string; updated: string; summary: string }
 
@@ -47,6 +48,7 @@ export async function loadSave(id: string): Promise<{ meta: SaveMeta; data: AnyS
 export function summarize(s: AnySave): string {
   if (s.mode === "futbol") return `Temporada ${s.seasonYear}/${String((s.seasonYear + 1) % 100).padStart(2, "0")} · ${s.date}`;
   if (s.mode === "nfl") return `Temporada ${s.seasonYear} · semana ${Math.min(s.week, 22)}`;
+  if (s.mode === "torneo") { const done = s.matches.filter((m) => m.result).length; return `${s.participants.length} equipos · ${s.champion ? `Campeón: ${s.teams[s.champion]?.name}` : `${done}/${s.matches.length} partidos`}`; }
   return `Día ${s.day} · ${s.tournaments.length} torneos`;
 }
 
