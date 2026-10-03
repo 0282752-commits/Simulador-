@@ -1,0 +1,21 @@
+{
+ "description": "Nombres reales de clubes que EA SPORTS FC no tiene licenciados (EA usa otro nombre). Clave = nombre en la base de EA.",
+ "aliases": {
+  "Milano FC": {
+   "name": "AC Milan",
+   "short": "MIL"
+  },
+  "Lombardia FC": {
+   "name": "Inter",
+   "short": "INT"
+  },
+  "Bergamo Calcio": {
+   "name": "Atalanta",
+   "short": "ATA"
+  },
+  "Latium": {
+   "name": "Lazio",
+   "short": "LAZ"
+  }
+ }
+}

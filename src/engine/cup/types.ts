@@ -18,7 +18,20 @@ export interface CupFormat {
   swissMatches: number; // suizo: partidos por equipo
   koSize: number; // suizo: tamaño del cuadro final (16 = 8 directos + playoff del 9 al 24)
   seeding: "fuerza" | "aleatorio";
+  koDraw?: "sorteo" | "cuadro"; // sorteo de cada ronda (como la Champions) o cuadro fijo por cabezas de serie
   preset?: string;
+}
+
+// Sorteo: la secuencia de bolas se calcula con la semilla y la UI la va revelando como una ceremonia
+export interface DrawStep { team: string; pot: number; target: string; note?: string }
+export interface CupDraw {
+  key: string; title: string; kind: "grupos" | "cruces" | "suizo";
+  potNames: string[]; pots: string[][];
+  steps: DrawStep[];
+  targets: string[]; // grupos (A, B…) o cruces en orden
+  rules: string[]; // restricciones aplicadas
+  real?: boolean; // recreación de un sorteo real
+  byes?: string[];
 }
 
 export interface CupTeam { id: string; name: string; short: string; colors: [string, string]; strength: number; sub?: string }
@@ -57,10 +70,14 @@ export interface CupSave {
   teams: Record<string, CupTeam>;
   participants: string[]; // orden de cabezas de serie
   groups?: Record<string, string[]>;
+  swiss?: [string, string][][]; // calendario sorteado de la fase liga
   matches: CupMatch[];
   fb?: { players: Record<string, Player>; clubs: Record<string, Club> };
   nfl?: { teams: Record<string, NflTeam>; players: Record<string, NflPlayer> };
   dc?: { characters: Record<string, DcCharacter>; synergies: Synergy[]; teamSize: number; members: Record<string, string[]>; randomness: number };
+  draws?: Record<string, CupDraw>;
+  drawSalt?: Record<string, number>;
+  drawSeen?: Record<string, boolean>;
   champion?: string;
   runnerUp?: string;
   third?: string;

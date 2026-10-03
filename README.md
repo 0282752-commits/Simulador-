@@ -122,6 +122,10 @@ Cuarto modo de la portada (🏆). Eliges deporte, formato y participantes:
   Todo editable: número de grupos, clasificados por grupo, mejores terceros, ida y vuelta, tercer puesto, bombos.
 - **Mundial 2026** con las 48 selecciones y los 12 grupos reales del sorteo (5-dic-2025) y la repesca de marzo de 2026.
   El cruce de dieciseisavos no copia la tabla oficial de FIFA: se ordena por rendimiento y evita rivales del mismo grupo.
+- **Sorteos animados** bola a bola: bombos de la fase de grupos (con tope por confederación en selecciones), fase liga
+  estilo Champions (2 rivales de cada bombo, mitad en casa) y cruces de eliminatoria (cabezas de serie contra no cabezas,
+  sin repetir rival del mismo grupo; playoff y cuadro de la Champions por parejas de puestos). Se pueden repetir mientras
+  no se haya jugado la fase. Opción de cuadro fijo (Mundial/Eurocopa) en lugar de sorteo.
 - Cada partido: simular, ver en vivo (los mismos visores de cada modo) o resultado manual; editar o borrar recalcula
   tablas y cuadro (los cruces que no cambian conservan su resultado). Tablas, cuadro, goleadores/líderes y plantillas.
 - **Selecciones:** convocatoria **estimada** de 26 (3 POR, 9 DEF, 8 MED, 6 DEL por media) a partir de toda la base de
@@ -173,6 +177,12 @@ La base de EA no recoge los traspasos de las últimas semanas del mercado. `data
 100 movimientos reales recopilados de medios (ESPN, Goal, Sky Italia, Fussballdaten, Ligue 1…), cada uno con su fuente.
 El importador los aplica solo (o a mano: `bun scripts/apply-transfers.ts data/football/`). Se omitieron los casos con fuentes
 contradictorias. Las medias siguen siendo las de EA SPORTS FC 27.
+
+### Nombres de clubes no licenciados por EA
+
+EA SPORTS FC usa otros nombres para algunos clubes: `Milano FC` (AC Milan), `Lombardia FC` (Inter), `Bergamo Calcio`
+(Atalanta) y `Latium` (Lazio). `data/football/club-aliases.json` los traduce al nombre real al importar; las listas de
+traspasos pueden usar cualquiera de los dos nombres.
 
 ### NFL real: Madden 27
 

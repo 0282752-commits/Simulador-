@@ -68,6 +68,7 @@ export interface Club {
   id: string;
   name: string;
   short: string; // 3 letras
+  eaName?: string; // nombre en la base de EA si EA usa uno distinto (p. ej. Milano FC = AC Milan)
   country: string; // código de país (ENG, ESP...)
   leagueId: string | null; // liga doméstica simulada o null
   colors: [string, string];

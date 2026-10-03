@@ -77,7 +77,7 @@ export function NewCup({ onCreate, onError }: { onCreate: (save: CupSave, title:
     const ids = [...sel];
     const f: CupFormat = { ...format, preset: realWc ? "mundial2026" : format.preset === "mundial2026" ? "mundial48" : format.preset };
     const name = title.trim() || `${preset.label.replace(/ \(.*\)$/, "")} · ${SPORTS.find((s) => s.id === sport)!.label}`;
-    const save = createCup({ sport, title: name, format: f, teams: src.teams.filter((t) => sel.has(t.id)), ...src.build(ids), dataSource: src.dataSource, groups: realWc ? src.worldCupGroups : undefined, note: sport === "selecciones" ? src.note : undefined });
+    const save = createCup({ sport, title: name, format: f, teams: src.teams.filter((t) => sel.has(t.id)), ...src.build(ids), dataSource: src.dataSource, groups: realWc ? src.worldCupGroups : undefined, hosts: realWc ? ["n_MEX", "n_CAN", "n_USA"] : undefined, note: sport === "selecciones" ? src.note : undefined });
     onCreate(save, name);
   }
 
@@ -136,6 +136,7 @@ export function NewCup({ onCreate, onError }: { onCreate: (save: CupSave, title:
               <Field label="Partidos por equipo"><input type="number" className="input" min={1} value={format.swissMatches} onChange={(e) => setF({ swissMatches: num(e.target.value, 1, 40) })} /></Field>
               <Field label="Cuadro final"><select className="input" value={format.koSize} onChange={(e) => setF({ koSize: Number(e.target.value) })}>{[4, 8, 16, 32].map((x) => <option key={x} value={x}>{x} ({x / 2} directos + playoff de {x})</option>)}</select></Field>
             </>}
+            {(format.kind !== "liga" || !!format.playoffTeams) && <Field label="Cruces de eliminatoria"><select className="input" value={format.koDraw ?? "sorteo"} onChange={(e) => setF({ koDraw: e.target.value as CupFormat["koDraw"] })}><option value="sorteo">🎱 Sorteo en cada ronda</option><option value="cuadro">Cuadro fijo por cabezas de serie</option></select></Field>}
             <Field label="Cabezas de serie / bombos"><select className="input" value={format.seeding} onChange={(e) => setF({ seeding: e.target.value as CupFormat["seeding"] })}><option value="fuerza">Por fuerza del equipo</option><option value="aleatorio">Sorteo puro</option></select></Field>
           </div>
           {presetId === "mundial2026" && <p className="text-[11px] text-gray-400">{realWc ? "✓ Grupos reales del sorteo del Mundial 2026." : "Si cambias las 48 selecciones, los grupos se sortean."} {src?.worldCupSource}</p>}

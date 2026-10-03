@@ -7,7 +7,7 @@ const clubsF = JSON.parse(readFileSync(dir + "clubs.json", "utf8"));
 const playersF = JSON.parse(readFileSync(dir + "players.json", "utf8"));
 const { transfers } = JSON.parse(readFileSync(file, "utf8"));
 const norm = (s: string) => s.toLowerCase().replace(/ð/g, "d").replace(/ø/g, "o").replace(/æ/g, "ae").replace(/ß/g, "ss").replace(/ł/g, "l").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
-const clubByName = new Map<string, any>(clubsF.clubs.map((c: any) => [norm(c.name), c]));
+const clubByName = new Map<string, any>(clubsF.clubs.flatMap((c: any) => [[norm(c.name), c], ...(c.eaName ? [[norm(c.eaName), c]] : [])]));
 const findClub = (n: string) => clubByName.get(norm(n));
 let done = 0, already = 0, removed = 0;
 const missing: string[] = [];

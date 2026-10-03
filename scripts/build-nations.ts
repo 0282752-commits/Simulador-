@@ -32,7 +32,8 @@ try {
   const extra = JSON.parse(readFileSync("data/football/added-players-2026.json", "utf8")).players;
   for (const e of extra) { const { club: c, source: _s, ...rest } = e; const p = { id: `x${++i}`, clubId: "x", ...rest, estimated: true } as Player; club.set(p.id, c); players.push(p); }
 } catch { /* sin archivo */ }
-const nations = buildNations(players, meta.nations, (p) => club.get(p.id));
+const ALIASES: Record<string, { name: string }> = (() => { try { return JSON.parse(readFileSync("data/football/club-aliases.json", "utf8")).aliases; } catch { return {}; } })();
+const nations = buildNations(players, meta.nations, (p) => { const c = club.get(p.id); return c ? ALIASES[c]?.name ?? c : c; });
 const fillers = nations.filter((n) => n.real < 23).map((n) => `${n.name} (${n.real} reales)`);
 writeFileSync(out + "nations.json", JSON.stringify({ meta: { source: "Convocatorias ESTIMADAS a partir de la base de EA SPORTS FC 27 (no son las listas oficiales)", updated: new Date().toISOString().slice(0, 10), note: fillers.length ? `Completadas con jugadores de relleno (no reales): ${fillers.join(", ")}` : "" }, nations }));
 console.log(`OK: ${nations.length} selecciones. Con relleno: ${fillers.join(", ") || "ninguna"}`);

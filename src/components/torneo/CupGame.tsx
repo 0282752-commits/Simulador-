@@ -1,7 +1,8 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CupMatch, CupResult, CupSave } from "@/engine/cup/types";
-import { SPORT_LABEL, cupLeaders, cupTable, decisiveInfo, dcSides, fbInput, fbOptions, fbSquad, fromDc, fromFootball, fromNfl, groupQualifiers, nextRound, nflShim, playable, resetCup, setCupResult, simulateCupMatch, simulateWhile } from "@/engine/cup/cup";
+import { DrawCeremony } from "./DrawCeremony";
+import { SPORT_LABEL, canRedraw, redraw, cupLeaders, cupTable, decisiveInfo, dcSides, fbInput, fbOptions, fbSquad, fromDc, fromFootball, fromNfl, groupQualifiers, nextRound, nflShim, playable, resetCup, setCupResult, simulateCupMatch, simulateWhile } from "@/engine/cup/cup";
 import { formatSummary } from "@/engine/cup/presets";
 import { FootballMatch } from "@/engine/football/match";
 import type { MatchResult } from "@/engine/football/types";
@@ -14,7 +15,24 @@ import { DcDetail, DcLive, DcManual } from "@/components/dc/DcGame";
 import { Badge, Empty, Modal, Progress, Tabs, cx } from "@/components/ui";
 
 type Mut = (fn: (s: CupSave) => void) => void;
-type Tab = "partidos" | "tabla" | "cuadro" | "stats" | "equipos";
+type Tab = "partidos" | "tabla" | "cuadro" | "sorteos" | "stats" | "equipos";
+
+// Sorteos en orden de celebración y si su fase ya empezó
+function drawKeys(save: CupSave): string[] {
+  const d = save.draws ?? {};
+  const roundOf = (k: string) => {
+    if (k === "grupos" || k === "suizo") return -1;
+    const stage = k === "playoff" ? "Playoff" : k.slice(3);
+    const ms = save.matches.filter((m) => m.stage.startsWith(stage) && (m.phase === "ko" || m.phase === "playoff"));
+    return ms.length ? Math.min(...ms.map((m) => m.round)) : 999;
+  };
+  return Object.keys(d).sort((a, b) => roundOf(a) - roundOf(b));
+}
+function drawStarted(save: CupSave, key: string): boolean {
+  if (key === "grupos" || key === "suizo") return save.matches.some((m) => m.result);
+  const stage = key === "playoff" ? "Playoff" : key.slice(3);
+  return save.matches.some((m) => m.result && m.stage.startsWith(stage) && (m.phase === "ko" || m.phase === "playoff"));
+}
 
 // ===== Adaptadores para reutilizar las vistas de NFL y DC =====
 function nflGameOf(save: CupSave, m: CupMatch): NflGame {
@@ -53,6 +71,14 @@ export default function CupGame({ save, tick, mutate }: { save: CupSave; tick: n
   const [manual, setManual] = useState<CupMatch | null>(null);
   const [detail, setDetail] = useState<CupMatch | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [ceremony, setCeremony] = useState<string | null>(null);
+  const pendingDraw = drawKeys(save).find((k) => !save.drawSeen?.[k] && !drawStarted(save, k));
+  // al abrir un torneo recién creado, arranca el sorteo
+  useEffect(() => { if (pendingDraw && !save.matches.some((m) => m.result)) setCeremony(pendingDraw); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // cuando termina una fase y toca sortear la siguiente, se abre la ceremonia
+  const [lastPending, setLastPending] = useState(pendingDraw);
+  useEffect(() => { if (pendingDraw !== lastPending) { setLastPending(pendingDraw); if (pendingDraw && save.matches.some((m) => m.result)) setCeremony(pendingDraw); } }, [pendingDraw, lastPending, save.matches]);
+  const closeCeremony = () => { const k = ceremony; setCeremony(null); if (k) mutate((s) => { s.drawSeen = { ...(s.drawSeen ?? {}), [k]: true }; }); };
   const f = save.format;
   const nr = nextRound(save);
   const left = playable(save).length;
@@ -71,6 +97,7 @@ export default function CupGame({ save, tick, mutate }: { save: CupSave; tick: n
     { id: "partidos", label: "Partidos" },
     ...(f.kind !== "eliminatoria" ? [{ id: "tabla" as Tab, label: f.kind === "grupos" ? "Grupos" : "Tabla" }] : []),
     { id: "cuadro", label: "Cuadro" },
+    ...(Object.keys(save.draws ?? {}).length ? [{ id: "sorteos" as Tab, label: "🎱 Sorteos" }] : []),
     { id: "stats", label: "Estadísticas" },
     { id: "equipos", label: "Equipos" },
   ];
@@ -93,6 +120,11 @@ export default function CupGame({ save, tick, mutate }: { save: CupSave; tick: n
             <button className="btn-ghost btn-sm" onClick={() => setConfirmReset(true)}>↺</button>
           </div>
         </div>
+        {pendingDraw && save.draws?.[pendingDraw] && (
+          <button className="mt-2 flex w-full items-center justify-between rounded-lg border border-yellow-400/60 bg-yellow-400/10 px-3 py-2 text-left text-sm" onClick={() => setCeremony(pendingDraw)}>
+            <span>🎱 <b>{save.draws[pendingDraw].title}</b> listo</span><span className="text-xs text-yellow-300">Ver sorteo ▶</span>
+          </button>
+        )}
         {save.note && <p className="mt-2 text-[11px] text-yellow-300/80">{save.note}</p>}
       </div>
       <div className="mt-2"><Tabs tabs={tabs} value={tab} onChange={setTab} /></div>
@@ -100,10 +132,22 @@ export default function CupGame({ save, tick, mutate }: { save: CupSave; tick: n
         {tab === "partidos" && <Matches save={save} tick={tick} mutate={mutate} onLive={setLive} onManual={setManual} onDetail={setDetail} />}
         {tab === "tabla" && <Tables save={save} tick={tick} />}
         {tab === "cuadro" && <Bracket save={save} tick={tick} onDetail={setDetail} />}
+        {tab === "sorteos" && (
+          <div className="space-y-1">
+            {drawKeys(save).map((k) => (
+              <button key={k} className="card flex w-full items-center justify-between !p-2 text-left text-sm" onClick={() => setCeremony(k)}>
+                <span>🎱 {save.draws![k].title}{save.draws![k].real ? " · real" : ""}</span>
+                <span className="text-xs text-gray-400">{drawStarted(save, k) ? "jugado" : save.drawSeen?.[k] ? "visto" : "nuevo"} ▶</span>
+              </button>
+            ))}
+            <p className="text-[11px] text-gray-500">Puedes repetir un sorteo mientras no se haya jugado ningún partido de esa fase. Los cruces dependen del sorteo; con “cuadro fijo” no hay sorteo de eliminatorias.</p>
+          </div>
+        )}
         {tab === "stats" && <Leaders save={save} tick={tick} />}
         {tab === "equipos" && <Teams save={save} />}
       </div>
 
+      {ceremony && save.draws?.[ceremony] && <DrawCeremony save={save} draw={save.draws[ceremony]} onClose={closeCeremony} canRedraw={canRedraw(save, ceremony)} onRedraw={() => mutate((s) => redraw(s, ceremony))} />}
       {live && <LiveModal save={save} m={live} onClose={() => setLive(null)} onSave={(r) => saveResult(live, r)} />}
       {manual && <ManualModal save={save} m={manual} onClose={() => setManual(null)} onSave={(r) => saveResult(manual, r)} />}
       {detail?.result && <DetailModal save={save} m={detail} onClose={() => setDetail(null)} />}

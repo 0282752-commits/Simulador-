@@ -42,6 +42,7 @@ const leagueOf = (name: string): { id: string | null; country: string } | null =
   return null;
 };
 
+const ALIASES: Record<string, { name: string; short: string }> = (() => { try { return JSON.parse(readFileSync("data/football/club-aliases.json", "utf8")).aliases; } catch { return {}; } })();
 const KNOWN_COLORS: Record<string, [string, string]> = (() => { try { return JSON.parse(readFileSync("data/football/club-colors.json", "utf8")).colors; } catch { return {}; } })();
 const clubs = new Map<string, Club>();
 const players: Player[] = [];
@@ -58,6 +59,8 @@ for (const r of rows) {
   let club = clubs.get(clubName);
   if (!club) {
     club = { id: `c_${norm(clubName).slice(0, 24)}`, name: clubName, short: clubName.replace(/^(FC|AC|AS|SS|US|SV|VfB|TSV|SC|1\. FC|VfL|RC|Real|Club|CF|UD|CD|RCD|SD|SL|SK|FK) /i, "").slice(0, 3).toUpperCase(), country: lg.country, leagueId: lg.id, colors: KNOWN_COLORS[clubName] ?? colorFromName(clubName) };
+    const al = ALIASES[clubName];
+    if (al) { club.eaName = clubName; club.name = al.name; club.short = al.short; }
     clubs.set(clubName, club);
   }
   const p = rowToPlayer(r, `p${++i}`, club.id);
